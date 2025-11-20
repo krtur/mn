@@ -27,10 +27,10 @@ const TerapiaBaixoCusto: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-teal-800 leading-tight mb-2">
+        <h1 className="heading-secondary mb-2">
           Bem-vindo ao Atendimento de Baixo Custo
         </h1>
-        <h2 className="text-2xl md:text-3xl font-bold text-teal-700 mb-8">
+        <h2 className="heading-secondary mb-8">
           Terapia TRG Acessível para Todos
         </h2>
         
@@ -55,7 +55,7 @@ const TerapiaBaixoCusto: React.FC = () => {
             {rules.map((rule, index) => (
               <div key={index} className="flex items-start">
                 <div className="flex-shrink-0">
-                  <ClipboardListIcon className="w-8 h-8 text-teal-500" />
+                  <ClipboardListIcon className="w-8 h-8 text-primary-500" />
                 </div>
                 <div className="ml-4">
                   <h4 className="text-lg font-semibold text-slate-800">{rule.title}</h4>
@@ -70,7 +70,7 @@ const TerapiaBaixoCusto: React.FC = () => {
           <a
             href={ctaLink}
             // For now, let's make it look disabled since the form isn't ready.
-            className="inline-block px-10 py-4 bg-teal-600 text-white font-bold rounded-full shadow-lg hover:bg-teal-700 transition-all duration-300 transform hover:scale-105"
+            className="btn-primary rounded-full"
             onClick={(e) => {
               e.preventDefault();
               alert('O formulário de inscrição será disponibilizado em breve!');

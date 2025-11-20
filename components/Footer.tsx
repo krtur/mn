@@ -2,30 +2,52 @@ import React from 'react';
 import InstagramIcon from './icons/InstagramIcon';
 
 const Footer: React.FC = () => {
-  // NOTE: Replace this placeholder with the actual Instagram profile URL.
-  const instagramUrl = 'https://www.instagram.com/example'; 
+  // Instagram profile URL
+  const instagramUrl = 'https://www.instagram.com/mnterapeutas/'; 
 
   return (
-    <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white w-full">
+    <footer className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary-900 via-primary-800 to-accent-900 text-white w-full">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-8 mb-8">
-          <div className="text-sm">
-            <p className="font-semibold text-teal-300 mb-2">🌍 Idiomas de Atendimento</p>
-            <p className="text-slate-300">Português • Inglês • Espanhol</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
+          {/* Brand Section */}
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold mb-4 gradient-text">M&N Terapeutas</h3>
+            <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              Transformando vidas através da terapia expressiva e acompanhamento profissional.
+            </p>
+            <p className="text-accent-300 font-semibold text-sm italic">
+              💙 Nós nos preocupamos com você!
+            </p>
           </div>
-          <a
-            href={instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-slate-300 hover:text-teal-400 transition-colors duration-300 group"
-          >
-            <InstagramIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
-            <span className="font-semibold group-hover:underline">Siga-nos no Instagram</span>
-          </a>
+
+          {/* TRG Logo */}
+          <div className="text-center flex justify-center items-center">
+            <img 
+              src="/TRG-logo.png" 
+              alt="TRG Logo" 
+              className="h-16 w-auto object-contain hover:opacity-80 transition-opacity duration-300"
+            />
+          </div>
+
+          {/* Social */}
+          <div className="text-center md:text-right">
+            <p className="font-bold text-accent-300 mb-4">Conecte-se</p>
+            <a
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-slate-300 hover:text-accent-300 transition-all duration-300 group"
+            >
+              <InstagramIcon className="w-6 h-6 group-hover:scale-125 transition-transform" />
+              <span className="font-semibold group-hover:underline">Instagram</span>
+            </a>
+          </div>
         </div>
-        <div className="border-t border-slate-700 pt-8">
+
+        {/* Divider */}
+        <div className="border-t border-primary-700 pt-12">
           <p className="text-center text-slate-400 text-sm">
-            © 2025 M&N Terapeutas. Todos os direitos reservados. | Desenvolvido com ❤️
+            © 2025 M&N Terapeutas. Todos os direitos reservados.
           </p>
         </div>
       </div>

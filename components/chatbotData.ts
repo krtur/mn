@@ -81,7 +81,6 @@ export const knowledgeBase = {
   ],
   generalInfo: {
     tagline: 'Expresso Terapêutico: aliviando seus traumas e te deixando mais leve a cada sessão!',
-    freeSession: 'Oferecemos 30 minutos de sessão GRÁTIS para você conhecer nossa metodologia.',
     languages: ['Português', 'Inglês', 'Espanhol']
   }
 };

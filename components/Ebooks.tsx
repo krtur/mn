@@ -28,7 +28,7 @@ const Ebooks: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <h2 className="heading-secondary">
           eBooks e Materiais Exclusivos
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
@@ -40,7 +40,7 @@ const Ebooks: React.FC = () => {
         {ebooks.map((ebook, index) => (
           <div key={index} className="bg-white p-8 rounded-xl shadow-lg border border-stone-200 flex flex-col text-center">
             <div className="mx-auto mb-6">
-              <BookOpenIcon className="w-24 h-24 text-teal-500" />
+              <BookOpenIcon className="w-24 h-24 text-primary-500" />
             </div>
             <h3 className="text-2xl font-bold text-slate-800">{ebook.title}</h3>
             <p className="mt-4 text-slate-600 flex-grow">{ebook.description}</p>
@@ -49,7 +49,7 @@ const Ebooks: React.FC = () => {
                 onClick={() => handleCtaClick(ebook.type as 'free' | 'paid')}
                 className={`inline-block w-full px-8 py-4 font-bold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 ${
                   ebook.type === 'free'
-                    ? 'bg-teal-600 text-white hover:bg-teal-700'
+                    ? 'bg-primary-600 text-white hover:bg-primary-700'
                     : 'bg-amber-500 text-white hover:bg-amber-600'
                 }`}
               >

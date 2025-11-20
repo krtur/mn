@@ -35,8 +35,8 @@ const Faq: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto">
-        <QuestionMarkCircleIcon className="w-20 h-20 text-teal-600 mx-auto mb-4" />
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <QuestionMarkCircleIcon className="w-20 h-20 text-primary-600 mx-auto mb-4" />
+        <h2 className="heading-secondary">
           Perguntas Frequentes
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
@@ -49,12 +49,12 @@ const Faq: React.FC = () => {
           <div key={index} className="border border-stone-200 rounded-lg bg-white shadow-sm overflow-hidden">
             <button
               onClick={() => toggleFaq(index)}
-              className="w-full flex justify-between items-center p-5 text-left font-semibold text-slate-800 hover:bg-teal-50 focus:outline-none"
+              className="w-full flex justify-between items-center p-5 text-left font-semibold text-slate-800 hover:bg-primary-50 focus:outline-none"
               aria-expanded={openIndex === index}
             >
               <span className="text-lg">{faq.question}</span>
               <ChevronDownIcon 
-                className={`w-6 h-6 text-teal-500 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
+                className={`w-6 h-6 text-primary-500 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
               />
             </button>
             {openIndex === index && (

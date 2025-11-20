@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,34 +11,74 @@
   }
 
   body {
-    @apply bg-stone-50 text-slate-800;
+    @apply bg-gradient-to-br from-slate-50 via-sky-50 to-slate-50 text-slate-700 font-lato;
+    letter-spacing: 0.3px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-semibold text-slate-900;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    @apply leading-relaxed;
+    line-height: 1.75;
   }
 }
 
 /* Custom component styles */
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors duration-300;
+    @apply px-6 py-3 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105;
+    background: linear-gradient(to right, #0284c7, #0369a1);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(to right, #0369a1, #075985);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-white text-teal-600 font-semibold rounded-lg border border-teal-600 hover:bg-teal-50 transition-colors duration-300;
+    @apply px-6 py-3 bg-white font-semibold rounded-lg border-2 transition-all duration-300;
+    color: #0284c7;
+    border-color: #0284c7;
+  }
+
+  .btn-secondary:hover {
+    background-color: #f0f7ff;
+  }
+
+  .btn-accent {
+    @apply px-6 py-3 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105;
+    background: linear-gradient(to right, #3b5fb3, #354fa7);
+  }
+
+  .btn-accent:hover {
+    background: linear-gradient(to right, #354fa7, #2f449b);
   }
 
   .section-container {
-    @apply container mx-auto px-4 py-12 md:py-16;
+    @apply container mx-auto px-4 py-12 md:py-20;
   }
 
   .heading-primary {
-    @apply text-4xl md:text-5xl font-extrabold text-teal-800 leading-tight;
+    @apply text-4xl md:text-6xl font-extrabold leading-tight;
+    background: linear-gradient(to right, #0369a1, #3b5fb3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .heading-secondary {
-    @apply text-2xl md:text-3xl font-bold text-teal-700;
+    @apply text-2xl md:text-4xl font-bold;
+    color: #0369a1;
   }
 
   .text-muted {
-    @apply text-slate-600 text-sm md:text-base;
+    @apply text-slate-500 text-sm md:text-base;
+  }
+
+  .card-premium {
+    @apply bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200;
   }
 
   .animation-delay-100 {
@@ -45,5 +87,40 @@
 
   .animation-delay-200 {
     animation-delay: 0.2s;
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, #0284c7, #3b5fb3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-effect {
+    @apply bg-white/90 backdrop-blur-md border border-white/30 rounded-2xl;
+  }
+
+  .header-gradient {
+    background: linear-gradient(to right, #0c4a6e, #075985, #354fa7);
+  }
+
+  .btn-whatsapp {
+    background: linear-gradient(to right, #0284c7, #0369a1);
+    color: white;
+    @apply px-10 py-4 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-whatsapp:hover {
+    background: linear-gradient(to right, #0369a1, #075985);
+  }
+
+  .btn-whatsapp-accent {
+    background: linear-gradient(to right, #3b5fb3, #354fa7);
+    color: white;
+    @apply px-10 py-4 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-whatsapp-accent:hover {
+    background: linear-gradient(to right, #354fa7, #2f449b);
   }
 }

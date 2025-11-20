@@ -8,13 +8,13 @@ const ProjetoEscola: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-teal-800 leading-tight mb-2">
+        <h1 className="heading-secondary mb-2">
           Projeto Escola
         </h1>
         <p className="text-2xl md:text-3xl font-bold text-red-600 mb-8">
           "Não deixe ser tarde demais"
         </p>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <h2 className="heading-secondary">
           Cuidando da Saúde Mental no Ambiente Educacional
         </h2>
         <div className="mt-8 bg-gradient-to-r from-cyan-100 to-blue-100 p-8 rounded-lg">
@@ -98,7 +98,7 @@ const ProjetoEscola: React.FC = () => {
         </div>
 
         <div className="mt-12">
-          <h3 className="text-3xl font-bold text-teal-800 mb-8">📰 Acompanhe as Últimas Notícias</h3>
+          <h3 className="heading-secondary mb-8">📰 Acompanhe as Últimas Notícias</h3>
           <p className="text-slate-700 mb-8 text-center">
             Clique nos links para acessar a reportagem na íntegra
           </p>
@@ -107,60 +107,60 @@ const ProjetoEscola: React.FC = () => {
               href="https://www.educacao.sp.gov.br/em-mapeamento-70-dos-estudantes-avaliados-relatam-sintomas-de-depressao-e-ansiedade/"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white border-2 border-teal-200 rounded-lg p-6 hover:shadow-lg hover:border-teal-500 transition-all duration-300 text-left"
+              className="bg-white border-2 border-primary-200 rounded-lg p-6 hover:shadow-lg hover:border-primary-500 transition-all duration-300 text-left"
             >
-              <h4 className="text-lg font-bold text-teal-800 mb-2">
+              <h4 className="text-lg font-bold text-primary-700 mb-2">
                 70% dos estudantes relatam sintomas de depressão e ansiedade
               </h4>
               <p className="text-slate-600 text-sm mb-3">
                 Índices de saúde emocional no contexto de pandemia foram revelados em estudo desenvolvido pela Secretaria da Educação e o Instituto Ayrton Senna.
               </p>
-              <span className="text-teal-600 font-semibold text-sm">Secretaria da Educação SP →</span>
+              <span className="text-primary-600 font-semibold text-sm">Secretaria da Educação SP →</span>
             </a>
 
             <a
               href="https://g1.globo.com/educacao/noticia/2022/08/25/crise-de-saude-mental-nas-escolas-alunos-estao-deprimidos-ansiosos-em-luto-e-faltam-psicologos.ghtml"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white border-2 border-teal-200 rounded-lg p-6 hover:shadow-lg hover:border-teal-500 transition-all duration-300 text-left"
+              className="bg-white border-2 border-primary-200 rounded-lg p-6 hover:shadow-lg hover:border-primary-500 transition-all duration-300 text-left"
             >
-              <h4 className="text-lg font-bold text-teal-800 mb-2">
+              <h4 className="text-lg font-bold text-primary-700 mb-2">
                 Crise de saúde mental nas escolas
               </h4>
               <p className="text-slate-600 text-sm mb-3">
                 No pós-pandemia, sete em cada 10 alunos relatam sintomas de ansiedade ou depressão. Professora revela sensação de desespero e impotência ao lidar com situação.
               </p>
-              <span className="text-teal-600 font-semibold text-sm">G1 Globo →</span>
+              <span className="text-primary-600 font-semibold text-sm">G1 Globo →</span>
             </a>
 
             <a
               href="https://www1.folha.uol.com.br/educacao/2022/04/69-dos-alunos-da-rede-estadual-de-sp-relatam-sintomas-de-depressao-e-ansiedade.shtml"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white border-2 border-teal-200 rounded-lg p-6 hover:shadow-lg hover:border-teal-500 transition-all duration-300 text-left"
+              className="bg-white border-2 border-primary-200 rounded-lg p-6 hover:shadow-lg hover:border-primary-500 transition-all duration-300 text-left"
             >
-              <h4 className="text-lg font-bold text-teal-800 mb-2">
+              <h4 className="text-lg font-bold text-primary-700 mb-2">
                 69% dos alunos da rede estadual relatam sintomas
               </h4>
               <p className="text-slate-600 text-sm mb-3">
                 Pesquisa ouviu 642 mil estudantes do ensino fundamental e médio da rede pública estadual de São Paulo sobre saúde mental.
               </p>
-              <span className="text-teal-600 font-semibold text-sm">Folha de S.Paulo →</span>
+              <span className="text-primary-600 font-semibold text-sm">Folha de S.Paulo →</span>
             </a>
 
             <a
               href="https://saude.abril.com.br/mente-saudavel/e-urgente-trabalhar-a-saude-mental-nas-escolas/"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white border-2 border-teal-200 rounded-lg p-6 hover:shadow-lg hover:border-teal-500 transition-all duration-300 text-left"
+              className="bg-white border-2 border-primary-200 rounded-lg p-6 hover:shadow-lg hover:border-primary-500 transition-all duration-300 text-left"
             >
-              <h4 className="text-lg font-bold text-teal-800 mb-2">
+              <h4 className="text-lg font-bold text-primary-700 mb-2">
                 É urgente trabalhar a saúde mental nas escolas
               </h4>
               <p className="text-slate-600 text-sm mb-3">
                 Institutos elegem dez medidas para abraçar o tema e cuidar melhor dos estudantes no país.
               </p>
-              <span className="text-teal-600 font-semibold text-sm">Veja Saúde →</span>
+              <span className="text-primary-600 font-semibold text-sm">Veja Saúde →</span>
             </a>
           </div>
         </div>

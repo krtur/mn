@@ -9,7 +9,7 @@ const Mentoria: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <h2 className="heading-secondary">
           Programa de Mentoria para Terapeutas
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
@@ -20,7 +20,7 @@ const Mentoria: React.FC = () => {
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
         <div className="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
           <div className="flex items-center mb-4">
-            <AcademicCapIcon className="w-10 h-10 text-teal-600 mr-4"/>
+            <AcademicCapIcon className="w-10 h-10 text-primary-600 mr-4"/>
             <h3 className="text-2xl font-bold text-slate-700">Para Quem é a Mentoria?</h3>
           </div>
           <p className="text-slate-600">
@@ -46,7 +46,7 @@ const Mentoria: React.FC = () => {
           href={ctaLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-teal-600 text-white font-bold rounded-full shadow-lg hover:bg-teal-700 transition-all duration-300 transform hover:scale-105"
+          className="btn-primary rounded-full inline-flex items-center justify-center gap-3 px-10 py-4"
         >
           <WhatsappIcon className="w-6 h-6" />
           <span>Saiba Mais e Aplique</span>

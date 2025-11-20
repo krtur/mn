@@ -55,7 +55,7 @@ const TerapiaCorporativa: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <h2 className="heading-secondary mb-4">
           Soluções Terapêuticas Personalizadas para Empresas
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
@@ -64,7 +64,7 @@ const TerapiaCorporativa: React.FC = () => {
         
         <div className="mt-12 text-left grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {benefits.map((benefit, index) => (
-            <div key={index} className="flex flex-col p-4 bg-white rounded-lg shadow-sm border-l-4 border-teal-500">
+            <div key={index} className="flex flex-col p-4 bg-white rounded-lg shadow-sm border-l-4 border-primary-500">
               <div className="flex items-start mb-2">
                 <CheckCircleIcon className="w-6 h-6 text-green-500 flex-shrink-0 mr-3 mt-0.5" />
                 <h3 className="font-bold text-slate-800">{benefit.title}</h3>
@@ -96,7 +96,7 @@ const TerapiaCorporativa: React.FC = () => {
             href={ctaLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-10 py-4 bg-teal-600 text-white font-bold rounded-full shadow-lg hover:bg-teal-700 transition-all duration-300 transform hover:scale-105"
+            className="btn-primary rounded-full"
           >
             Agende uma consulta inicial para saber mais
           </a>

@@ -86,14 +86,14 @@ Quer agendar uma sessão com um deles?`;
 
     // Check for pricing/free session
     if (lowerMessage.match(/preço|valor|custa|quanto|grátis|sessão gratuita|free/i)) {
-      return `🎁 **Ótima notícia!** Oferecemos **30 minutos de sessão GRÁTIS** para você conhecer nossa metodologia e conversar com um de nossos terapeutas!
+      return `💼 **Investimento em sua saúde mental** - Oferecemos atendimento profissional com terapeutas certificados internacionalmente.
 
-Isso é perfeito para:
-- Esclarecer suas dúvidas
-- Conhecer o terapeuta
-- Entender se a TRG é o ideal para você
+Para conhecer melhor nossos serviços e valores:
+- Converse com um de nossos terapeutas
+- Eles podem responder todas suas dúvidas
+- Agende uma consulta profissional
 
-Quer agendar sua sessão gratuita?`;
+Qual terapeuta você prefere?`;
     }
 
     // Check for FAQ questions
@@ -118,7 +118,7 @@ Então fique à vontade para indicar nossos serviços para quem você ama! ❤�
 
 Porém, a TRG é conhecida por ser uma **terapia breve e focada em resultados**. Muitos clientes relatam **melhoras significativas em poucas sessões**!
 
-Na sua sessão gratuita, podemos avaliar melhor seu caso e dar uma estimativa mais precisa.`;
+Na sua primeira sessão, nossos terapeutas podem avaliar melhor seu caso e dar uma estimativa mais precisa.`;
     }
 
     if (lowerMessage.match(/online|presencial|formato|onde/i)) {
@@ -138,12 +138,12 @@ Escolha o formato que melhor se adequa à sua rotina!`;
 Temos dois terapeutas incríveis disponíveis:
 
 **Marcelo** - Clique no link abaixo para conversar no WhatsApp:
-https://wa.me/5500000000000
+https://wa.me/5519981109732
 
 **Nadielma** - Clique no link abaixo para conversar no WhatsApp:
-https://wa.me/5500000000001
+https://wa.me/5519981740279
 
-Lembre-se: você tem **30 minutos de sessão GRÁTIS** para começar! 🎁
+Nossos terapeutas certificados estão prontos para ajudá-lo!
 
 Qual terapeuta você prefere?`;
     }
@@ -180,7 +180,7 @@ Quer conversar com um de nossos terapeutas sobre seu caso específico?`;
 Infelizmente, não tenho informação específica sobre isso. Mas nossos terapeutas podem responder com muito mais detalhes!
 
 Você gostaria de:
-1. **Agendar uma sessão gratuita** para conversar com um terapeuta
+1. **Agendar uma sessão** para conversar com um terapeuta
 2. **Fazer outra pergunta** sobre nossos serviços
 
 O que prefere?`;
@@ -227,7 +227,7 @@ O que prefere?`;
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-full shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-110 flex items-center justify-center z-40 border-4 border-white"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-lg hover:shadow-xl hover:from-primary-600 hover:to-primary-700 transition-all duration-300 transform hover:scale-110 flex items-center justify-center z-40 border-4 border-white"
         title="Abrir chat"
       >
         <svg
@@ -249,14 +249,14 @@ O que prefere?`;
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-stone-200 overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-4 flex justify-between items-center">
             <div>
               <h3 className="font-bold text-lg">M&N Terapeutas</h3>
-              <p className="text-sm text-teal-100">Assistente Virtual</p>
+              <p className="text-sm text-primary-100">Assistente Virtual</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 hover:bg-teal-700 rounded-full transition-colors"
+              className="p-1 hover:bg-primary-700 rounded-full transition-colors"
               title="Fechar chat"
             >
               <XIcon className="w-6 h-6" />
@@ -273,7 +273,7 @@ O que prefere?`;
                 <div
                   className={`max-w-xs px-4 py-3 rounded-lg ${
                     message.sender === 'user'
-                      ? 'bg-teal-500 text-white rounded-br-none'
+                      ? 'bg-primary-500 text-white rounded-br-none'
                       : 'bg-white text-slate-800 border border-stone-200 rounded-bl-none'
                   }`}
                 >
@@ -285,9 +285,9 @@ O que prefere?`;
               <div className="flex justify-start">
                 <div className="bg-white text-slate-800 border border-stone-200 px-4 py-3 rounded-lg rounded-bl-none">
                   <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce-delay-100"></div>
-                    <div className="w-2 h-2 bg-teal-500 rounded-full animate-bounce-delay-200"></div>
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce-delay-100"></div>
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce-delay-200"></div>
                   </div>
                 </div>
               </div>
@@ -303,13 +303,13 @@ O que prefere?`;
                 onChange={e => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Digite sua pergunta..."
-                className="flex-1 px-4 py-2 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                className="flex-1 px-4 py-2 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                 rows={1}
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 disabled:bg-stone-300 transition-colors flex items-center justify-center"
+                className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:bg-stone-300 transition-colors flex items-center justify-center"
                 title="Enviar mensagem"
               >
                 <SendIcon className="w-5 h-5" />

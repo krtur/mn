@@ -52,7 +52,7 @@ function App() {
   };
 
   return (
-    <div className="bg-stone-50 min-h-screen flex flex-col text-slate-800 font-sans">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 min-h-screen flex flex-col text-slate-800 font-sans">
       <Header setCurrentPage={setCurrentPage} />
       <main className="flex-grow flex items-center justify-center p-4">
         {renderCurrentPage()}

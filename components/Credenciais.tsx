@@ -37,8 +37,8 @@ const Credenciais: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Título */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-4">
-            Nossas <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">Credenciais</span>
+          <h2 className="heading-primary mb-4">
+            Nossas <span className="gradient-text">Credenciais</span>
           </h2>
           <p className="text-xl text-slate-600">
             Certificação Profissional pelo CITRG
@@ -46,7 +46,7 @@ const Credenciais: React.FC = () => {
         </div>
 
         {/* Informações sobre CITRG */}
-        <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl border border-teal-200 shadow-lg p-8 md:p-12 mb-16">
+        <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-8 md:p-12 mb-16">
           <div className="flex items-start gap-4 mb-6">
             <div className="text-4xl">🏆</div>
             <div className="text-left">
@@ -88,7 +88,7 @@ const Credenciais: React.FC = () => {
                   href={therapist.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full block text-center py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-lg hover:from-teal-700 hover:to-teal-600 transition-all duration-300 transform hover:scale-105"
+                  className="btn-primary w-full"
                 >
                   Verificar Credencial no CITRG
                 </a>
@@ -98,7 +98,7 @@ const Credenciais: React.FC = () => {
         </div>
 
         {/* Benefícios da Certificação */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border border-purple-200 shadow-lg p-8 md:p-12">
+        <div className="card-premium bg-gradient-to-r from-accent-50 to-primary-50 border-2 border-accent-200 p-8 md:p-12">
           <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">
             ✅ O que a Certificação CITRG Garante
           </h3>
@@ -135,7 +135,7 @@ const Credenciais: React.FC = () => {
         </div>
 
         {/* CTA Final */}
-        <div className="mt-16 bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl border border-teal-200 shadow-lg p-12 text-center">
+        <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-12 text-center mt-16">
           <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
             Confiança e Profissionalismo
           </h3>
@@ -145,7 +145,7 @@ const Credenciais: React.FC = () => {
           <a
             href="#"
             onClick={(e) => { e.preventDefault(); alert('Redirecionando para agendamento...'); }}
-            className="inline-block px-10 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105"
+            className="btn-primary"
           >
             Agende Sua Sessão Gratuita
           </a>

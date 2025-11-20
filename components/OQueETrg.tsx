@@ -48,8 +48,8 @@ const OQueETrg: React.FC = () => {
       <div className="max-w-5xl mx-auto">
         {/* Título */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
-            O que é <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">TRG</span>?
+          <h2 className="heading-primary mb-6">
+            O que é <span className="gradient-text">TRG</span>?
           </h2>
           <p className="text-xl text-slate-600">
             Terapia de Reprocessamento Generativo
@@ -57,7 +57,7 @@ const OQueETrg: React.FC = () => {
         </div>
 
         {/* Introdução Principal */}
-        <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl border border-teal-200 shadow-lg p-8 md:p-12 mb-12">
+        <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-8 md:p-12 mb-12">
           <p className="text-lg md:text-xl text-slate-800 leading-relaxed mb-6">
             A <strong>TRG (Terapia de Reprocessamento Generativo)</strong> é uma terapia de curto período, baseada em resultados, que <strong>reestrutura sua psique na raiz dos problemas</strong>, em todas as fases da sua vida, eliminando traumas, fobias, bloqueios emocionais e muitos transtornos como ansiedade, depressão, pânico entre muitos outros.
           </p>
@@ -123,7 +123,7 @@ const OQueETrg: React.FC = () => {
                 <h4 className="text-lg font-bold text-slate-900">
                   A TRG tem algo a ver com regressão ou hipnoterapia?
                 </h4>
-                <span className={`text-2xl text-teal-600 transition-transform duration-300 ${expandedFaq === 1 ? 'rotate-180' : ''}`}>
+                <span className={`text-2xl text-primary-600 transition-transform duration-300 ${expandedFaq === 1 ? 'rotate-180' : ''}`}>
                   ▼
                 </span>
               </button>
@@ -171,7 +171,7 @@ const OQueETrg: React.FC = () => {
           </div>
 
           {/* Abordagem da TRG */}
-          <div className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-2xl border border-teal-300 shadow-lg p-8 md:p-12">
+          <div className="card-premium bg-gradient-to-r from-primary-50 to-primary-100 border-2 border-primary-300 p-8 md:p-12">
             <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
               🎯 Abordagem da Terapia de Reprocessamento Generativo (TRG)
             </h3>
@@ -231,7 +231,7 @@ const OQueETrg: React.FC = () => {
         </div>
 
         {/* CTA Final */}
-        <div className="mt-16 bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl border border-teal-200 shadow-lg p-12 text-center">
+        <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-12 text-center mt-16">
           <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
             Pronto para transformar sua vida?
           </h3>
@@ -241,7 +241,7 @@ const OQueETrg: React.FC = () => {
           <a
             href="#"
             onClick={(e) => { e.preventDefault(); alert('Redirecionando para agendamento...'); }}
-            className="inline-block px-10 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105"
+            className="btn-primary"
           >
             Agende Sua Sessão Gratuita
           </a>

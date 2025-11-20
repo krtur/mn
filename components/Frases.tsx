@@ -32,7 +32,7 @@ const Frases: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 leading-tight">
+        <h2 className="heading-secondary">
           Frases para Reflexão
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
@@ -43,7 +43,7 @@ const Frases: React.FC = () => {
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {quotes.map((quote, index) => (
           <div key={index} className="bg-white p-6 rounded-xl shadow-lg border border-stone-200 flex flex-col text-center transform hover:scale-105 transition-transform duration-300">
-            <QuoteIcon className="w-10 h-10 text-teal-200 mx-auto mb-4" />
+            <QuoteIcon className="w-10 h-10 text-primary-200 mx-auto mb-4" />
             <p className="text-slate-600 italic flex-grow text-lg">"{quote.text}"</p>
             <p className="mt-6 font-bold text-slate-700">- {quote.author}</p>
           </div>
