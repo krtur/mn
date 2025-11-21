@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { LanguageProvider } from './context/LanguageContext';
+import { AuthProvider } from './components/auth/AuthContext';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
@@ -16,50 +20,185 @@ import Fobias from './components/Fobias';
 import Ebooks from './components/Ebooks';
 import Chatbot from './components/Chatbot';
 
+// Auth Components
+import { Login } from './components/auth/Login';
+import { Register } from './components/auth/Register';
+
+// Dashboard Components
+import { DashboardLayout } from './components/dashboard/DashboardLayout';
+import { PatientDashboard } from './components/patient/PatientDashboard';
+import { Appointments } from './components/patient/Appointments';
+import { Messages as PatientMessages } from './components/patient/Messages';
+import { Reports } from './components/patient/Reports';
+import { TestShop } from './components/patient/TestShop';
+import { AttendanceHistory } from './components/patient/AttendanceHistory';
+import { Profile as PatientProfile } from './components/patient/Profile';
+
+import { TherapistDashboard } from './components/therapist/TherapistDashboard';
+import { Schedule } from './components/therapist/Schedule';
+import { PatientList } from './components/therapist/PatientList';
+import { Messages as TherapistMessages } from './components/therapist/Messages';
+import { DocumentGeneration } from './components/therapist/DocumentGeneration';
+import { Profile as TherapistProfile } from './components/therapist/Profile';
+
+// Public Layout Component
+const PublicLayout = ({ children }: { children: React.ReactNode }) => (
+  <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 min-h-screen flex flex-col text-slate-800 font-sans">
+    <Header setCurrentPage={() => {}} />
+    <main className="flex-grow flex items-center justify-center p-4">
+      {children}
+    </main>
+    <Footer />
+    <Chatbot />
+  </div>
+);
+
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const renderCurrentPage = () => {
-    switch (currentPage) {
-      case 'terapia-corporativa':
-        return <TerapiaCorporativa />;
-      case 'projeto-escola':
-        return <ProjetoEscola />;
-      case 'terapia-baixo-custo':
-        return <TerapiaBaixoCusto />;
-      case 'mentoria':
-        return <Mentoria />;
-      case 'meu-atendimento':
-        return <MeuAtendimento />;
-      case 'credenciais':
-        return <Credenciais />;
-      case 'depoimentos':
-        return <Depoimentos />;
-      case 'o-que-e-trg':
-        return <OQueETrg />;
-      case 'faq':
-        return <Faq />;
-      case 'frases':
-        return <Frases />;
-      case 'fobias':
-        return <Fobias />;
-      case 'ebooks':
-        return <Ebooks />;
-      case 'home':
-      default:
-        return <HeroSection />;
-    }
-  };
-
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 min-h-screen flex flex-col text-slate-800 font-sans">
-      <Header setCurrentPage={setCurrentPage} />
-      <main className="flex-grow flex items-center justify-center p-4">
-        {renderCurrentPage()}
-      </main>
-      <Footer />
-      <Chatbot />
-    </div>
+    <Router>
+      <LanguageProvider>
+        <AuthProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route
+              path="/"
+              element={
+                <PublicLayout>
+                  <HeroSection />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/terapia-corporativa"
+              element={
+                <PublicLayout>
+                  <TerapiaCorporativa />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/projeto-escola"
+              element={
+                <PublicLayout>
+                  <ProjetoEscola />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/terapia-baixo-custo"
+              element={
+                <PublicLayout>
+                  <TerapiaBaixoCusto />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/mentoria"
+              element={
+                <PublicLayout>
+                  <Mentoria />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/meu-atendimento"
+              element={
+                <PublicLayout>
+                  <MeuAtendimento />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/credenciais"
+              element={
+                <PublicLayout>
+                  <Credenciais />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/depoimentos"
+              element={
+                <PublicLayout>
+                  <Depoimentos />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/o-que-e-trg"
+              element={
+                <PublicLayout>
+                  <OQueETrg />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/faq"
+              element={
+                <PublicLayout>
+                  <Faq />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/frases"
+              element={
+                <PublicLayout>
+                  <Frases />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/fobias"
+              element={
+                <PublicLayout>
+                  <Fobias />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/ebooks"
+              element={
+                <PublicLayout>
+                  <Ebooks />
+                </PublicLayout>
+              }
+            />
+
+            {/* Auth Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Dashboard Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
+            >
+              {/* Patient Routes */}
+              <Route path="" element={<PatientDashboard />} />
+              <Route path="appointments" element={<Appointments />} />
+              <Route path="messages" element={<PatientMessages />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="test-shop" element={<TestShop />} />
+              <Route path="attendance" element={<AttendanceHistory />} />
+              <Route path="profile" element={<PatientProfile />} />
+
+              {/* Therapist Routes */}
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="patients" element={<PatientList />} />
+              <Route path="documents" element={<DocumentGeneration />} />
+            </Route>
+
+            {/* Catch all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AuthProvider>
+      </LanguageProvider>
+    </Router>
   );
 }
 

@@ -494,23 +494,25 @@ const Fobias: React.FC = () => {
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
-      <div className="text-center max-w-4xl mx-auto mb-12">
-        <h2 className="heading-primary">
-          Glossário de Fobias
-        </h2>
-        <p className="mt-4 text-lg md:text-xl text-slate-600">
-          Um guia informativo e completo sobre medos específicos. Clique em cada letra para explorar as fobias e suas definições. Este glossário é um recurso para entender melhor as diversas fobias que podem ser tratadas com a terapia.
-        </p>
-      </div>
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="heading-primary mb-4">
+            Glossário de <span className="gradient-text">Fobias</span>
+          </h2>
+          <p className="mt-4 text-lg md:text-xl text-slate-600">
+            Um guia informativo e completo sobre medos específicos. Clique em cada letra para explorar as fobias e suas definições. Este glossário é um recurso para entender melhor as diversas fobias que podem ser tratadas com a terapia.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-        {letters.map((letter) => (
-          <LetterCard
-            key={letter}
-            letter={letter}
-            phobias={phobiasByLetter[letter]}
-          />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {letters.map((letter) => (
+            <LetterCard
+              key={letter}
+              letter={letter}
+              phobias={phobiasByLetter[letter]}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

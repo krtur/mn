@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 
 interface Video {
   name: string;
@@ -43,11 +45,13 @@ const YouTubeEmbed: React.FC<{ videoId: string; name: string }> = ({ videoId, na
 };
 
 const Depoimentos: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto mb-16">
         <h2 className="heading-primary mb-4">
-          Histórias de <span className="gradient-text">Transformação</span>
+          {t('Histórias de')} <span className="gradient-text">{t('Transformação')}</span>
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
           Veja os depoimentos em vídeo de nossos clientes sobre a jornada deles com a M&N Terapeutas e a metodologia TRG.

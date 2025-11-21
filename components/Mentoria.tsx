@@ -1,16 +1,23 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import AcademicCapIcon from './icons/AcademicCapIcon';
 import LightBulbIcon from './icons/LightBulbIcon';
 import WhatsappIcon from './icons/WhatsappIcon';
 
 const Mentoria: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   const ctaLink = 'https://wa.me/5500000000000'; // Placeholder contact number
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-3xl mx-auto text-center">
+        <h1 className="heading-secondary mb-6">
+          {t('pages.mentoring.title')}
+        </h1>
         <h2 className="heading-secondary">
-          Programa de Mentoria para Terapeutas
+          Mentoria para Terapeutas
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
           Eleve sua prática terapêutica a um novo patamar com a nossa mentoria especializada em Terapia de Reprocessamento Generativo (TRG).

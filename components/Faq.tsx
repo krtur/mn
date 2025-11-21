@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import QuestionMarkCircleIcon from './icons/QuestionMarkCircleIcon';
 import ChevronDownIcon from './icons/ChevronDownIcon';
 
@@ -26,6 +28,8 @@ const faqs = [
 ];
 
 const Faq: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {

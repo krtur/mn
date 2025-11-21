@@ -1,14 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import { knowledgeBase, Message, initialGreeting } from './chatbotData';
 import SendIcon from './icons/SendIcon';
 import XIcon from './icons/XIcon';
 
 const Chatbot: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '0',
-      text: initialGreeting,
+      text: t('chatbot.greeting'),
       sender: 'bot',
       timestamp: new Date()
     }
@@ -29,8 +33,8 @@ const Chatbot: React.FC = () => {
     const lowerMessage = userMessage.toLowerCase();
 
     // Check for greetings
-    if (lowerMessage.match(/oi|olá|opa|e aí|tudo bem|opa/i)) {
-      return 'Olá! 👋 Como posso ajudá-lo? Tem alguma dúvida sobre nossos serviços de terapia?';
+    if (lowerMessage.match(/oi|olá|opa|e aí|tudo bem|opa|hola|buenos|hey/i)) {
+      return t('chatbot.greeting');
     }
 
     // Check for service-related questions

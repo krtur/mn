@@ -1,7 +1,11 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import InstagramIcon from './icons/InstagramIcon';
 
 const Footer: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   // Instagram profile URL
   const instagramUrl = 'https://www.instagram.com/mnterapeutas/'; 
 
@@ -13,10 +17,10 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-left">
             <h3 className="text-2xl font-bold mb-4 gradient-text">M&N Terapeutas</h3>
             <p className="text-slate-300 text-sm leading-relaxed mb-4">
-              Transformando vidas através da terapia expressiva e acompanhamento profissional.
+              {t('footer.tagline')}
             </p>
             <p className="text-accent-300 font-semibold text-sm italic">
-              💙 Nós nos preocupamos com você!
+              {t('footer.care')}
             </p>
           </div>
 
@@ -31,7 +35,7 @@ const Footer: React.FC = () => {
 
           {/* Social */}
           <div className="text-center md:text-right">
-            <p className="font-bold text-accent-300 mb-4">Conecte-se</p>
+            <p className="font-bold text-accent-300 mb-4">{t('footer.connect')}</p>
             <a
               href={instagramUrl}
               target="_blank"
@@ -47,7 +51,7 @@ const Footer: React.FC = () => {
         {/* Divider */}
         <div className="border-t border-primary-700 pt-12">
           <p className="text-center text-slate-400 text-sm">
-            © 2025 M&N Terapeutas. Todos os direitos reservados.
+            {t('footer.copyright')}
           </p>
         </div>
       </div>

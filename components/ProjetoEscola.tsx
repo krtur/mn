@@ -1,7 +1,12 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import WhatsappIcon from './icons/WhatsappIcon';
 
 const ProjetoEscola: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
+
   const contactForSchool = 'https://wa.me/19981109732';
   const contactForParent = 'https://wa.me/19981109732';
 
@@ -9,13 +14,13 @@ const ProjetoEscola: React.FC = () => {
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
       <div className="max-w-3xl mx-auto">
         <h1 className="heading-secondary mb-2">
-          Projeto Escola
+          {t('pages.schoolProject.title')}
         </h1>
         <p className="text-2xl md:text-3xl font-bold text-red-600 mb-8">
           "Não deixe ser tarde demais"
         </p>
         <h2 className="heading-secondary">
-          Cuidando da Saúde Mental no Ambiente Educacional
+          {t('pages.schoolProject.description')}
         </h2>
         <div className="mt-8 bg-gradient-to-r from-cyan-100 to-blue-100 p-8 rounded-lg">
           <h3 className="text-2xl font-bold text-slate-800 mb-2">

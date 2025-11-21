@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 
 interface Protocol {
   id: number;
@@ -41,7 +43,9 @@ const protocols: Protocol[] = [
 ];
 
 const OQueETrg: React.FC = () => {
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
+  const [expandedFaq, setExpandedFaq] = React.useState<number | null>(null);
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">

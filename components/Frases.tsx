@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import QuoteIcon from './icons/QuoteIcon';
 
 const quotes = [
@@ -29,11 +31,13 @@ const quotes = [
 ];
 
 const Frases: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto">
         <h2 className="heading-secondary">
-          Frases para Reflexão
+          {t('Frase para Reflexão')}
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
           Citações e pensamentos de grandes figuras da psicologia para inspirar sua jornada de autoconhecimento.

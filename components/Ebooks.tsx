@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import BookOpenIcon from './icons/BookOpenIcon';
 
 const ebooks = [
@@ -17,6 +19,8 @@ const ebooks = [
 ];
 
 const Ebooks: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   const handleCtaClick = (type: 'free' | 'paid') => {
     if (type === 'free') {
       alert('Em breve, você poderá inserir seu e-mail para receber o eBook!');

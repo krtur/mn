@@ -1,49 +1,53 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import ChevronDownIcon from './icons/ChevronDownIcon';
 import MenuIcon from './icons/MenuIcon';
 import XIcon from './icons/XIcon';
-
-const navLinks = [
-  { name: 'Início', pageKey: 'home' },
-  {
-    name: 'Sobre M&N',
-    dropdown: [
-      { name: 'Meu Atendimento', pageKey: 'meu-atendimento' },
-      { name: 'Depoimentos', pageKey: 'depoimentos' },
-      { name: 'Credenciais (CITRG)', pageKey: 'credenciais' },
-    ],
-  },
-  {
-    name: 'Serviços',
-    dropdown: [
-      { name: 'Terapia Corporativa', pageKey: 'terapia-corporativa' },
-      { name: 'Projeto Escola', pageKey: 'projeto-escola' },
-      { name: 'Mentoria', pageKey: 'mentoria' },
-      { name: 'Terapia Baixo Custo', pageKey: 'terapia-baixo-custo' },
-    ],
-  },
-  {
-    name: 'A Metodologia (TRG)',
-    dropdown: [
-      { name: 'O que é TRG?', pageKey: 'o-que-e-trg' },
-      { name: 'Perguntas Frequentes', pageKey: 'faq' },
-    ],
-  },
-  {
-    name: 'Recursos',
-    dropdown: [
-      { name: 'eBooks', pageKey: 'ebooks' },
-      { name: 'Fobias (Glossário)', pageKey: 'fobias' },
-      { name: 'Frases', pageKey: 'frases' },
-    ],
-  },
-];
 
 interface NavbarProps {
   setCurrentPage: (page: string) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
+
+  const navLinks = [
+    { nameKey: 'nav.home', pageKey: 'home' },
+    {
+      nameKey: 'nav.about',
+      dropdown: [
+        { nameKey: 'nav.myServices', pageKey: 'meu-atendimento' },
+        { nameKey: 'nav.testimonials', pageKey: 'depoimentos' },
+        { nameKey: 'nav.credentials', pageKey: 'credenciais' },
+      ],
+    },
+    {
+      nameKey: 'nav.services',
+      dropdown: [
+        { nameKey: 'nav.corporateTherapy', pageKey: 'terapia-corporativa' },
+        { nameKey: 'nav.schoolProject', pageKey: 'projeto-escola' },
+        { nameKey: 'nav.mentoring', pageKey: 'mentoria' },
+        { nameKey: 'nav.lowCostTherapy', pageKey: 'terapia-baixo-custo' },
+      ],
+    },
+    {
+      nameKey: 'nav.methodology',
+      dropdown: [
+        { nameKey: 'nav.whatIsTrg', pageKey: 'o-que-e-trg' },
+        { nameKey: 'nav.faq', pageKey: 'faq' },
+      ],
+    },
+    {
+      nameKey: 'nav.resources',
+      dropdown: [
+        { nameKey: 'nav.ebooks', pageKey: 'ebooks' },
+        { nameKey: 'nav.phobias', pageKey: 'fobias' },
+        { nameKey: 'nav.phrases', pageKey: 'frases' },
+      ],
+    },
+  ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null);
@@ -63,9 +67,9 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
       <nav className="hidden lg:flex items-center space-x-8">
         {navLinks.map((link) => (
           <div
-            key={link.name}
+            key={link.nameKey}
             className="relative"
-            onMouseEnter={() => link.dropdown && setOpenDropdown(link.name)}
+            onMouseEnter={() => link.dropdown && setOpenDropdown(link.nameKey)}
             onMouseLeave={() => link.dropdown && setOpenDropdown(null)}
           >
             <a
@@ -73,15 +77,15 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
               onClick={(e) => handleLinkClick(e, link.pageKey)}
               className="flex items-center text-white hover:text-accent-300 transition-colors duration-300 font-medium cursor-pointer"
             >
-              {link.name}
+              {t(link.nameKey)}
               {link.dropdown && <ChevronDownIcon className="w-4 h-4 ml-1" />}
             </a>
-            {link.dropdown && openDropdown === link.name && (
+            {link.dropdown && openDropdown === link.nameKey && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 bg-white rounded-xl shadow-2xl ring-1 ring-primary-200 z-20 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="py-2" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   {link.dropdown.map((item, index) => (
                     <a
-                      key={item.name}
+                      key={item.nameKey}
                       href="#"
                       onClick={(e) => handleLinkClick(e, item.pageKey)}
                       className={`block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-700 hover:pl-5 cursor-pointer transition-all duration-200 ${
@@ -89,7 +93,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
                       }`}
                       role="menuitem"
                     >
-                      {item.name}
+                      {t(item.nameKey)}
                     </a>
                   ))}
                 </div>
@@ -126,27 +130,27 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
             </div>
             <nav className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <div key={link.name}>
+                <div key={link.nameKey}>
                   {link.dropdown ? (
                     <>
                       <button
-                        onClick={() => setOpenMobileSubmenu(openMobileSubmenu === link.name ? null : link.name)}
+                        onClick={() => setOpenMobileSubmenu(openMobileSubmenu === link.nameKey ? null : link.nameKey)}
                         className="w-full flex justify-between items-center text-left text-lg font-semibold text-slate-700 hover:text-primary-700"
-                        aria-expanded={openMobileSubmenu === link.name}
+                        aria-expanded={openMobileSubmenu === link.nameKey}
                       >
-                        <span>{link.name}</span>
-                        <ChevronDownIcon className={`w-5 h-5 transition-transform ${openMobileSubmenu === link.name ? 'rotate-180' : ''}`} />
+                        <span>{t(link.nameKey)}</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform ${openMobileSubmenu === link.nameKey ? 'rotate-180' : ''}`} />
                       </button>
-                      {openMobileSubmenu === link.name && (
+                      {openMobileSubmenu === link.nameKey && (
                         <div className="pl-4 mt-2 space-y-2 border-l-2 border-primary-200">
                           {link.dropdown.map((item) => (
                             <a
-                              key={item.name}
+                              key={item.nameKey}
                               href="#"
                               onClick={(e) => handleLinkClick(e, item.pageKey)}
                               className="block py-2 text-md text-slate-600 hover:text-primary-700"
                             >
-                              {item.name}
+                              {t(item.nameKey)}
                             </a>
                           ))}
                         </div>
@@ -154,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
                     </>
                   ) : (
                     <a href="#" onClick={(e) => handleLinkClick(e, link.pageKey)} className="text-lg font-semibold text-slate-700 hover:text-primary-700">
-                      {link.name}
+                      {t(link.nameKey)}
                     </a>
                   )}
                 </div>

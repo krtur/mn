@@ -1,54 +1,59 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 
-const benefits = [
-  {
-    title: "Resultados rápidos e positivos",
-    description: "Nossas metodologias eficazes têm demonstrado resultados notáveis, ajudando pessoas a superar depressão, ansiedade, traumas e outros problemas emocionais de maneira ágil, aumentando assim a produtividade de seu time."
-  },
-  {
-    title: "Melhoria no Bem-Estar Emocional",
-    description: "Funcionários emocionalmente saudáveis são mais propensos a enfrentar desafios de forma construtiva, mantendo um ambiente de trabalho positivo."
-  },
-  {
-    title: "Aumento da Produtividade",
-    description: "A terapia ajuda a desenvolver habilidades de gerenciamento de estresse e aumento da resiliência, o que pode levar a uma maior produtividade e foco."
-  },
-  {
-    title: "Redução do Absenteísmo",
-    description: "Melhorar a saúde mental dos funcionários pode reduzir as faltas relacionadas a problemas emocionais, resultando em maior presença no trabalho."
-  },
-  {
-    title: "Melhor Comunicação e Relações Interpessoais",
-    description: "A terapia pode aprimorar as habilidades de comunicação e a capacidade de lidar com conflitos, melhorando as interações entre colegas e equipes."
-  },
-  {
-    title: "Criação de um Ambiente de Trabalho Positivo",
-    description: "Funcionários que cuidam de sua saúde mental contribuem para a construção de uma cultura organizacional saudável e acolhedora."
-  },
-  {
-    title: "Aumento da Autoconsciência",
-    description: "A terapia ajuda os funcionários a entender melhor suas emoções e comportamentos, permitindo um maior autoconhecimento e autogestão."
-  },
-  {
-    title: "Melhoria na Tomada de Decisões",
-    description: "Uma mente clara e equilibrada resulta em decisões mais informadas e eficazes por parte dos funcionários."
-  },
-  {
-    title: "Aumento da Criatividade e Inovação",
-    description: "O bem-estar emocional estimula a criatividade, levando a soluções inovadoras e novas abordagens para os desafios empresariais."
-  },
-  {
-    title: "Redução do Estresse no Trabalho",
-    description: "O bem-estar emocional estimula a criatividade, levando a soluções inovadoras e novas abordagens para os desafios empresariais."
-  },
-  {
-    title: "Retenção e Engajamento de Funcionários",
-    description: "Empresas que valorizam a saúde mental de seus funcionários tendem a ter uma maior taxa de retenção e maior engajamento por parte da equipe."
-  }
-];
-
 const TerapiaCorporativa: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
+
+  const benefits = [
+    {
+      title: "Resultados rápidos e positivos",
+      description: "Nossas metodologias eficazes têm demonstrado resultados notáveis, ajudando pessoas a superar depressão, ansiedade, traumas e outros problemas emocionais de maneira ágil, aumentando assim a produtividade de seu time."
+    },
+    {
+      title: "Melhoria no Bem-Estar Emocional",
+      description: "Funcionários emocionalmente saudáveis são mais propensos a enfrentar desafios de forma construtiva, mantendo um ambiente de trabalho positivo."
+    },
+    {
+      title: "Aumento da Produtividade",
+      description: "A terapia ajuda a desenvolver habilidades de gerenciamento de estresse e aumento da resiliência, o que pode levar a uma maior produtividade e foco."
+    },
+    {
+      title: "Redução do Absenteísmo",
+      description: "Melhorar a saúde mental dos funcionários pode reduzir as faltas relacionadas a problemas emocionais, resultando em maior presença no trabalho."
+    },
+    {
+      title: "Melhor Comunicação e Relações Interpessoais",
+      description: "A terapia pode aprimorar as habilidades de comunicação e a capacidade de lidar com conflitos, melhorando as interações entre colegas e equipes."
+    },
+    {
+      title: "Criação de um Ambiente de Trabalho Positivo",
+      description: "Funcionários que cuidam de sua saúde mental contribuem para a construção de uma cultura organizacional saudável e acolhedora."
+    },
+    {
+      title: "Aumento da Autoconsciência",
+      description: "A terapia ajuda os funcionários a entender melhor suas emoções e comportamentos, permitindo um maior autoconhecimento e autogestão."
+    },
+    {
+      title: "Melhoria na Tomada de Decisões",
+      description: "Uma mente clara e equilibrada resulta em decisões mais informadas e eficazes por parte dos funcionários."
+    },
+    {
+      title: "Aumento da Criatividade e Inovação",
+      description: "O bem-estar emocional estimula a criatividade, levando a soluções inovadoras e novas abordagens para os desafios empresariais."
+    },
+    {
+      title: "Redução do Estresse no Trabalho",
+      description: "O bem-estar emocional estimula a criatividade, levando a soluções inovadoras e novas abordagens para os desafios empresariais."
+    },
+    {
+      title: "Retenção e Engajamento de Funcionários",
+      description: "Empresas que valorizam a saúde mental de seus funcionários tendem a ter uma maior taxa de retenção e maior engajamento por parte da equipe."
+    }
+  ];
+
   // NOTE: This can link to a contact modal or a specific contact page/WhatsApp in the future.
   const ctaLink = 'https://wa.me/5500000000000'; 
 
@@ -56,10 +61,10 @@ const TerapiaCorporativa: React.FC = () => {
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
       <div className="max-w-4xl mx-auto">
         <h2 className="heading-secondary mb-4">
-          Soluções Terapêuticas Personalizadas para Empresas
+          {t('pages.corporateTherapy.title')}
         </h2>
         <p className="mt-4 text-lg md:text-xl text-slate-600">
-          Acreditamos na importância de um ambiente emocionalmente saudável para o sucesso duradouro das empresas. Oferecemos soluções terapêuticas personalizadas que podem elevar o bem-estar emocional de sua equipe, resultando em maior produtividade, engajamento e harmonia no local de trabalho e pessoal.
+          {t('pages.corporateTherapy.description')}
         </p>
         
         <div className="mt-12 text-left grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -90,7 +95,7 @@ const TerapiaCorporativa: React.FC = () => {
 
         <div className="mt-12 text-center">
           <p className="text-slate-700 mb-6">
-            Estamos ansiosos para discutir como podemos apoiar sua equipe em sua jornada rumo à saúde emocional e ao sucesso empresarial. Entre em contato conosco para agendar uma consulta inicial ou solicitar mais informações sobre nossos serviços.
+            {t('pages.corporateTherapy.ctaDescription')}
           </p>
           <a
             href={ctaLink}
@@ -98,7 +103,7 @@ const TerapiaCorporativa: React.FC = () => {
             rel="noopener noreferrer"
             className="btn-primary rounded-full"
           >
-            Agende uma consulta inicial para saber mais
+            {t('pages.corporateTherapy.cta')}
           </a>
         </div>
       </div>

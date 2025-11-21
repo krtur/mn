@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 
 interface Therapist {
   name: string;
@@ -32,12 +34,15 @@ const therapists: Therapist[] = [
 ];
 
 const Credenciais: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="max-w-6xl mx-auto">
         {/* Título */}
         <div className="text-center mb-16">
           <h2 className="heading-primary mb-4">
+            {t('nossas_credenciais')} <span className="gradient-text">{t('credenciais')}</span>
             Nossas <span className="gradient-text">Credenciais</span>
           </h2>
           <p className="text-xl text-slate-600">

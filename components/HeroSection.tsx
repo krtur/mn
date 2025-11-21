@@ -1,25 +1,29 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import WhatsappIcon from './icons/WhatsappIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import HeartIcon from './icons/HeartIcon';
 import BoltIcon from './icons/BoltIcon';
 
 const HeroSection: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
   // WhatsApp links for therapists
   const marceloWhatsapp = 'https://wa.me/5519981109732';
   const nadielmaWhatsapp = 'https://wa.me/5519981740279';
 
   const stats = [
-    { number: '500+', label: 'Pacientes Transformados', icon: '👥' },
-    { number: '95%', label: 'Taxa de Satisfação', icon: '⭐' },
-    { number: '10+', label: 'Anos de Experiência', icon: '🎓' },
+    { number: '500+', label: t('stats.patients'), icon: '👥' },
+    { number: '95%', label: t('stats.satisfaction'), icon: '⭐' },
+    { number: '10+', label: t('stats.experience'), icon: '🎓' },
   ];
 
   const benefits = [
-    { title: 'Resultados em Poucas Sessões', description: 'Metodologia TRG comprovada e eficaz', icon: '⚡' },
-    { title: 'Abordagem Humanizada', description: 'Você é o centro do processo terapêutico', icon: '❤️' },
-    { title: 'Flexibilidade de Horários', description: 'Atendimento presencial e online', icon: '🕐' },
-    { title: 'Profissionalismo Garantido', description: 'Terapeutas certificados e experientes', icon: '✓' },
+    { title: t('benefits.benefit1'), description: t('benefits.benefit1Desc'), icon: '⚡' },
+    { title: t('benefits.benefit2'), description: t('benefits.benefit2Desc'), icon: '❤️' },
+    { title: t('benefits.benefit3'), description: t('benefits.benefit3Desc'), icon: '🕐' },
+    { title: t('benefits.benefit4'), description: t('benefits.benefit4Desc'), icon: '✓' },
   ];
 
   const testimonials = [
@@ -36,34 +40,34 @@ const HeroSection: React.FC = () => {
           {/* Badge */}
           <div className="mb-12 animate-fade-in">
             <span className="inline-block px-6 py-3 bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 rounded-full text-sm font-bold tracking-wide border border-primary-200">
-              💙 NÓS NOS PREOCUPAMOS COM VOCÊ!
+              {t('hero.badge')}
             </span>
           </div>
 
           {/* Main Heading - Disruptive */}
           <h1 className="text-5xl md:text-7xl font-black leading-tight mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <span className="gradient-text">Liberte-se</span> dos traumas que<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-accent-600 to-primary-600">limitam seu potencial</span>
+            <span className="gradient-text">{t('hero.title1')}</span> {t('hero.title2')}<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-accent-600 to-primary-600">{t('hero.title3')}</span>
           </h1>
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed max-w-4xl mx-auto mb-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            Caminhando juntos em direção à sua melhor versão
+            {t('hero.subtitle')}
           </p>
 
           {/* Key Promise */}
           <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up" style={{ animationDelay: '0.25s' }}>
             <div className="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-200">
               <CheckCircleIcon className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-semibold text-green-700">Comprovadamente Eficaz</span>
+              <span className="text-sm font-semibold text-green-700">{t('hero.promise1')}</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-200">
               <BoltIcon className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-semibold text-blue-700">Resultados Rápidos</span>
+              <span className="text-sm font-semibold text-blue-700">{t('hero.promise2')}</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-full border border-purple-200">
               <HeartIcon className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-semibold text-purple-700">Humanizado</span>
+              <span className="text-sm font-semibold text-purple-700">{t('hero.promise3')}</span>
             </div>
           </div>
 
@@ -72,12 +76,12 @@ const HeroSection: React.FC = () => {
             <div className="glass-effect bg-gradient-to-br from-primary-50 via-accent-50 to-primary-50 rounded-3xl border-2 border-primary-200 shadow-2xl p-12 mb-12 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-accent-200 to-primary-200 rounded-full opacity-10 -mr-20 -mt-20"></div>
               <div className="relative z-10">
-                <p className="text-sm font-bold text-primary-600 uppercase tracking-widest mb-3">Comece Agora</p>
+                <p className="text-sm font-bold text-primary-600 uppercase tracking-widest mb-3">{t('cta.ctaBoxLabel')}</p>
                 <p className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
-                  Transforme sua vida com <span className="gradient-text">TRG</span>
+                  {t('cta.ctaBoxTitle')} <span className="gradient-text">TRG</span>
                 </p>
-                <p className="text-lg text-slate-600 mb-2">Metodologia comprovada para resultados duradouros</p>
-                <p className="text-sm text-slate-500">Atendimento profissional • Terapeutas certificados • Resultados garantidos</p>
+                <p className="text-lg text-slate-600 mb-2">{t('cta.ctaBoxSubtitle')}</p>
+                <p className="text-sm text-slate-500">{t('cta.ctaBoxFeatures')}</p>
               </div>
             </div>
 
@@ -90,7 +94,7 @@ const HeroSection: React.FC = () => {
                 className="btn-whatsapp flex items-center justify-center w-full sm:w-auto gap-3 text-lg"
               >
                 <WhatsappIcon className="w-6 h-6" />
-                <span>Falar com Marcelo</span>
+                <span>{t('cta.buttonMarcelo')}</span>
               </a>
               <a
                 href={nadielmaWhatsapp}
@@ -99,7 +103,7 @@ const HeroSection: React.FC = () => {
                 className="btn-whatsapp-accent flex items-center justify-center w-full sm:w-auto gap-3 text-lg"
               >
                 <WhatsappIcon className="w-6 h-6" />
-                <span>Falar com Nadielma</span>
+                <span>{t('cta.buttonNadielma')}</span>
               </a>
             </div>
           </div>
@@ -126,10 +130,10 @@ const HeroSection: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black mb-6">
-              Por que escolher <span className="gradient-text">M&N Terapeutas?</span>
+              {t('benefits.title')} <span className="gradient-text">{t('benefits.subtitle')}</span>
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Combinamos experiência, metodologia comprovada e humanidade para sua transformação
+              {t('benefits.description')}
             </p>
           </div>
 
@@ -154,10 +158,10 @@ const HeroSection: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black mb-6">
-              Conheça Nossos <span className="gradient-text">Terapeutas</span>
+              {t('therapists.title')} <span className="gradient-text">{t('therapists.subtitle')}</span>
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Profissionais certificados internacionalmente, dedicados a sua transformação
+              {t('therapists.description')}
             </p>
           </div>
 
@@ -175,10 +179,10 @@ const HeroSection: React.FC = () => {
             <div className="animate-slide-up">
               <div className="space-y-8">
                 <div className="card-premium p-8 border-l-4 border-primary-500">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">Marcelo</h3>
-                  <p className="text-primary-600 font-semibold mb-3">Terapeuta e Fundador</p>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{t('therapists.marcelo')}</h3>
+                  <p className="text-primary-600 font-semibold mb-3">{t('therapists.marceloRole')}</p>
                   <p className="text-slate-600 leading-relaxed mb-4">
-                    Especialista em Terapia de Reprocessamento Generativo (TRG) com certificação internacional. Sua abordagem empática e focada em resultados cria um espaço seguro para sua transformação.
+                    {t('therapists.marceloDesc')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">CITRG</span>
@@ -188,10 +192,10 @@ const HeroSection: React.FC = () => {
                 </div>
 
                 <div className="card-premium p-8 border-l-4 border-accent-500">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">Nadielma</h3>
-                  <p className="text-accent-600 font-semibold mb-3">Terapeuta e Fundadora</p>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{t('therapists.nadielma')}</h3>
+                  <p className="text-accent-600 font-semibold mb-3">{t('therapists.nadielmaRole')}</p>
                   <p className="text-slate-600 leading-relaxed mb-4">
-                    Combina TRG com profunda compreensão da dinâmica humana. Sua prática é pautada na compaixão e na crença de que a transformação é sempre possível.
+                    {t('therapists.nadielmaDesc')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-3 py-1 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold">CITRG</span>
@@ -209,10 +213,10 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto px-4 py-24 md:py-32">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-black mb-8">
-            Pronto para sua <span className="gradient-text">transformação?</span>
+            {t('cta.title')} <span className="gradient-text">{t('cta.subtitle')}</span>
           </h2>
           <p className="text-xl text-slate-600 mb-16">
-            Agende sua sessão com um de nossos terapeutas certificados e comece sua jornada de cura.
+            {t('cta.description')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
             <a

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../i18n/translations';
 import ClipboardListIcon from './icons/ClipboardListIcon';
 
 const rules = [
@@ -21,14 +23,17 @@ const rules = [
 ];
 
 const TerapiaBaixoCusto: React.FC = () => {
+  const { language } = useLanguage();
+  const t = (key: string) => getTranslation(language, key);
+
   // NOTE: This will link to the 'Anamnese (Formulário)' page or a specific sign-up form later.
   const ctaLink = '#'; 
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="heading-secondary mb-2">
-          Bem-vindo ao Atendimento de Baixo Custo
+      <div className="max-w-3xl mx-auto">
+        <h1 className="heading-secondary mb-6">
+          {t('pages.lowCostTherapy.title')}
         </h1>
         <h2 className="heading-secondary mb-8">
           Terapia TRG Acessível para Todos
