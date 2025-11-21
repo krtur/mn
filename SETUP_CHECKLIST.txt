@@ -1,0 +1,306 @@
+================================================================================
+CHECKLIST DE SETUP - SISTEMA M&N TERAPEUTAS
+================================================================================
+
+DATA: 21 de Novembro de 2025
+STATUS: Pronto para implementar
+
+================================================================================
+FASE 1: PREPARAÇÃO SUPABASE
+================================================================================
+
+☐ 1.1 Criar projeto Supabase
+      - Acesse: https://app.supabase.com
+      - Clique em "New Project"
+      - Nome: mn-terapeutas
+      - Salve a senha em local seguro
+      - Aguarde criação (pode levar alguns minutos)
+
+☐ 1.2 Copiar credenciais Supabase
+      - Vá para: Settings > API
+      - Copie: Project URL
+      - Copie: anon public key
+      - Salve em local seguro
+
+☐ 1.3 Atualizar credenciais no código
+      - Abra: services/supabase.ts
+      - Substitua: supabaseUrl
+      - Substitua: supabaseAnonKey
+      - Salve o arquivo
+
+☐ 1.4 Criar tabelas no Supabase
+      - Vá para: SQL Editor
+      - Abra arquivo: SUPABASE_TABLES_SETUP.sql
+      - Cole o conteúdo no SQL Editor
+      - Clique em "Run"
+      - Verifique se não há erros
+
+☐ 1.5 Desabilitar RLS (para desenvolvimento)
+      - Vá para: Authentication > Policies
+      - Para cada tabela (users, appointments, messages, documents):
+        * Clique em "Disable RLS" ou
+        * Configure políticas adequadas
+      - OU execute o SQL em SUPABASE_FINAL_FIX.sql
+
+================================================================================
+FASE 2: CRIAR TERAPEUTAS
+================================================================================
+
+☐ 2.1 Criar usuário Nadielma no Supabase Auth
+      - Vá para: Authentication > Users
+      - Clique em "Add user"
+      - Email: nadi@mnterapeutas.com
+      - Password: Perante@1202
+      - Marque: "Auto confirm user"
+      - Clique em "Save"
+      - COPIE O ID GERADO
+
+☐ 2.2 Criar usuário Marcelo no Supabase Auth
+      - Vá para: Authentication > Users
+      - Clique em "Add user"
+      - Email: marcelo@mnterapeutas.com
+      - Password: Perante@1202
+      - Marque: "Auto confirm user"
+      - Clique em "Save"
+      - COPIE O ID GERADO
+
+☐ 2.3 Adicionar Nadielma à tabela users
+      - Vá para: SQL Editor
+      - Execute SQL:
+        INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+        VALUES (
+          'ID_NADIELMA_AQUI',
+          'nadi@mnterapeutas.com',
+          'Nadielma',
+          '000.000.000-00',
+          '(11) 99999-9999',
+          'therapist_a',
+          NOW(),
+          NOW()
+        );
+      - Substitua ID_NADIELMA_AQUI pelo ID copiado
+
+☐ 2.4 Adicionar Marcelo à tabela users
+      - Vá para: SQL Editor
+      - Execute SQL:
+        INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+        VALUES (
+          'ID_MARCELO_AQUI',
+          'marcelo@mnterapeutas.com',
+          'Marcelo',
+          '000.000.000-00',
+          '(11) 99999-9999',
+          'therapist_b',
+          NOW(),
+          NOW()
+        );
+      - Substitua ID_MARCELO_AQUI pelo ID copiado
+
+☐ 2.5 Atualizar IDs no código
+      - Abra: hooks/useTherapists.ts
+      - Substitua em THERAPIST_IDS:
+        const THERAPIST_IDS = {
+          nadi: 'ID_NADIELMA_AQUI',
+          marcelo: 'ID_MARCELO_AQUI',
+        };
+      - Salve o arquivo
+
+================================================================================
+FASE 3: CONFIGURAR AMBIENTE LOCAL
+================================================================================
+
+☐ 3.1 Instalar Node.js
+      - Verifique: node --version
+      - Se não tiver, baixe em: https://nodejs.org
+
+☐ 3.2 Instalar dependências
+      - Abra terminal na pasta do projeto
+      - Execute: npm install
+      - Aguarde conclusão
+
+☐ 3.3 Criar arquivo .env.local (OPCIONAL)
+      - Crie arquivo: .env.local
+      - Adicione:
+        VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+        VITE_SUPABASE_ANON_KEY=sua-chave-anonima
+      - Salve (não commitar este arquivo)
+
+================================================================================
+FASE 4: INICIAR SISTEMA
+================================================================================
+
+☐ 4.1 Iniciar servidor de desenvolvimento
+      - Abra terminal na pasta do projeto
+      - Execute: npm run dev
+      - Aguarde: "Local: http://localhost:3000"
+
+☐ 4.2 Acessar no navegador
+      - Abra: http://localhost:3000
+      - Verifique se carrega a página inicial
+
+================================================================================
+FASE 5: TESTAR SISTEMA
+================================================================================
+
+☐ 5.1 Testar login do terapeuta
+      - Vá para: http://localhost:3000/login
+      - Email: nadi@mnterapeutas.com
+      - Senha: Perante@1202
+      - Clique em "Entrar"
+      - Verifique se redireciona para /dashboard/therapist
+      - Verifique se mostra TherapistDashboard
+
+☐ 5.2 Testar logout
+      - Clique em "Sair" (se disponível)
+      - Verifique se redireciona para /login
+
+☐ 5.3 Testar cadastro de paciente
+      - Vá para: http://localhost:3000/register
+      - Selecione: Nadielma
+      - Preencha dados:
+        * Nome: João Silva
+        * Email: joao@email.com
+        * CPF: 123.456.789-00
+        * Telefone: (11) 98765-4321
+        * Senha: Senha@123
+      - Clique em "Criar Conta"
+      - Verifique se redireciona para /login com mensagem de sucesso
+
+☐ 5.4 Testar login do paciente
+      - Email: joao@email.com
+      - Senha: Senha@123
+      - Clique em "Entrar"
+      - Verifique se redireciona para /dashboard/patient
+      - Verifique se mostra PatientDashboard
+
+☐ 5.5 Testar navegação do paciente
+      - Clique em "Agendamentos"
+      - Clique em "Mensagens"
+      - Clique em "Relatórios"
+      - Verifique se todos os links funcionam
+
+☐ 5.6 Testar navegação do terapeuta
+      - Faça login novamente com nadi@mnterapeutas.com
+      - Clique em "Agenda"
+      - Clique em "Pacientes"
+      - Clique em "Mensagens"
+      - Clique em "Documentos"
+      - Verifique se todos os links funcionam
+
+================================================================================
+FASE 6: VERIFICAR DADOS
+================================================================================
+
+☐ 6.1 Verificar tabela users
+      - Vá para: Supabase > Table Editor
+      - Clique em: users
+      - Verifique se há 3 registros (Nadielma, Marcelo, João Silva)
+
+☐ 6.2 Verificar tabela appointments
+      - Clique em: appointments
+      - Verifique se está vazia (normal no início)
+
+☐ 6.3 Verificar tabela messages
+      - Clique em: messages
+      - Verifique se está vazia (normal no início)
+
+☐ 6.4 Verificar tabela documents
+      - Clique em: documents
+      - Verifique se está vazia (normal no início)
+
+================================================================================
+FASE 7: PRÓXIMOS PASSOS
+================================================================================
+
+☐ 7.1 Implementar criação de agendamentos
+      - Criar formulário em Appointments.tsx
+      - Salvar em tabela appointments
+      - Atualizar lista em tempo real
+
+☐ 7.2 Implementar envio de mensagens
+      - Criar formulário em Messages.tsx
+      - Salvar em tabela messages
+      - Atualizar lista em tempo real
+
+☐ 7.3 Implementar criação de documentos
+      - Criar formulário em DocumentGeneration.tsx
+      - Salvar em tabela documents
+      - Atualizar lista em tempo real
+
+☐ 7.4 Implementar confirmação de agendamentos
+      - Adicionar botão "Confirmar" em Appointments.tsx
+      - Atualizar status em tabela appointments
+
+☐ 7.5 Adicionar validações
+      - Validar email único
+      - Validar CPF
+      - Validar telefone
+      - Validar datas de agendamento
+
+☐ 7.6 Melhorar design
+      - Adicionar fotos de perfil
+      - Adicionar ícones
+      - Melhorar cores
+      - Responsivo em mobile
+
+☐ 7.7 Deploy em produção
+      - Configurar variáveis de ambiente
+      - Build: npm run build
+      - Deploy em Netlify, Vercel ou outro
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+❌ PROBLEMA: "Erro ao fazer login"
+✅ SOLUÇÃO:
+   - Verifique se o usuário existe no Supabase Auth
+   - Verifique se o usuário existe na tabela users
+   - Verifique se a senha está correta
+   - Abra console (F12) e procure por erros
+
+❌ PROBLEMA: "Terapeutas não aparecem no cadastro"
+✅ SOLUÇÃO:
+   - Verifique se os IDs em useTherapists.ts estão corretos
+   - Verifique se os registros foram criados na tabela users
+   - Abra console (F12) e procure por erros
+
+❌ PROBLEMA: "Paciente não aparece na lista do terapeuta"
+✅ SOLUÇÃO:
+   - Verifique se há agendamentos entre paciente e terapeuta
+   - Verifique o hook usePatients
+   - Abra console (F12) e procure por erros
+
+❌ PROBLEMA: "Erro de CORS"
+✅ SOLUÇÃO:
+   - Verifique se o Supabase está configurado corretamente
+   - Verifique se as credenciais estão corretas
+   - Verifique se o navegador está acessando http://localhost:3000
+
+❌ PROBLEMA: "Banco de dados vazio"
+✅ SOLUÇÃO:
+   - Verifique se as tabelas foram criadas
+   - Execute novamente o SQL em SUPABASE_TABLES_SETUP.sql
+   - Verifique se RLS está desabilitado
+
+================================================================================
+CONTATOS ÚTEIS
+================================================================================
+
+- Documentação Supabase: https://supabase.com/docs
+- Documentação React: https://react.dev
+- Documentação React Router: https://reactrouter.com
+- Documentação Tailwind: https://tailwindcss.com
+
+================================================================================
+NOTAS IMPORTANTES
+================================================================================
+
+1. Nunca commitar arquivo .env.local com credenciais reais
+2. Usar RLS em produção para segurança
+3. Fazer backup regular do banco de dados
+4. Testar em navegador incógnito para limpar cache
+5. Usar console (F12) para debug
+6. Verificar logs do Supabase em Dashboard > Logs
+
+================================================================================

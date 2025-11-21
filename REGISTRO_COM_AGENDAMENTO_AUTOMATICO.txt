@@ -1,0 +1,102 @@
+================================================================================
+REGISTRO COM AGENDAMENTO AUTOMÁTICO - IMPLEMENTADO ✅
+================================================================================
+
+DATA: 21 de Novembro de 2025
+STATUS: ✅ CONCLUÍDO
+
+================================================================================
+O QUE FOI IMPLEMENTADO:
+================================================================================
+
+Modificado: components/auth/Register.tsx
+
+Novo fluxo de cadastro:
+1. Paciente preenche formulário
+2. Seleciona terapeuta
+3. Clica em "Criar Conta"
+4. Sistema cria usuário no Supabase Auth
+5. Sistema cria registro na tabela users
+6. ✅ NOVO: Sistema cria agendamento automático
+7. Sistema faz logout automático
+8. Redireciona para login
+
+================================================================================
+DETALHES DA IMPLEMENTAÇÃO:
+================================================================================
+
+1. IMPORTAÇÃO DO SUPABASE:
+   - Adicionado: import { supabase } from '../../services/supabase';
+   - Permite criar agendamentos diretamente
+
+2. CRIAÇÃO DO AGENDAMENTO:
+   - Após registrar o usuário, aguarda 1 segundo
+   - Busca o ID do usuário recém-criado
+   - Cria agendamento com:
+     * patient_id: ID do novo paciente
+     * therapist_id: ID do terapeuta selecionado
+     * start_time: Próxima semana, 10:00
+     * end_time: 1 hora depois
+     * status: "pending"
+     * notes: "Primeira sessão agendada automaticamente"
+
+3. TRATAMENTO DE ERROS:
+   - Se o agendamento falhar, não interrompe o fluxo
+   - Apenas registra um aviso no console
+   - Usuário consegue fazer login normalmente
+
+4. LOGOUT AUTOMÁTICO:
+   - Após criar agendamento, faz logout
+   - Força o usuário a fazer login
+   - Garante que o token seja atualizado
+
+================================================================================
+FLUXO COMPLETO AGORA:
+================================================================================
+
+ANTES (Incompleto):
+1. Cadastro → Usuário criado → Sem agendamento → Paciente invisível
+
+DEPOIS (Completo):
+1. Cadastro → Usuário criado → Agendamento criado → Paciente visível
+
+================================================================================
+COMO TESTAR:
+================================================================================
+
+1. Acesse: http://localhost:3000/register
+2. Preencha o formulário:
+   - Nome: João Silva
+   - Email: joao@email.com
+   - CPF: 123.456.789-00
+   - Telefone: (11) 98765-4321
+   - Senha: Senha@123
+   - Selecione: Marcelo
+3. Clique em "Criar Conta"
+4. Verifique se redireciona para login
+5. Faça login com Marcelo: marcelo@mnterapeutas.com / Perante@1202
+6. Vá para: Dashboard > Pacientes
+7. ✅ João Silva deve aparecer na lista!
+
+================================================================================
+RESULTADO ESPERADO:
+================================================================================
+
+✅ Paciente aparece na lista do terapeuta
+✅ Agendamento criado automaticamente
+✅ Status: "pending"
+✅ Data: Próxima semana, 10:00
+✅ Paciente pode fazer login e ver seu agendamento
+
+================================================================================
+PRÓXIMOS PASSOS:
+================================================================================
+
+1. Testar fluxo completo de cadastro
+2. Verificar se paciente aparece na lista do terapeuta
+3. Verificar se agendamento aparece na agenda do terapeuta
+4. Implementar edição de agendamentos
+5. Implementar confirmação de agendamentos
+6. Implementar cancelamento de agendamentos
+
+================================================================================

@@ -1,51 +1,30 @@
 import React, { useState } from 'react';
+import { usePatients } from '../../hooks/usePatients';
 
 interface Patient {
   id: string;
   name: string;
   cpf: string;
   phone: string;
-  status: 'active' | 'inactive' | 'paused';
+  email: string;
+  status?: 'active' | 'inactive' | 'paused';
   lastSession?: string;
 }
 
 export const PatientList: React.FC = () => {
-  const [patients] = useState<Patient[]>([
-    {
-      id: '1',
-      name: 'João Silva',
-      cpf: '123.456.789-00',
-      phone: '(11) 99999-9999',
-      status: 'active',
-      lastSession: '2024-11-13',
-    },
-    {
-      id: '2',
-      name: 'Maria Santos',
-      cpf: '987.654.321-00',
-      phone: '(11) 98888-8888',
-      status: 'active',
-      lastSession: '2024-11-10',
-    },
-    {
-      id: '3',
-      name: 'Pedro Costa',
-      cpf: '456.789.123-00',
-      phone: '(11) 97777-7777',
-      status: 'paused',
-      lastSession: '2024-10-30',
-    },
-    {
-      id: '4',
-      name: 'Ana Silva',
-      cpf: '789.123.456-00',
-      phone: '(11) 96666-6666',
-      status: 'active',
-      lastSession: '2024-11-15',
-    },
-  ]);
-
+  const { patients: realPatients, loading, error } = usePatients();
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Converter dados reais para o formato esperado
+  const patients = realPatients.map(p => ({
+    id: p.id,
+    name: p.name,
+    cpf: p.cpf,
+    phone: p.phone,
+    email: p.email,
+    status: 'active' as const,
+    lastSession: undefined,
+  }));
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -79,6 +58,25 @@ export const PatientList: React.FC = () => {
       patient.cpf.includes(searchTerm)
   );
 
+  // Mostrar loading
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+        <p className="ml-2 text-slate-600">Carregando pacientes...</p>
+      </div>
+    );
+  }
+
+  // Mostrar erro
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p className="text-red-700">Erro ao carregar pacientes: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-slate-900">Meus Pacientes</h1>
@@ -93,43 +91,48 @@ export const PatientList: React.FC = () => {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Nome</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">CPF</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Telefone</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Status</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Última Sessão</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {filteredPatients.map((patient) => (
-                <tr key={patient.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4 text-sm font-medium text-slate-900">{patient.name}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{patient.cpf}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{patient.phone}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(patient.status)}`}>
-                      {getStatusLabel(patient.status)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
-                    {patient.lastSession && new Date(patient.lastSession).toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <button className="text-teal-600 hover:text-teal-700 font-semibold mr-3">Ver</button>
-                    <button className="text-slate-600 hover:text-slate-900 font-semibold">Editar</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {filteredPatients.length === 0 ? (
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-8 text-center">
+          <p className="text-slate-600 text-lg">Nenhum paciente encontrado</p>
+          <p className="text-slate-500 text-sm mt-2">Quando pacientes se cadastrarem e forem associados a você, aparecerão aqui</p>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Nome</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">CPF</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Telefone</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Email</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Status</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {filteredPatients.map((patient) => (
+                  <tr key={patient.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 text-sm font-medium text-slate-900">{patient.name}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{patient.cpf}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{patient.phone}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{patient.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(patient.status || 'active')}`}>
+                        {getStatusLabel(patient.status || 'active')}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <button className="text-teal-600 hover:text-teal-700 font-semibold mr-3">Ver</button>
+                      <button className="text-slate-600 hover:text-slate-900 font-semibold">Editar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

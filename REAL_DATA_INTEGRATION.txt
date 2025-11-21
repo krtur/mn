@@ -1,0 +1,223 @@
+================================================================================
+INTEGRAÇÃO DE DADOS REAIS - GUIA COMPLETO
+================================================================================
+
+✅ IMPLEMENTADO:
+================================================================================
+
+1. HOOKS CUSTOMIZADOS CRIADOS:
+   - useAppointments.ts     → Busca agendamentos do usuário com atualizações em tempo real
+   - useMessages.ts         → Busca mensagens e conversas com atualizações em tempo real
+   - useDocuments.ts        → Busca documentos (relatórios, diagnósticos, etc)
+   - usePatients.ts         → Busca pacientes do terapeuta
+   - useDashboardStats.ts   → Calcula estatísticas gerais do dashboard
+   - index.ts               → Exporta todos os hooks
+
+2. COMPONENTES ATUALIZADOS:
+   ✓ PatientDashboard.tsx   → Agora mostra dados reais de agendamentos, mensagens e documentos
+   ✓ TherapistDashboard.tsx → Agora mostra dados reais de pacientes, agenda e documentos
+   ✓ Appointments.tsx       → Agora busca agendamentos reais do Supabase
+
+3. FUNCIONALIDADES:
+   - Busca de dados em tempo real do Supabase
+   - Atualização automática quando dados mudam (via WebSocket)
+   - Loading states durante busca de dados
+   - Error handling com mensagens claras
+   - Filtros automáticos por tipo de usuário (paciente/terapeuta)
+
+================================================================================
+COMO USAR OS HOOKS:
+================================================================================
+
+1. AGENDAMENTOS (useAppointments):
+   
+   import { useAppointments } from '../../hooks/useAppointments';
+   
+   const { appointments, loading, error } = useAppointments();
+   
+   // appointments é um array de agendamentos do usuário
+   // Pacientes veem seus agendamentos
+   // Terapeutas veem agendamentos com seus pacientes
+   
+   Estrutura:
+   {
+     id: string;
+     patient_id: string;
+     therapist_id: string;
+     start_time: string;
+     end_time: string;
+     status: 'pending' | 'confirmed' | 'cancelled';
+     notes?: string;
+     patient?: { name: string; email: string };
+     therapist?: { name: string; email: string };
+   }
+
+2. MENSAGENS (useMessages):
+   
+   import { useMessages } from '../../hooks/useMessages';
+   
+   const { messages, conversations, loading, error } = useMessages();
+   
+   // messages: todas as mensagens do usuário
+   // conversations: conversas agrupadas por usuário
+   
+   Estrutura Conversation:
+   {
+     id: string;
+     other_user_id: string;
+     other_user_name: string;
+     other_user_email: string;
+     last_message: string;
+     last_message_time: string;
+     unread_count: number;
+   }
+
+3. DOCUMENTOS (useDocuments):
+   
+   import { useDocuments } from '../../hooks/useDocuments';
+   
+   const { documents, loading, error } = useDocuments();
+   
+   // Pacientes veem documentos criados para eles
+   // Terapeutas veem documentos que criaram
+   
+   Estrutura:
+   {
+     id: string;
+     patient_id: string;
+     therapist_id: string;
+     type: 'report' | 'diagnosis' | 'progress_note';
+     title: string;
+     content: string;
+     file_url?: string;
+     created_at: string;
+     updated_at: string;
+   }
+
+4. PACIENTES (usePatients):
+   
+   import { usePatients } from '../../hooks/usePatients';
+   
+   const { patients, loading, error } = usePatients();
+   
+   // Apenas terapeutas podem usar este hook
+   // Retorna lista de pacientes do terapeuta
+   
+   Estrutura:
+   {
+     id: string;
+     email: string;
+     name: string;
+     cpf: string;
+     phone: string;
+     profile_image?: string;
+     created_at: string;
+     updated_at: string;
+   }
+
+5. ESTATÍSTICAS (useDashboardStats):
+   
+   import { useDashboardStats } from '../../hooks/useDashboardStats';
+   
+   const stats = useDashboardStats();
+   
+   // Retorna:
+   {
+     totalAppointments: number;
+     upcomingAppointments: number;
+     confirmedAppointments: number;
+     cancelledAppointments: number;
+     totalMessages: number;
+     unreadMessages: number;
+     totalDocuments: number;
+     totalPatients: number;
+     appointmentsToday: number;
+     loading: boolean;
+     error: string | null;
+   }
+
+================================================================================
+PRÓXIMOS PASSOS:
+================================================================================
+
+1. ATUALIZAR COMPONENTES RESTANTES:
+   - Messages.tsx (Paciente e Terapeuta)
+   - Reports.tsx
+   - Schedule.tsx (Terapeuta)
+   - PatientList.tsx (Terapeuta)
+   - DocumentGeneration.tsx (Terapeuta)
+
+2. IMPLEMENTAR FUNCIONALIDADES DE CRIAÇÃO/EDIÇÃO:
+   - Criar novo agendamento
+   - Enviar mensagem
+   - Criar documento
+   - Confirmar/cancelar agendamento
+
+3. ADICIONAR VALIDAÇÕES:
+   - Verificar permissões (RLS do Supabase)
+   - Validar dados antes de enviar
+   - Tratar erros de rede
+
+4. OTIMIZAÇÕES:
+   - Implementar paginação para listas grandes
+   - Adicionar cache local
+   - Melhorar performance de queries
+
+================================================================================
+ESTRUTURA DO BANCO DE DADOS ESPERADA:
+================================================================================
+
+Tabelas necessárias no Supabase:
+
+1. users
+   - id (UUID, PK)
+   - email (TEXT)
+   - name (TEXT)
+   - cpf (TEXT)
+   - phone (TEXT)
+   - role ('patient' | 'therapist_a' | 'therapist_b')
+   - profile_image (TEXT, nullable)
+   - created_at (TIMESTAMP)
+   - updated_at (TIMESTAMP)
+
+2. appointments
+   - id (UUID, PK)
+   - patient_id (UUID, FK → users.id)
+   - therapist_id (UUID, FK → users.id)
+   - start_time (TIMESTAMP)
+   - end_time (TIMESTAMP)
+   - status ('pending' | 'confirmed' | 'cancelled')
+   - notes (TEXT, nullable)
+   - created_at (TIMESTAMP)
+   - updated_at (TIMESTAMP)
+
+3. messages
+   - id (UUID, PK)
+   - sender_id (UUID, FK → users.id)
+   - recipient_id (UUID, FK → users.id)
+   - content (TEXT)
+   - read (BOOLEAN)
+   - created_at (TIMESTAMP)
+
+4. documents
+   - id (UUID, PK)
+   - patient_id (UUID, FK → users.id)
+   - therapist_id (UUID, FK → users.id)
+   - type ('report' | 'diagnosis' | 'progress_note')
+   - title (TEXT)
+   - content (TEXT)
+   - file_url (TEXT, nullable)
+   - created_at (TIMESTAMP)
+   - updated_at (TIMESTAMP)
+
+================================================================================
+TESTANDO A INTEGRAÇÃO:
+================================================================================
+
+1. Certifique-se de que o Supabase está configurado corretamente
+2. Verifique se as tabelas existem e têm dados
+3. Abra o console do navegador (F12) para ver logs de debug
+4. Verifique se os hooks estão buscando dados corretamente
+5. Teste a atualização em tempo real criando dados em outra aba
+
+================================================================================

@@ -1,0 +1,76 @@
+================================================================================
+FLUXO DE ASSOCIAÇÃO PACIENTE-TERAPEUTA
+================================================================================
+
+PROBLEMA IDENTIFICADO:
+- Paciente cadastrado não aparece na lista do terapeuta
+- Motivo: usePatients busca pacientes baseado em AGENDAMENTOS
+- Solução: Criar agendamento automático ao cadastrar paciente
+
+================================================================================
+FLUXO ATUAL (INCOMPLETO):
+================================================================================
+
+1. Paciente acessa /register
+2. Seleciona terapeuta (ex: Marcelo)
+3. Preenche dados e clica em "Criar Conta"
+4. Usuário é criado no Supabase Auth
+5. Registro é criado na tabela users
+6. ❌ MAS: Nenhum agendamento é criado
+7. ❌ RESULTADO: Paciente não aparece na lista do terapeuta
+
+================================================================================
+FLUXO DESEJADO (COMPLETO):
+================================================================================
+
+1. Paciente acessa /register
+2. Seleciona terapeuta (ex: Marcelo)
+3. Preenche dados e clica em "Criar Conta"
+4. Usuário é criado no Supabase Auth
+5. Registro é criado na tabela users
+6. ✅ AGENDAMENTO é criado automaticamente
+7. ✅ RESULTADO: Paciente aparece na lista do terapeuta
+
+================================================================================
+COMO IMPLEMENTAR:
+================================================================================
+
+Opção 1: AUTOMÁTICO NO CADASTRO (Recomendado)
+- Modificar Register.tsx
+- Após criar usuário, criar agendamento automático
+- Agendamento com data futura (ex: próxima semana)
+- Status: "pending"
+
+Opção 2: SCRIPT MANUAL
+- Executar script: node associar_paciente_terapeuta.js
+- Script busca pacientes sem agendamento
+- Cria agendamento automático para cada um
+
+================================================================================
+PROBLEMA ATUAL:
+================================================================================
+
+Você cadastrou um paciente, mas:
+1. O paciente foi criado no Supabase Auth
+2. O registro foi criado na tabela users
+3. MAS: Nenhum agendamento foi criado
+4. RESULTADO: usePatients não encontra o paciente
+
+SOLUÇÃO IMEDIATA:
+1. Executar: node associar_paciente_terapeuta.js
+2. Script vai criar agendamentos para todos os pacientes
+3. Recarregar navegador
+4. Paciente deve aparecer na lista
+
+================================================================================
+PRÓXIMOS PASSOS:
+================================================================================
+
+1. Implementar criação automática de agendamento no Register.tsx
+2. Quando paciente se cadastra:
+   - Criar usuário
+   - Criar agendamento com terapeuta selecionado
+   - Redirecionar para login
+3. Paciente aparecerá automaticamente na lista do terapeuta
+
+================================================================================

@@ -224,7 +224,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'> & { password: string }) => {
+  const register = async (userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'> & { password: string; therapistId?: string }) => {
     setIsLoading(true);
     try {
       // Criar usuário no Auth do Supabase
@@ -237,18 +237,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (authData.user) {
         // Criar registro do usuário na tabela users
+        const userRecord: any = {
+          id: authData.user.id,
+          email: userData.email,
+          cpf: userData.cpf,
+          name: userData.name,
+          phone: userData.phone,
+          role: userData.role,
+        };
+
+        // Adicionar therapist_id se for paciente
+        if (userData.role === 'patient' && userData.therapistId) {
+          userRecord.therapist_id = userData.therapistId;
+        }
+
         const { error: dbError } = await supabase
           .from('users')
-          .insert([
-            {
-              id: authData.user.id,
-              email: userData.email,
-              cpf: userData.cpf,
-              name: userData.name,
-              phone: userData.phone,
-              role: userData.role,
-            },
-          ]);
+          .insert([userRecord]);
 
         if (dbError) {
           console.error('Erro ao criar usuário na tabela:', dbError);
@@ -272,8 +277,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Erro ao cadastrar:', error);
       setIsLoading(false);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-    // NÃO resetar isLoading aqui - deixar o onAuthStateChange fazer isso
   };
 
   const logout = async () => {

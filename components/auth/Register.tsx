@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from './AuthContext';
+import { useTherapists } from '../../hooks/useTherapists';
 
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,12 +11,14 @@ export const Register: React.FC = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    therapistId: '', // ID do terapeuta selecionado
     role: 'patient' as UserRole,
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, user } = useAuth();
+  const { therapists, loading: therapistsLoading } = useTherapists();
   const hasRedirected = useRef(false);
 
   // Redirecionar para dashboard se já estiver logado
@@ -35,6 +38,12 @@ export const Register: React.FC = () => {
     e.preventDefault();
     setError('');
 
+    // Validações
+    if (!formData.therapistId) {
+      setError('Selecione um terapeuta');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não conferem');
       return;
@@ -43,15 +52,32 @@ export const Register: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await register({
+      // Buscar o terapeuta selecionado
+      const selectedTherapist = therapists.find((t) => t.id === formData.therapistId);
+
+      if (!selectedTherapist) {
+        setError('Terapeuta inválido');
+        return;
+      }
+
+      // Registrar o usuário com therapist_id
+      const registerData: any = {
         name: formData.name,
         email: formData.email,
         cpf: formData.cpf,
         phone: formData.phone,
         role: formData.role,
         password: formData.password,
+        therapistId: formData.therapistId, // Passar o ID do terapeuta
+      };
+
+      await register(registerData);
+
+      navigate('/login', {
+        state: {
+          message: `Cadastro realizado com sucesso! Você está associado ao terapeuta ${selectedTherapist.name}. Faça login para continuar.`,
+        },
       });
-      navigate('/login', { state: { message: 'Cadastro realizado com sucesso! Faça login para continuar.' } });
     } catch (err) {
       setError('Erro ao registrar. Tente novamente.');
       console.error(err);
@@ -77,20 +103,30 @@ export const Register: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-slate-700 mb-1">
-                Tipo de Conta
+              <label htmlFor="therapistId" className="block text-sm font-medium text-slate-700 mb-1">
+                Selecione seu Terapeuta
               </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-              >
-                <option value="patient">Paciente</option>
-                <option value="therapist_a">Terapeuta A</option>
-                <option value="therapist_b">Terapeuta B</option>
-              </select>
+              {therapistsLoading ? (
+                <div className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600">
+                  Carregando terapeutas...
+                </div>
+              ) : (
+                <select
+                  id="therapistId"
+                  name="therapistId"
+                  value={formData.therapistId}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  required
+                >
+                  <option value="">-- Escolha um terapeuta --</option>
+                  {therapists.map((therapist) => (
+                    <option key={therapist.id} value={therapist.id}>
+                      {therapist.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div>

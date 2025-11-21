@@ -12,22 +12,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
   const location = useLocation();
 
   const patientMenuItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Agendamentos', path: '/dashboard/appointments' },
-    { label: 'Mensagens', path: '/dashboard/messages' },
-    { label: 'Relatórios', path: '/dashboard/reports' },
-    { label: 'Loja de Testes', path: '/dashboard/test-shop' },
-    { label: 'Histórico', path: '/dashboard/attendance' },
-    { label: 'Perfil', path: '/dashboard/profile' },
+    { label: 'Dashboard', path: '/dashboard/patient' },
+    { label: 'Agendamentos', path: '/dashboard/patient/appointments' },
+    { label: 'Mensagens', path: '/dashboard/patient/messages' },
+    { label: 'Relatórios', path: '/dashboard/patient/reports' },
+    { label: 'Loja de Testes', path: '/dashboard/patient/test-shop' },
+    { label: 'Histórico', path: '/dashboard/patient/attendance' },
+    { label: 'Perfil', path: '/dashboard/patient/profile' },
   ];
 
   const therapistMenuItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Agenda', path: '/dashboard/schedule' },
-    { label: 'Pacientes', path: '/dashboard/patients' },
-    { label: 'Mensagens', path: '/dashboard/messages' },
-    { label: 'Documentos', path: '/dashboard/documents' },
-    { label: 'Perfil', path: '/dashboard/profile' },
+    { label: 'Dashboard', path: '/dashboard/therapist' },
+    { label: 'Agenda', path: '/dashboard/therapist/schedule' },
+    { label: 'Pacientes', path: '/dashboard/therapist/patients' },
+    { label: 'Mensagens', path: '/dashboard/therapist/messages' },
+    { label: 'Documentos', path: '/dashboard/therapist/documents' },
+    { label: 'Perfil', path: '/dashboard/therapist/profile' },
   ];
 
   const menuItems = userRole === 'patient' ? patientMenuItems : therapistMenuItems;

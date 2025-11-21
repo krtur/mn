@@ -1,39 +1,27 @@
 import React, { useState } from 'react';
-
-interface Appointment {
-  id: string;
-  therapist: string;
-  date: string;
-  time: string;
-  status: 'confirmed' | 'pending' | 'cancelled';
-}
+import { useAppointments } from '../../hooks/useAppointments';
 
 export const Appointments: React.FC = () => {
-  const [appointments] = useState<Appointment[]>([
-    {
-      id: '1',
-      therapist: 'Terapeuta A',
-      date: '2024-11-20',
-      time: '14:00',
-      status: 'confirmed',
-    },
-    {
-      id: '2',
-      therapist: 'Terapeuta A',
-      date: '2024-11-27',
-      time: '10:00',
-      status: 'confirmed',
-    },
-    {
-      id: '3',
-      therapist: 'Terapeuta B',
-      date: '2024-12-04',
-      time: '15:30',
-      status: 'pending',
-    },
-  ]);
-
+  const { appointments, loading, error } = useAppointments();
   const [showNewAppointment, setShowNewAppointment] = useState(false);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+        <p className="ml-2 text-slate-600">Carregando agendamentos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+        <p className="font-semibold">Erro ao carregar agendamentos</p>
+        <p className="text-sm">{error}</p>
+      </div>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -124,25 +112,44 @@ export const Appointments: React.FC = () => {
 
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-slate-900">Próximos Agendamentos</h2>
-        {appointments.map((apt) => (
-          <div key={apt.id} className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="font-semibold text-slate-900">{apt.therapist}</h3>
-                <p className="text-sm text-slate-600">
-                  📅 {new Date(apt.date).toLocaleDateString('pt-BR')} às {apt.time}
-                </p>
-              </div>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(apt.status)}`}>
-                {getStatusLabel(apt.status)}
-              </span>
-            </div>
-            <div className="mt-3 flex gap-2">
-              <button className="text-sm text-teal-600 hover:text-teal-700 font-semibold">Reagendar</button>
-              <button className="text-sm text-red-600 hover:text-red-700 font-semibold">Cancelar</button>
-            </div>
+        {appointments.length === 0 ? (
+          <div className="bg-slate-50 rounded-lg p-6 text-center">
+            <p className="text-slate-600">Você não possui agendamentos no momento</p>
+            <button
+              onClick={() => setShowNewAppointment(true)}
+              className="mt-4 text-teal-600 hover:text-teal-700 font-semibold"
+            >
+              Agendar uma sessão
+            </button>
           </div>
-        ))}
+        ) : (
+          appointments.map((apt) => (
+            <div key={apt.id} className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-slate-900">
+                    Sessão com {apt.therapist?.name || 'Terapeuta'}
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    📅 {new Date(apt.start_time).toLocaleDateString('pt-BR')} às{' '}
+                    {new Date(apt.start_time).toLocaleTimeString('pt-BR', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                  {apt.notes && <p className="text-sm text-slate-500 mt-2">Notas: {apt.notes}</p>}
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(apt.status)}`}>
+                  {getStatusLabel(apt.status)}
+                </span>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <button className="text-sm text-teal-600 hover:text-teal-700 font-semibold">Reagendar</button>
+                <button className="text-sm text-red-600 hover:text-red-700 font-semibold">Cancelar</button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

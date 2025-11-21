@@ -1,0 +1,144 @@
+================================================================================
+COMECE AQUI - GUIA RÁPIDO DE 5 MINUTOS
+================================================================================
+
+Bem-vindo ao M&N Terapeutas! Este guia vai te ajudar a começar em 5 minutos.
+
+================================================================================
+PASSO 1: PREPARAR SUPABASE (2 minutos)
+================================================================================
+
+1. Acesse: https://app.supabase.com
+2. Crie um novo projeto (nome: mn-terapeutas)
+3. Vá para: Settings > API
+4. Copie: Project URL e anon public key
+5. Abra: services/supabase.ts
+6. Substitua os valores:
+   - supabaseUrl = "sua-url"
+   - supabaseAnonKey = "sua-chave"
+
+================================================================================
+PASSO 2: CRIAR TABELAS (1 minuto)
+================================================================================
+
+1. No Supabase, vá para: SQL Editor
+2. Abra arquivo: SUPABASE_TABLES_SETUP.sql
+3. Cole o conteúdo no SQL Editor
+4. Clique em "Run"
+
+================================================================================
+PASSO 3: CRIAR TERAPEUTAS (1 minuto)
+================================================================================
+
+1. No Supabase, vá para: Authentication > Users
+2. Clique em "Add user"
+3. Crie NADIELMA:
+   - Email: nadi@mnterapeutas.com
+   - Password: Perante@1202
+   - Marque: "Auto confirm user"
+   - Clique em "Save"
+   - COPIE O ID
+
+4. Crie MARCELO:
+   - Email: marcelo@mnterapeutas.com
+   - Password: Perante@1202
+   - Marque: "Auto confirm user"
+   - Clique em "Save"
+   - COPIE O ID
+
+5. No Supabase, vá para: SQL Editor
+6. Execute este SQL (substitua os IDs):
+
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  'ID_NADIELMA_AQUI',
+  'nadi@mnterapeutas.com',
+  'Nadielma',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_a',
+  NOW(),
+  NOW()
+);
+
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  'ID_MARCELO_AQUI',
+  'marcelo@mnterapeutas.com',
+  'Marcelo',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_b',
+  NOW(),
+  NOW()
+);
+
+7. Abra: hooks/useTherapists.ts
+8. Substitua os IDs em THERAPIST_IDS
+
+================================================================================
+PASSO 4: INICIAR O SISTEMA (1 minuto)
+================================================================================
+
+1. Abra terminal na pasta do projeto
+2. Execute: npm install
+3. Execute: npm run dev
+4. Abra: http://localhost:3000
+
+================================================================================
+PASSO 5: TESTAR (1 minuto)
+================================================================================
+
+TESTE 1 - Login como Terapeuta:
+- Clique em "Entrar"
+- Email: nadi@mnterapeutas.com
+- Senha: Perante@1202
+- Clique em "Entrar"
+- Verifique se mostra TherapistDashboard
+
+TESTE 2 - Cadastro como Paciente:
+- Clique em "Cadastre-se"
+- Selecione: Nadielma
+- Preencha dados:
+  * Nome: João Silva
+  * Email: joao@email.com
+  * CPF: 123.456.789-00
+  * Telefone: (11) 98765-4321
+  * Senha: Senha@123
+- Clique em "Criar Conta"
+- Faça login com os dados criados
+- Verifique se mostra PatientDashboard
+
+================================================================================
+PRONTO! 🎉
+================================================================================
+
+Seu sistema está funcionando! Agora você pode:
+
+✅ Fazer login como terapeuta
+✅ Cadastrar novos pacientes
+✅ Fazer login como paciente
+✅ Ver dashboards diferentes
+✅ Navegar pelo sistema
+
+================================================================================
+PRÓXIMOS PASSOS:
+================================================================================
+
+Para aprender mais, leia:
+1. SISTEMA_FUNCIONAL_RESUMO.txt - Resumo do sistema
+2. SYSTEM_SETUP_GUIDE.txt - Guia completo
+3. SETUP_CHECKLIST.txt - Checklist detalhado
+
+================================================================================
+DÚVIDAS?
+================================================================================
+
+Se algo não funcionar:
+1. Abra console (F12) e procure por erros
+2. Verifique se as credenciais do Supabase estão corretas
+3. Verifique se as tabelas foram criadas
+4. Verifique se os terapeutas foram criados
+5. Leia SYSTEM_SETUP_GUIDE.txt para troubleshooting
+
+================================================================================

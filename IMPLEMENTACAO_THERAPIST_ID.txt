@@ -1,0 +1,118 @@
+================================================================================
+IMPLEMENTAÇÃO: PACIENTES APARECEM NA LISTA DO TERAPEUTA
+================================================================================
+
+DATA: 21 de Novembro de 2025
+STATUS: ✅ PRONTO PARA USAR
+
+================================================================================
+O QUE FOI IMPLEMENTADO:
+================================================================================
+
+1. NOVO CAMPO NO BANCO DE DADOS:
+   - Adicionado campo `therapist_id` na tabela `users`
+   - Cada paciente agora tem uma referência ao seu terapeuta
+
+2. MODIFICAÇÕES NO CÓDIGO:
+
+   a) Register.tsx:
+      - Passa o `therapist_id` selecionado para o registro
+      - Sem criar agendamento automático
+
+   b) AuthContext.tsx:
+      - Aceita `therapistId` no registro
+      - Salva `therapist_id` na tabela users
+
+   c) usePatients.ts:
+      - Busca pacientes pelo `therapist_id` (não por agendamentos)
+      - Mostra todos os pacientes cadastrados com aquele terapeuta
+
+================================================================================
+PASSO 1: ADICIONAR CAMPO NO BANCO DE DADOS
+================================================================================
+
+1. Acesse: https://app.supabase.com
+2. Vá para: SQL Editor
+3. Abra arquivo: ADICIONAR_THERAPIST_ID.sql
+4. Cole o conteúdo no SQL Editor
+5. Clique em "Run"
+
+Este script vai:
+✅ Adicionar coluna `therapist_id` na tabela users
+✅ Criar constraint de chave estrangeira
+✅ Criar índice para performance
+
+================================================================================
+PASSO 2: TESTAR O NOVO FLUXO
+================================================================================
+
+1. Acesse: http://localhost:3000/register
+2. Preencha o formulário:
+   - Nome: João Silva
+   - Email: joao@email.com
+   - CPF: 123.456.789-00
+   - Telefone: (11) 98765-4321
+   - Senha: Senha@123
+   - Selecione: Marcelo
+3. Clique em "Criar Conta"
+4. Faça login com Marcelo:
+   - Email: marcelo@mnterapeutas.com
+   - Senha: Perante@1202
+5. Vá para: Dashboard > Pacientes
+6. ✅ João Silva deve aparecer na lista!
+
+================================================================================
+FLUXO COMPLETO:
+================================================================================
+
+ANTES (Não funcionava):
+1. Paciente se cadastra
+2. Seleciona terapeuta
+3. ❌ Paciente não aparecia na lista do terapeuta
+
+DEPOIS (Funciona):
+1. Paciente se cadastra
+2. Seleciona terapeuta
+3. ✅ Paciente aparece na lista do terapeuta
+4. ✅ Sem criar agendamento automático
+5. ✅ Baseado no campo `therapist_id`
+
+================================================================================
+COMO FUNCIONA:
+================================================================================
+
+1. REGISTRO:
+   - Paciente seleciona terapeuta
+   - Sistema salva `therapist_id` do paciente
+   - Sem criar agendamento
+
+2. BUSCA DE PACIENTES:
+   - Terapeuta faz login
+   - Sistema busca pacientes com `therapist_id` = ID do terapeuta
+   - Mostra na lista
+
+3. AGENDAMENTOS:
+   - Paciente e terapeuta podem criar agendamentos quando quiserem
+   - Independente do registro
+
+================================================================================
+VANTAGENS:
+================================================================================
+
+✅ Paciente aparece na lista do terapeuta imediatamente
+✅ Sem criar agendamento automático
+✅ Flexibilidade para criar agendamentos depois
+✅ Simples e direto
+✅ Sem dados fictícios
+
+================================================================================
+PRÓXIMOS PASSOS:
+================================================================================
+
+1. Testar fluxo completo
+2. Implementar criação de agendamentos
+3. Implementar confirmação de agendamentos
+4. Implementar cancelamento de agendamentos
+5. Adicionar mais funcionalidades
+
+================================================================================

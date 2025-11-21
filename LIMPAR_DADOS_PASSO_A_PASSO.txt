@@ -1,0 +1,210 @@
+================================================================================
+LIMPAR DADOS FICTÍCIOS - PASSO A PASSO DETALHADO
+================================================================================
+
+Se o primeiro script não funcionou, siga estes passos:
+
+================================================================================
+PASSO 1: ABRIR SUPABASE DASHBOARD
+================================================================================
+
+1. Acesse: https://app.supabase.com
+2. Faça login
+3. Selecione seu projeto (mn-terapeutas)
+4. Você está no Dashboard
+
+================================================================================
+PASSO 2: ACESSAR TABLE EDITOR (MÉTODO VISUAL)
+================================================================================
+
+Se preferir deletar visualmente:
+
+1. No menu esquerdo, clique em: "Table Editor"
+2. Clique em: "appointments"
+3. Você verá uma lista de agendamentos fictícios
+4. Selecione TODOS (Ctrl+A ou clique no checkbox do cabeçalho)
+5. Clique em "Delete" (lixeira)
+6. Confirme
+
+Repita para:
+- messages (deletar todas)
+- documents (deletar todos)
+- users (deletar apenas pacientes, manter terapeutas)
+
+================================================================================
+PASSO 3: ACESSAR SQL EDITOR (MÉTODO AUTOMÁTICO - RECOMENDADO)
+================================================================================
+
+1. No menu esquerdo, clique em: "SQL Editor"
+2. Clique em: "New query"
+3. Cole o SQL abaixo:
+
+---
+
+-- DELETAR TUDO
+DELETE FROM documents;
+DELETE FROM messages;
+DELETE FROM appointments;
+DELETE FROM users WHERE role = 'patient';
+
+-- RECRIAR TERAPEUTAS
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  '83273ffc-c878-4abc-a24b-e35fd4801339',
+  'nadi@mnterapeutas.com',
+  'Nadielma',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_a',
+  NOW(),
+  NOW()
+);
+
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  '028d8869-679f-4093-b435-1a43b6ced0e2',
+  'marcelo@mnterapeutas.com',
+  'Marcelo',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_b',
+  NOW(),
+  NOW()
+);
+
+-- VERIFICAR
+SELECT COUNT(*) as usuarios FROM users;
+SELECT COUNT(*) as agendamentos FROM appointments;
+SELECT COUNT(*) as mensagens FROM messages;
+SELECT COUNT(*) as documentos FROM documents;
+
+---
+
+4. Clique em: "Run"
+5. Aguarde a execução
+
+================================================================================
+PASSO 4: VERIFICAR RESULTADO
+================================================================================
+
+Após executar, você deve ver:
+- usuarios: 2
+- agendamentos: 0
+- mensagens: 0
+- documentos: 0
+
+Se ainda houver dados, significa que há RLS bloqueando. Nesse caso:
+
+1. Vá para: "Authentication" > "Policies"
+2. Para cada tabela (users, appointments, messages, documents):
+   - Clique em "Disable RLS"
+3. Repita o SQL acima
+
+================================================================================
+PASSO 5: RECARREGAR O NAVEGADOR
+================================================================================
+
+1. Volte ao navegador com o sistema
+2. Pressione F5 para recarregar
+3. Faça logout (se estiver logado)
+4. Faça login novamente com: nadi@mnterapeutas.com / Perante@1202
+5. Verifique se os dados fictícios desapareceram
+
+================================================================================
+PASSO 6: VERIFICAR NO SISTEMA
+================================================================================
+
+Após recarregar:
+- Dashboard do Marcelo deve estar VAZIO
+- Nenhum agendamento fictício
+- Nenhum paciente fictício
+- Nenhuma mensagem fictícia
+
+Se ainda houver dados:
+1. Abra console (F12)
+2. Procure por erros
+3. Verifique se o Supabase está retornando dados
+
+================================================================================
+SE AINDA NÃO FUNCIONAR:
+================================================================================
+
+Tente este script mais agressivo:
+
+1. Vá para: SQL Editor
+2. Cole:
+
+---
+
+-- DESABILITAR RLS
+ALTER TABLE documents DISABLE ROW LEVEL SECURITY;
+ALTER TABLE messages DISABLE ROW LEVEL SECURITY;
+ALTER TABLE appointments DISABLE ROW LEVEL SECURITY;
+ALTER TABLE users DISABLE ROW LEVEL SECURITY;
+
+-- DELETAR TUDO
+DELETE FROM documents;
+DELETE FROM messages;
+DELETE FROM appointments;
+DELETE FROM users;
+
+-- RECRIAR TERAPEUTAS
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  '83273ffc-c878-4abc-a24b-e35fd4801339',
+  'nadi@mnterapeutas.com',
+  'Nadielma',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_a',
+  NOW(),
+  NOW()
+);
+
+INSERT INTO users (id, email, name, cpf, phone, role, created_at, updated_at)
+VALUES (
+  '028d8869-679f-4093-b435-1a43b6ced0e2',
+  'marcelo@mnterapeutas.com',
+  'Marcelo',
+  '000.000.000-00',
+  '(11) 99999-9999',
+  'therapist_b',
+  NOW(),
+  NOW()
+);
+
+-- REABILITAR RLS
+ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+---
+
+3. Clique em "Run"
+
+================================================================================
+ÚLTIMO RECURSO:
+================================================================================
+
+Se nada funcionar:
+
+1. Vá para: "Settings" > "Database"
+2. Clique em: "Reset database"
+3. Confirme
+4. Execute novamente o SUPABASE_TABLES_SETUP.sql
+5. Recrie os terapeutas
+
+================================================================================
+PRONTO!
+================================================================================
+
+Após limpar, o sistema estará 100% limpo!
+
+Você pode agora:
+✅ Cadastrar novos pacientes reais
+✅ Criar agendamentos reais
+✅ Enviar mensagens reais
+✅ Criar documentos reais
+
+================================================================================

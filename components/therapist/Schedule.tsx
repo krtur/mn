@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useAppointments } from '../../hooks/useAppointments';
 
 interface ScheduleItem {
   id: string;
@@ -9,36 +10,16 @@ interface ScheduleItem {
 }
 
 export const Schedule: React.FC = () => {
-  const [schedule] = useState<ScheduleItem[]>([
-    {
-      id: '1',
-      patientName: 'João Silva',
-      date: '2024-11-20',
-      time: '14:00',
-      status: 'confirmed',
-    },
-    {
-      id: '2',
-      patientName: 'Maria Santos',
-      date: '2024-11-20',
-      time: '15:00',
-      status: 'confirmed',
-    },
-    {
-      id: '3',
-      patientName: 'Pedro Costa',
-      date: '2024-11-20',
-      time: '16:00',
-      status: 'pending',
-    },
-    {
-      id: '4',
-      patientName: 'Ana Silva',
-      date: '2024-11-21',
-      time: '10:00',
-      status: 'confirmed',
-    },
-  ]);
+  const { appointments, loading, error } = useAppointments();
+
+  // Converter agendamentos reais para o formato esperado
+  const schedule: ScheduleItem[] = appointments.map(apt => ({
+    id: apt.id,
+    patientName: apt.patient?.name || 'Paciente',
+    date: apt.start_time.split('T')[0],
+    time: apt.start_time.split('T')[1]?.substring(0, 5) || '00:00',
+    status: (apt.status as 'confirmed' | 'pending' | 'completed') || 'pending',
+  }));
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -66,38 +47,64 @@ export const Schedule: React.FC = () => {
     }
   };
 
+  // Mostrar loading
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+        <p className="ml-2 text-slate-600">Carregando agenda...</p>
+      </div>
+    );
+  }
+
+  // Mostrar erro
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p className="text-red-700">Erro ao carregar agenda: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-slate-900">Agenda</h1>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
-          <h2 className="text-xl font-bold text-slate-900">Próximas Sessões</h2>
+      {schedule.length === 0 ? (
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-8 text-center">
+          <p className="text-slate-600 text-lg">Nenhum agendamento</p>
+          <p className="text-slate-500 text-sm mt-2">Quando pacientes agendarem sessões, aparecerão aqui</p>
         </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-6 border-b border-slate-200">
+            <h2 className="text-xl font-bold text-slate-900">Próximas Sessões</h2>
+          </div>
 
-        <div className="divide-y divide-slate-200">
-          {schedule.map((item) => (
-            <div key={item.id} className="p-4 hover:bg-slate-50 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900">{item.patientName}</h3>
-                  <p className="text-sm text-slate-600">
-                    📅 {new Date(item.date).toLocaleDateString('pt-BR')} às {item.time}
-                  </p>
+          <div className="divide-y divide-slate-200">
+            {schedule.map((item) => (
+              <div key={item.id} className="p-4 hover:bg-slate-50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900">{item.patientName}</h3>
+                    <p className="text-sm text-slate-600">
+                      📅 {new Date(item.date).toLocaleDateString('pt-BR')} às {item.time}
+                    </p>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(item.status)}`}>
+                    {getStatusLabel(item.status)}
+                  </span>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(item.status)}`}>
-                  {getStatusLabel(item.status)}
-                </span>
+                <div className="mt-3 flex gap-2">
+                  <button className="text-sm text-teal-600 hover:text-teal-700 font-semibold">Confirmar</button>
+                  <button className="text-sm text-slate-600 hover:text-slate-900 font-semibold">Reagendar</button>
+                  <button className="text-sm text-red-600 hover:text-red-700 font-semibold">Cancelar</button>
+                </div>
               </div>
-              <div className="mt-3 flex gap-2">
-                <button className="text-sm text-teal-600 hover:text-teal-700 font-semibold">Confirmar</button>
-                <button className="text-sm text-slate-600 hover:text-slate-900 font-semibold">Reagendar</button>
-                <button className="text-sm text-red-600 hover:text-red-700 font-semibold">Cancelar</button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -26,6 +26,7 @@ import { Register } from './components/auth/Register';
 
 // Dashboard Components
 import { DashboardLayout } from './components/dashboard/DashboardLayout';
+import { DashboardRedirect } from './components/dashboard/DashboardRedirect';
 import { PatientDashboard } from './components/patient/PatientDashboard';
 import { Appointments } from './components/patient/Appointments';
 import { Messages as PatientMessages } from './components/patient/Messages';
@@ -170,15 +171,25 @@ function App() {
             <Route path="/register" element={<Register />} />
 
             {/* Dashboard Routes */}
+            {/* Rota raiz que redireciona para o dashboard correto */}
             <Route
               path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardRedirect />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Dashboard do Paciente */}
+            <Route
+              path="/dashboard/patient"
               element={
                 <ProtectedRoute>
                   <DashboardLayout />
                 </ProtectedRoute>
               }
             >
-              {/* Patient Routes */}
               <Route path="" element={<PatientDashboard />} />
               <Route path="appointments" element={<Appointments />} />
               <Route path="messages" element={<PatientMessages />} />
@@ -186,11 +197,23 @@ function App() {
               <Route path="test-shop" element={<TestShop />} />
               <Route path="attendance" element={<AttendanceHistory />} />
               <Route path="profile" element={<PatientProfile />} />
+            </Route>
 
-              {/* Therapist Routes */}
+            {/* Dashboard do Terapeuta */}
+            <Route
+              path="/dashboard/therapist"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="" element={<TherapistDashboard />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="patients" element={<PatientList />} />
+              <Route path="messages" element={<TherapistMessages />} />
               <Route path="documents" element={<DocumentGeneration />} />
+              <Route path="profile" element={<TherapistProfile />} />
             </Route>
 
             {/* Catch all */}
