@@ -1,0 +1,188 @@
+================================================================================
+TRIAGEM PARA TDAH PARA ADULTO - IMPLEMENTAÇÃO COMPLETA ✅
+================================================================================
+
+🎯 O QUE FOI IMPLEMENTADO:
+
+Um teste completo de triagem para TDAH com 100 perguntas divididas em 6 categorias:
+
+A. Desatenção (18 perguntas)
+B. Hiperatividade / Impulsividade (17 perguntas)
+C. Função Executiva (17 perguntas)
+D. Regulação Emocional (16 perguntas)
+E. Memória de Trabalho / Esquecimentos (16 perguntas)
+F. Impacto em Áreas da Vida + História de Infância (16 perguntas)
+
+================================================================================
+📁 ARQUIVOS CRIADOS:
+================================================================================
+
+1. /data/tdahQuestions.ts
+   - Arquivo com todas as 100 perguntas
+   - Interface Question definida
+   - Exportação TDAH_QUESTIONS
+
+2. /components/patient/TdahScreening.tsx
+   - Componente principal do teste
+   - Interface para respostas e scores
+   - Lógica de cálculo de pontuação
+   - Tela de resultados com análise por categoria
+
+================================================================================
+📝 ARQUIVOS MODIFICADOS:
+================================================================================
+
+1. App.tsx
+   - Importado TdahScreening
+   - Adicionada rota: /dashboard/patient/tdah-screening
+
+2. components/dashboard/Sidebar.tsx
+   - Adicionado link "Triagem TDAH" no menu de pacientes
+   - Ícone: 🧠
+
+3. package.json
+   - Adicionado lucide-react: ^0.263.1
+
+================================================================================
+✨ FUNCIONALIDADES:
+================================================================================
+
+DURANTE O TESTE:
+✓ Navegação entre 100 perguntas
+✓ Barra de progresso visual
+✓ Indicador de categoria atual
+✓ 5 opções de resposta com cores:
+  - Nunca (verde)
+  - Raramente (azul)
+  - Às vezes (amarelo)
+  - Frequentemente (laranja)
+  - Quase sempre (vermelho)
+✓ Botões Anterior/Próxima
+✓ Contador de respostas
+
+RESULTADOS:
+✓ Pontuação total em porcentagem
+✓ Nível de risco (Baixo, Moderado, Alto, Muito Alto)
+✓ Análise detalhada por categoria
+✓ Gráfico de progresso para cada categoria
+✓ Expandir/recolher categorias para ver respostas
+✓ Recomendações profissionais
+✓ Botão para imprimir resultados
+✓ Botão para refazer o teste
+
+================================================================================
+🎨 DESIGN:
+================================================================================
+
+CORES POR NÍVEL DE RISCO:
+- Muito Alto (75%+): Vermelho (#dc2626)
+- Alto (50-74%): Laranja (#ea580c)
+- Moderado (25-49%): Amarelo (#ca8a04)
+- Baixo (<25%): Verde (#16a34a)
+
+COMPONENTES:
+- Cards com sombras e bordas coloridas
+- Ícones do Lucide React
+- Barras de progresso animadas
+- Layout responsivo
+- Tipografia clara e legível
+
+================================================================================
+🧪 COMO TESTAR:
+================================================================================
+
+1. Instalar dependências:
+   npm install
+
+2. Fazer login como paciente
+
+3. Ir para Dashboard > Triagem TDAH (ou /dashboard/patient/tdah-screening)
+
+4. Responder todas as 100 perguntas
+
+5. Ver resultados com análise detalhada
+
+6. Imprimir ou refazer o teste
+
+================================================================================
+📊 CÁLCULO DE PONTUAÇÃO:
+================================================================================
+
+Cada resposta vale:
+- Nunca: 0 pontos
+- Raramente: 1 ponto
+- Às vezes: 2 pontos
+- Frequentemente: 3 pontos
+- Quase sempre: 4 pontos
+
+Máximo por categoria: 4 × número de perguntas
+Máximo total: 400 pontos (100 perguntas × 4)
+
+Porcentagem = (Pontos obtidos / Máximo possível) × 100
+
+================================================================================
+🔍 INTERPRETAÇÃO DOS RESULTADOS:
+================================================================================
+
+MUITO ALTO (75%+):
+"Seus sintomas sugerem características significativas de TDAH. 
+Recomenda-se avaliação profissional com um especialista."
+
+ALTO (50-74%):
+"Você apresenta alguns sintomas compatíveis com TDAH. 
+Considere uma avaliação profissional."
+
+MODERADO (25-49%):
+"Você apresenta alguns sintomas, mas em nível moderado. 
+Acompanhamento recomendado."
+
+BAIXO (<25%):
+"Seus sintomas sugerem baixa probabilidade de TDAH. 
+Continue monitorando sua saúde mental."
+
+================================================================================
+⚠️ RECOMENDAÇÕES EXIBIDAS:
+================================================================================
+
+✓ Este teste é apenas uma triagem e não substitui uma avaliação profissional
+✓ Consulte um psicólogo, psiquiatra ou neurologista para diagnóstico preciso
+✓ Compartilhe estes resultados com seu terapeuta para discussão
+✓ Existem tratamentos eficazes disponíveis, incluindo terapia e medicação
+
+================================================================================
+🚀 PRÓXIMOS PASSOS (OPCIONAL):
+================================================================================
+
+1. Salvar resultados no banco de dados
+2. Permitir que terapeutas vejam histórico de testes do paciente
+3. Gerar relatório PDF dos resultados
+4. Comparar resultados ao longo do tempo
+5. Integrar com outros testes psicológicos
+6. Adicionar recomendações personalizadas baseadas em categoria
+
+================================================================================
+📱 RESPONSIVIDADE:
+================================================================================
+
+✓ Mobile: Layout em coluna única
+✓ Tablet: Grid adaptativo
+✓ Desktop: Layout otimizado com largura máxima
+
+================================================================================
+✅ CHECKLIST DE IMPLEMENTAÇÃO:
+================================================================================
+
+[✓] Criar arquivo de perguntas (tdahQuestions.ts)
+[✓] Criar componente principal (TdahScreening.tsx)
+[✓] Adicionar rota no App.tsx
+[✓] Adicionar link no Sidebar
+[✓] Instalar lucide-react
+[✓] Implementar lógica de navegação
+[✓] Implementar cálculo de pontuação
+[✓] Criar tela de resultados
+[✓] Adicionar recomendações
+[✓] Design responsivo
+[✓] Cores por nível de risco
+[✓] Botões de ação (imprimir, refazer)
+
+================================================================================

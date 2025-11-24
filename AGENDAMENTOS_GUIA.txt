@@ -1,0 +1,239 @@
+================================================================================
+SISTEMA COMPLETO DE AGENDAMENTOS - GUIA DE IMPLEMENTAÇÃO
+================================================================================
+
+🎯 O QUE FOI IMPLEMENTADO:
+
+1. TABELAS NO SUPABASE
+   - therapist_availability: Horários de atendimento do terapeuta
+   - appointments: Agendamentos (sessões)
+   - appointment_recurrences: Recorrências (semanal, quinzenal, mensal)
+   - appointment_requests: Solicitações de agendamento do paciente
+
+2. HOOKS CUSTOMIZADOS
+   - useTherapistAvailability: Gerencia horários de atendimento
+   - useAppointmentRecurrences: Gerencia recorrências
+   - useAppointmentRequests: Gerencia solicitações de pacientes
+
+3. COMPONENTES
+   - Calendar: Calendário reutilizável com 3 visualizações (mês, semana, dia)
+   - ScheduleManager: Tela completa para terapeutas gerenciarem agenda
+
+4. FUNCIONALIDADES PARA TERAPEUTAS
+   ✓ Visualizar calendário com 3 modos (mensal, semanal, diário)
+   ✓ Criar agendamentos diretos com pacientes
+   ✓ Criar agendamentos com recorrência (semanal, quinzenal, mensal)
+   ✓ Configurar horários de atendimento disponíveis
+   ✓ Aprovar/rejeitar solicitações de pacientes
+   ✓ Ver horários ocupados no calendário
+
+5. FUNCIONALIDADES PARA PACIENTES
+   ✓ Solicitar agendamento com terapeuta
+   ✓ Ver status da solicitação (pendente, aprovada, rejeitada)
+   ✓ Cancelar solicitação pendente
+   ✓ Ver agendamentos confirmados
+
+================================================================================
+PASSO 1: EXECUTAR SQL NO SUPABASE
+================================================================================
+
+1. Acesse: https://app.supabase.com
+2. Vá para: SQL Editor
+3. Copie todo o conteúdo do arquivo: AGENDAMENTOS_SETUP.sql
+4. Cole no editor SQL
+5. Clique em "Run"
+
+Isso vai criar:
+- 4 tabelas novas
+- Índices para performance
+- Políticas RLS
+- Função para gerar recorrências
+- Triggers para atualizar datas
+
+================================================================================
+PASSO 2: TESTAR NO FRONTEND
+================================================================================
+
+PARA TERAPEUTA:
+1. Faça login com conta de terapeuta
+2. Vá para: Dashboard > Gerenciar Agenda
+3. Clique na aba "Horários de Atendimento"
+4. Adicione seus horários disponíveis (ex: Segunda 09:00-12:00)
+5. Clique na aba "Calendário"
+6. Clique em "+ Novo Agendamento"
+7. Selecione um paciente, data, hora e recorrência
+8. Clique em "Criar Agendamento"
+9. Vá para aba "Solicitações" para ver solicitações de pacientes
+10. Clique em "Aprovar" ou "Rejeitar"
+
+PARA PACIENTE:
+1. Faça login com conta de paciente
+2. Vá para: Dashboard > Agendamentos
+3. Clique em "+ Novo Agendamento"
+4. Selecione um terapeuta
+5. Escolha data e horário
+6. Adicione motivo (opcional)
+7. Clique em "Enviar Solicitação"
+8. Veja o status em "Minhas Solicitações"
+
+================================================================================
+ESTRUTURA DE ARQUIVOS CRIADOS
+================================================================================
+
+/hooks/
+  ├── useTherapistAvailability.ts     (Gerencia horários)
+  ├── useAppointmentRecurrences.ts    (Gerencia recorrências)
+  └── useAppointmentRequests.ts       (Gerencia solicitações)
+
+/components/
+  ├── calendar/
+  │   └── Calendar.tsx                (Calendário reutilizável)
+  └── therapist/
+      └── ScheduleManager.tsx         (Tela de gerenciamento)
+
+/components/patient/
+  └── Appointments.tsx                (Atualizado com solicitações)
+
+================================================================================
+FLUXO DE AGENDAMENTO
+================================================================================
+
+FLUXO 1: TERAPEUTA CRIA AGENDAMENTO DIRETO
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Terapeuta acessa ScheduleManager                         │
+│ 2. Clica em "+ Novo Agendamento"                            │
+│ 3. Seleciona paciente, data, hora                           │
+│ 4. Escolhe recorrência (nenhuma, semanal, quinzenal, mensal)│
+│ 5. Sistema cria agendamento com status "confirmed"          │
+│ 6. Agendamento aparece no calendário                        │
+│ 7. Paciente vê agendamento confirmado em seus agendamentos  │
+└─────────────────────────────────────────────────────────────┘
+
+FLUXO 2: PACIENTE SOLICITA AGENDAMENTO
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Paciente acessa Agendamentos                             │
+│ 2. Clica em "+ Novo Agendamento"                            │
+│ 3. Seleciona terapeuta, data, hora, motivo                  │
+│ 4. Clica em "Enviar Solicitação"                            │
+│ 5. Solicitação fica com status "pending"                    │
+│ 6. Terapeuta vê em aba "Solicitações"                       │
+│ 7. Terapeuta clica "Aprovar" ou "Rejeitar"                  │
+│ 8. Se aprovada: cria agendamento confirmado                 │
+│ 9. Paciente vê status atualizado                            │
+└─────────────────────────────────────────────────────────────┘
+
+================================================================================
+RECORRÊNCIAS
+================================================================================
+
+Tipos de recorrência disponíveis:
+- SEMANAL: Repete todo semana no mesmo dia e hora
+- BIWEEKLY (A cada 2 semanas): Repete a cada 15 dias
+- MONTHLY (Mensal): Repete no mesmo dia do mês
+
+Exemplo:
+- Início: 2024-01-15 (segunda)
+- Fim: 2024-12-31
+- Frequência: Semanal
+- Horário: 09:00 - 10:00
+
+Resultado: Agendamentos toda segunda de 09:00-10:00 até 31/12/2024
+
+================================================================================
+VISUALIZAÇÕES DO CALENDÁRIO
+================================================================================
+
+VISTA MENSAL:
+- Mostra todo o mês em grid
+- Cada dia mostra até 2 agendamentos
+- Clique em um dia para criar novo agendamento
+- Clique em um agendamento para ver detalhes
+
+VISTA SEMANAL:
+- Mostra 7 dias (segunda a domingo)
+- Cada dia em coluna separada
+- Todos os agendamentos da semana visíveis
+- Clique em um dia para criar novo agendamento
+
+VISTA DIÁRIA:
+- Mostra um dia em detalhes
+- Agendamentos organizados por hora
+- Horários de 00:00 a 23:00
+- Clique em um agendamento para ver detalhes
+
+================================================================================
+CORES DOS AGENDAMENTOS
+================================================================================
+
+VERDE (Confirmed):     Agendamento confirmado
+AMARELO (Pending):     Agendamento pendente de confirmação
+AZUL (Completed):      Agendamento concluído
+VERMELHO (Cancelled):  Agendamento cancelado
+
+================================================================================
+PRÓXIMOS PASSOS (OPCIONAL)
+================================================================================
+
+1. Adicionar notificações por email quando:
+   - Paciente solicita agendamento
+   - Terapeuta aprova/rejeita solicitação
+   - Agendamento é criado
+
+2. Adicionar lembretes:
+   - 24 horas antes do agendamento
+   - 1 hora antes do agendamento
+
+3. Adicionar funcionalidade de:
+   - Reagendar agendamento
+   - Cancelar agendamento
+   - Adicionar notas ao agendamento
+
+4. Adicionar relatórios:
+   - Agendamentos por paciente
+   - Taxa de confirmação
+   - Horários mais procurados
+
+5. Integrar com:
+   - Google Calendar
+   - Outlook Calendar
+   - iCal
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+PROBLEMA: Não consigo criar agendamento
+SOLUÇÃO: 
+- Verifique se o paciente existe
+- Verifique se a data está no futuro
+- Verifique se o horário é válido (fim > início)
+
+PROBLEMA: Recorrência não está gerando agendamentos
+SOLUÇÃO:
+- Execute a função: SELECT generate_recurring_appointments();
+- Verifique se a data de fim é válida
+- Verifique se a frequência está correta
+
+PROBLEMA: Não vejo solicitações de pacientes
+SOLUÇÃO:
+- Verifique se está logado como terapeuta
+- Verifique se o paciente está associado ao terapeuta
+- Recarregue a página
+
+PROBLEMA: Calendário não atualiza em tempo real
+SOLUÇÃO:
+- Recarregue a página
+- Verifique conexão com Supabase
+- Verifique se o WebSocket está ativo
+
+================================================================================
+SUPORTE
+================================================================================
+
+Para dúvidas ou problemas:
+1. Verifique os logs do navegador (F12 > Console)
+2. Verifique os logs do Supabase (Logs > Postgres)
+3. Verifique as políticas RLS (Authentication > Policies)
+4. Verifique se as tabelas foram criadas corretamente
+
+================================================================================

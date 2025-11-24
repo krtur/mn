@@ -61,6 +61,13 @@ export const useAppointments = () => {
           return;
         }
 
+        console.log('Agendamentos carregados:', {
+          userRole: user.role,
+          userId: user.id,
+          count: data?.length || 0,
+          data
+        });
+
         setAppointments(data || []);
       } catch (err) {
         console.error('Erro ao buscar agendamentos:', err);
@@ -96,5 +103,43 @@ export const useAppointments = () => {
     };
   }, [user]);
 
-  return { appointments, loading, error };
+  const updateAppointment = async (
+    appointmentId: string,
+    updates: {
+      start_time?: string;
+      end_time?: string;
+      status?: string;
+      notes?: string;
+    }
+  ) => {
+    try {
+      const { error } = await supabase
+        .from('appointments')
+        .update(updates)
+        .eq('id', appointmentId);
+
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('Erro ao atualizar agendamento:', err);
+      throw err;
+    }
+  };
+
+  const deleteAppointment = async (appointmentId: string) => {
+    try {
+      const { error } = await supabase
+        .from('appointments')
+        .delete()
+        .eq('id', appointmentId);
+
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('Erro ao deletar agendamento:', err);
+      throw err;
+    }
+  };
+
+  return { appointments, loading, error, updateAppointment, deleteAppointment };
 };

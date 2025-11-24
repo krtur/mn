@@ -1,9 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppointments } from '../../hooks/useAppointments';
+import { useAppointmentRequests } from '../../hooks/useAppointmentRequests';
+import { useAuth } from '../auth/AuthContext';
+import { supabase } from '../../services/supabase';
 
 export const Appointments: React.FC = () => {
+  const { user } = useAuth();
   const { appointments, loading, error } = useAppointments();
+  const { requests, createRequest, cancelRequest } = useAppointmentRequests();
   const [showNewAppointment, setShowNewAppointment] = useState(false);
+  const [therapists, setTherapists] = useState<any[]>([]);
+  const [loadingTherapists, setLoadingTherapists] = useState(false);
+
+  // Debug log
+  React.useEffect(() => {
+    console.log('Appointments component - Dados do paciente:', {
+      userId: user?.id,
+      userRole: user?.role,
+      appointmentsCount: appointments.length,
+      appointments,
+      loading,
+      error
+    });
+  }, [appointments, user, loading, error]);
+  const [newRequest, setNewRequest] = useState({
+    therapistId: '',
+    date: '',
+    time: '09:00',
+    reason: ''
+  });
+
+  // Buscar terapeutas disponíveis
+  useEffect(() => {
+    const fetchTherapists = async () => {
+      setLoadingTherapists(true);
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id, name, email')
+          .like('role', 'therapist%');
+
+        if (error) throw error;
+        setTherapists(data || []);
+      } catch (err) {
+        console.error('Erro ao buscar terapeutas:', err);
+      } finally {
+        setLoadingTherapists(false);
+      }
+    };
+
+    fetchTherapists();
+  }, []);
+
+  const handleCreateRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!newRequest.therapistId || !newRequest.date || !newRequest.time) {
+      alert('Preencha todos os campos obrigatórios');
+      return;
+    }
+
+    try {
+      await createRequest(
+        newRequest.therapistId,
+        newRequest.date,
+        newRequest.time,
+        newRequest.reason
+      );
+
+      setShowNewAppointment(false);
+      setNewRequest({
+        therapistId: '',
+        date: '',
+        time: '09:00',
+        reason: ''
+      });
+
+      alert('Solicitação de agendamento enviada! O terapeuta analisará em breve.');
+    } catch (err) {
+      console.error('Erro ao criar solicitação:', err);
+      alert('Erro ao criar solicitação');
+    }
+  };
+
+  const handleCancelRequest = async (requestId: string) => {
+    if (window.confirm('Deseja cancelar esta solicitação?')) {
+      try {
+        await cancelRequest(requestId);
+        alert('Solicitação cancelada');
+      } catch (err) {
+        console.error('Erro ao cancelar:', err);
+        alert('Erro ao cancelar solicitação');
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -63,32 +153,54 @@ export const Appointments: React.FC = () => {
 
       {showNewAppointment && (
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">Agendar Nova Sessão</h2>
-          <form className="space-y-4">
+          <h2 className="text-xl font-bold text-slate-900 mb-4">Solicitar Novo Agendamento</h2>
+          <form onSubmit={handleCreateRequest} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Terapeuta</label>
-              <select className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
-                <option>Selecione um terapeuta</option>
-                <option>Terapeuta A</option>
-                <option>Terapeuta B</option>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Terapeuta *</label>
+              <select
+                value={newRequest.therapistId}
+                onChange={(e) => setNewRequest({ ...newRequest, therapistId: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              >
+                <option value="">Selecione um terapeuta</option>
+                {therapists.map(therapist => (
+                  <option key={therapist.id} value={therapist.id}>
+                    {therapist.name}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Data</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Data *</label>
                 <input
                   type="date"
+                  value={newRequest.date}
+                  onChange={(e) => setNewRequest({ ...newRequest, date: e.target.value })}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Horário</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Horário *</label>
                 <input
                   type="time"
+                  value={newRequest.time}
+                  onChange={(e) => setNewRequest({ ...newRequest, time: e.target.value })}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Motivo (opcional)</label>
+              <textarea
+                value={newRequest.reason}
+                onChange={(e) => setNewRequest({ ...newRequest, reason: e.target.value })}
+                placeholder="Descreva o motivo da consulta..."
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                rows={3}
+              />
             </div>
 
             <div className="flex gap-2">
@@ -96,7 +208,7 @@ export const Appointments: React.FC = () => {
                 type="submit"
                 className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg transition-colors"
               >
-                Agendar
+                Enviar Solicitação
               </button>
               <button
                 type="button"
@@ -151,6 +263,54 @@ export const Appointments: React.FC = () => {
           ))
         )}
       </div>
+
+      {/* Solicitações Pendentes */}
+      {requests.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-slate-900">Minhas Solicitações</h2>
+          <div className="space-y-3">
+            {requests.map((request) => (
+              <div key={request.id} className="bg-white rounded-lg shadow p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900">
+                      {request.therapist?.name || 'Terapeuta'}
+                    </h3>
+                    <p className="text-sm text-slate-600">
+                      📅 {new Date(request.requested_date).toLocaleDateString('pt-BR')} às{' '}
+                      {request.requested_time}
+                    </p>
+                    {request.reason && (
+                      <p className="text-sm text-slate-500 mt-2">Motivo: {request.reason}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      request.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      'bg-slate-100 text-slate-800'
+                    }`}>
+                      {request.status === 'pending' ? '⏳ Pendente' :
+                       request.status === 'approved' ? '✓ Aprovada' :
+                       request.status === 'rejected' ? '✕ Rejeitada' :
+                       'Cancelada'}
+                    </span>
+                    {request.status === 'pending' && (
+                      <button
+                        onClick={() => handleCancelRequest(request.id)}
+                        className="text-sm text-red-600 hover:text-red-700 font-semibold"
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

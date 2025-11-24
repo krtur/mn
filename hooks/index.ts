@@ -15,3 +15,12 @@ export type { DashboardStats } from './useDashboardStats';
 
 export { useTherapists } from './useTherapists';
 export type { Therapist } from './useTherapists';
+
+export { useTherapistAvailability } from './useTherapistAvailability';
+export type { TherapistAvailability } from './useTherapistAvailability';
+
+export { useAppointmentRecurrences } from './useAppointmentRecurrences';
+export type { AppointmentRecurrence } from './useAppointmentRecurrences';
+
+export { useAppointmentRequests } from './useAppointmentRequests';
+export type { AppointmentRequest } from './useAppointmentRequests';

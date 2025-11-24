@@ -12,22 +12,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
   const location = useLocation();
 
   const patientMenuItems = [
-    { label: 'Dashboard', path: '/dashboard/patient' },
-    { label: 'Agendamentos', path: '/dashboard/patient/appointments' },
-    { label: 'Mensagens', path: '/dashboard/patient/messages' },
-    { label: 'Relatórios', path: '/dashboard/patient/reports' },
-    { label: 'Loja de Testes', path: '/dashboard/patient/test-shop' },
-    { label: 'Histórico', path: '/dashboard/patient/attendance' },
-    { label: 'Perfil', path: '/dashboard/patient/profile' },
+    { label: 'Dashboard', path: '/dashboard/patient', icon: '📊' },
+    { label: 'Agendamentos', path: '/dashboard/patient/appointments', icon: '📅' },
+    { label: 'Mensagens', path: '/dashboard/patient/messages', icon: '💬' },
+    { label: 'Relatórios', path: '/dashboard/patient/reports', icon: '📋' },
+    { label: 'Loja de Testes', path: '/dashboard/patient/test-shop', icon: '🛍️' },
+    { label: 'Triagem TDAH', path: '/dashboard/patient/tdah-screening', icon: '🧠' },
+    { label: 'Histórico', path: '/dashboard/patient/attendance', icon: '📈' },
+    { label: 'Perfil', path: '/dashboard/patient/profile', icon: '👤' },
   ];
 
   const therapistMenuItems = [
-    { label: 'Dashboard', path: '/dashboard/therapist' },
-    { label: 'Agenda', path: '/dashboard/therapist/schedule' },
-    { label: 'Pacientes', path: '/dashboard/therapist/patients' },
-    { label: 'Mensagens', path: '/dashboard/therapist/messages' },
-    { label: 'Documentos', path: '/dashboard/therapist/documents' },
-    { label: 'Perfil', path: '/dashboard/therapist/profile' },
+    { label: 'Dashboard', path: '/dashboard/therapist', icon: '📊' },
+    { label: 'Gerenciar Agenda', path: '/dashboard/therapist/schedule', icon: '📅' },
+    { label: 'Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
+    { label: 'Mensagens', path: '/dashboard/therapist/messages', icon: '💬' },
+    { label: 'Documentos', path: '/dashboard/therapist/documents', icon: '📄' },
+    { label: 'Perfil', path: '/dashboard/therapist/profile', icon: '👤' },
   ];
 
   const menuItems = userRole === 'patient' ? patientMenuItems : therapistMenuItems;
@@ -45,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4">
-        {menuItems.map((item) => (
+        {menuItems.map((item: any) => (
           <Link
             key={item.path}
             to={item.path}
@@ -56,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
             }`}
             title={!isOpen ? item.label : undefined}
           >
-            <span className="w-6 h-6 flex items-center justify-center">📄</span>
+            <span className="w-6 h-6 flex items-center justify-center">{item.icon}</span>
             {isOpen && <span className="ml-3">{item.label}</span>}
           </Link>
         ))}

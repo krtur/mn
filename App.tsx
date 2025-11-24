@@ -32,11 +32,13 @@ import { Appointments } from './components/patient/Appointments';
 import { Messages as PatientMessages } from './components/patient/Messages';
 import { Reports } from './components/patient/Reports';
 import { TestShop } from './components/patient/TestShop';
+import { TdahScreening } from './components/patient/TdahScreening';
 import { AttendanceHistory } from './components/patient/AttendanceHistory';
 import { Profile as PatientProfile } from './components/patient/Profile';
 
 import { TherapistDashboard } from './components/therapist/TherapistDashboard';
 import { Schedule } from './components/therapist/Schedule';
+import { ScheduleManager } from './components/therapist/ScheduleManager';
 import { PatientList } from './components/therapist/PatientList';
 import { Messages as TherapistMessages } from './components/therapist/Messages';
 import { DocumentGeneration } from './components/therapist/DocumentGeneration';
@@ -195,6 +197,7 @@ function App() {
               <Route path="messages" element={<PatientMessages />} />
               <Route path="reports" element={<Reports />} />
               <Route path="test-shop" element={<TestShop />} />
+              <Route path="tdah-screening" element={<TdahScreening />} />
               <Route path="attendance" element={<AttendanceHistory />} />
               <Route path="profile" element={<PatientProfile />} />
             </Route>
@@ -209,7 +212,7 @@ function App() {
               }
             >
               <Route path="" element={<TherapistDashboard />} />
-              <Route path="schedule" element={<Schedule />} />
+              <Route path="schedule" element={<ScheduleManager />} />
               <Route path="patients" element={<PatientList />} />
               <Route path="messages" element={<TherapistMessages />} />
               <Route path="documents" element={<DocumentGeneration />} />
