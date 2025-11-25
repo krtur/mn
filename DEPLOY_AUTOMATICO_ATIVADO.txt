@@ -1,0 +1,86 @@
+╔════════════════════════════════════════════════════════════════╗
+║    ✅ DEPLOY AUTOMÁTICO ATIVADO COM SUCESSO!                 ║
+║    M&N Terapeutas - Atualização a cada 5 minutos             ║
+╚════════════════════════════════════════════════════════════════╝
+
+🎉 DEPLOY AUTOMÁTICO ESTÁ FUNCIONANDO!
+
+Seu site agora será atualizado automaticamente a cada 5 minutos quando houver novos commits no GitHub.
+
+════════════════════════════════════════════════════════════════
+
+📊 COMO FUNCIONA
+
+1. Você faz um commit e push para o GitHub:
+   git commit -m "Sua mensagem"
+   git push origin main
+
+2. O servidor verifica a cada 5 minutos se há atualizações
+   (usando o script auto-deploy.sh via cron)
+
+3. Se houver atualizações, o servidor:
+   - Faz git pull
+   - Instala dependências (npm install)
+   - Faz o build (npm run build)
+   - Reinicia o servidor (pm2 restart)
+   - Reinicia o Nginx
+
+4. O site é atualizado automaticamente!
+
+════════════════════════════════════════════════════════════════
+
+⏱️ TEMPO DE ATUALIZAÇÃO
+
+O site será atualizado em no máximo 5 minutos após seu push.
+Normalmente, a atualização leva entre 1-5 minutos.
+
+════════════════════════════════════════════════════════════════
+
+📋 COMANDOS ÚTEIS
+
+Ver logs do deploy automático:
+   ssh root@31.97.252.100
+   tail -f /var/log/auto-deploy.log
+
+Executar deploy manualmente:
+   ssh root@31.97.252.100
+   /var/www/mn/auto-deploy.sh
+
+Ver status do servidor:
+   ssh root@31.97.252.100
+   pm2 status
+
+Reiniciar servidor:
+   ssh root@31.97.252.100
+   pm2 restart mn-backend
+
+════════════════════════════════════════════════════════════════
+
+🔍 TROUBLESHOOTING
+
+Se o site não atualizar após 5 minutos:
+
+1. Verifique os logs:
+   ssh root@31.97.252.100
+   tail -f /var/log/auto-deploy.log
+
+2. Execute o deploy manualmente:
+   ssh root@31.97.252.100
+   /var/www/mn/auto-deploy.sh
+
+3. Verifique o status do servidor:
+   ssh root@31.97.252.100
+   pm2 status
+
+════════════════════════════════════════════════════════════════
+
+🎉 PRONTO!
+
+Seu site agora tem deploy automático funcionando!
+
+Sempre que você fizer:
+   git push origin main
+
+O site será atualizado em até 5 minutos automaticamente! 🚀
+
+════════════════════════════════════════════════════════════════
