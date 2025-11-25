@@ -1,0 +1,374 @@
+╔════════════════════════════════════════════════════════════════╗
+║         🚀 GUIA COMPLETO - DEPLOY AUTOMÁTICO                  ║
+║         M&N Terapeutas - GitHub Webhook                       ║
+╚════════════════════════════════════════════════════════════════╝
+
+============================================
+📋 RESUMO DO PROBLEMA
+============================================
+
+O VPS não estava recebendo commits automaticamente porque:
+
+1. ❌ Webhook do GitHub não estava configurado
+2. ❌ Servidor webhook não estava rodando
+3. ❌ Serviço systemd não estava criado
+4. ❌ Nginx não estava configurado para proxy reverso
+
+SOLUÇÃO: Implementamos um servidor webhook robusto com:
+✅ Verificação de assinatura SHA256
+✅ Suporte a múltiplos eventos do GitHub
+✅ Logging detalhado
+✅ Tratamento de erros
+✅ Serviço systemd para auto-restart
+✅ Nginx como proxy reverso
+
+============================================
+🚀 PASSO 1: COPIAR ARQUIVOS PARA O VPS
+============================================
+
+1. Conecte ao VPS:
+   ssh root@31.97.252.100
+
+2. Navegue para o diretório do projeto:
+   cd /var/www/mn
+
+3. Copie o arquivo webhook-server.js:
+   # Opção A: Via SCP (do seu computador local)
+   scp webhook-server.js root@31.97.252.100:/var/www/mn/
+
+   # Opção B: Criar direto no VPS
+   cat > /var/www/mn/webhook-server.js << 'EOF'
+   [Cole aqui o conteúdo do arquivo webhook-server.js]
+   EOF
+
+4. Copie o script de setup:
+   scp WEBHOOK_SETUP_FINAL.sh root@31.97.252.100:/var/www/mn/
+
+============================================
+🔧 PASSO 2: EXECUTAR SCRIPT DE SETUP
+============================================
+
+1. Conecte ao VPS:
+   ssh root@31.97.252.100
+
+2. Navegue para o diretório:
+   cd /var/www/mn
+
+3. Dê permissão de execução:
+   chmod +x WEBHOOK_SETUP_FINAL.sh
+
+4. Execute o script:
+   ./WEBHOOK_SETUP_FINAL.sh
+
+   Este script irá:
+   ✅ Criar usuário webhook
+   ✅ Configurar permissões
+   ✅ Criar serviço systemd
+   ✅ Configurar Nginx como proxy reverso
+   ✅ Configurar firewall
+   ✅ Testar webhook
+
+5. Aguarde a conclusão (deve levar ~1 minuto)
+
+============================================
+🔐 PASSO 3: CONFIGURAR WEBHOOK NO GITHUB
+============================================
+
+1. Acesse: https://github.com/krtur/mn/settings/hooks
+
+2. Clique em "Add webhook"
+
+3. Preencha os campos:
+
+   📍 Payload URL:
+      http://31.97.252.100:9000/hooks/mn-deploy
+
+   📋 Content type:
+      application/json
+
+   🔑 Secret:
+      c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+
+   📨 Which events would you like to trigger this webhook?
+      ○ Just the push event (SELECIONE ESTA OPÇÃO)
+
+   ✅ Active:
+      [X] Active (MARQUE ESTA CAIXA)
+
+4. Clique em "Add webhook"
+
+5. Você verá uma tela com a lista de webhooks
+   Procure por "http://31.97.252.100:9000/hooks/mn-deploy"
+   Deve mostrar um ✅ verde indicando sucesso
+
+============================================
+🧪 PASSO 4: TESTAR WEBHOOK
+============================================
+
+TESTE 1: Health Check (do seu computador)
+   curl http://31.97.252.100:9000/health
+
+   Resposta esperada:
+   {"status":"ok","timestamp":"2025-01-01T12:00:00.000Z"}
+
+TESTE 2: Deploy Manual (do seu computador)
+   curl -X POST http://31.97.252.100:9000/hooks/test
+
+   Resposta esperada:
+   {"success":true,"message":"Deploy concluído com sucesso"}
+
+TESTE 3: Verificar Logs (no VPS)
+   ssh root@31.97.252.100
+   journalctl -u webhook -f
+
+   Você deve ver logs como:
+   [timestamp] 🚀 INICIANDO DEPLOY AUTOMÁTICO
+   [timestamp] 📥 Fazendo git pull origin main...
+   [timestamp] 📦 Instalando dependências...
+   [timestamp] 🔨 Fazendo build...
+   [timestamp] ✅ DEPLOY CONCLUÍDO COM SUCESSO!
+
+TESTE 4: Deploy Automático (do GitHub)
+   1. Faça um commit vazio:
+      git commit -m "teste deploy automático" --allow-empty
+
+   2. Faça push:
+      git push origin main
+
+   3. Aguarde 2-3 minutos
+
+   4. Verifique os logs no VPS:
+      ssh root@31.97.252.100
+      journalctl -u webhook -f
+
+   5. Recarregue o site:
+      http://31.97.252.100
+
+============================================
+📊 MONITORAMENTO E LOGS
+============================================
+
+VER STATUS DO WEBHOOK:
+   systemctl status webhook
+
+VER LOGS EM TEMPO REAL:
+   journalctl -u webhook -f
+
+VER ÚLTIMOS 50 LOGS:
+   journalctl -u webhook -n 50
+
+VER LOGS DE HOJE:
+   journalctl -u webhook --since today
+
+VER LOGS COM FILTRO:
+   journalctl -u webhook | grep "DEPLOY"
+
+PARAR WEBHOOK:
+   systemctl stop webhook
+
+REINICIAR WEBHOOK:
+   systemctl restart webhook
+
+INICIAR WEBHOOK:
+   systemctl start webhook
+
+============================================
+🔍 TROUBLESHOOTING
+============================================
+
+PROBLEMA: Webhook não responde
+SOLUÇÃO:
+   1. Verifique se o serviço está rodando:
+      systemctl status webhook
+   
+   2. Verifique se a porta 9000 está aberta:
+      netstat -tlnp | grep 9000
+   
+   3. Verifique os logs:
+      journalctl -u webhook -n 20
+   
+   4. Reinicie o webhook:
+      systemctl restart webhook
+
+PROBLEMA: Deploy não executa após push
+SOLUÇÃO:
+   1. Verifique se o webhook está configurado no GitHub:
+      https://github.com/krtur/mn/settings/hooks
+   
+   2. Clique no webhook e vá para "Recent Deliveries"
+   
+   3. Veja se há erros na entrega
+   
+   4. Teste manualmente:
+      curl -X POST http://31.97.252.100:9000/hooks/test
+   
+   5. Verifique os logs:
+      journalctl -u webhook -f
+
+PROBLEMA: Erro "Assinatura inválida"
+SOLUÇÃO:
+   1. Verifique se o secret está correto:
+      c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+   
+   2. Copie exatamente este valor no GitHub
+   
+   3. Não adicione espaços ou caracteres extras
+   
+   4. Salve e tente novamente
+
+PROBLEMA: Erro "git pull" falha
+SOLUÇÃO:
+   1. Verifique se o repositório está clonado:
+      ls -la /var/www/mn/.git
+   
+   2. Verifique se tem permissão:
+      ls -la /var/www/mn | head -5
+   
+   3. Teste git pull manualmente:
+      cd /var/www/mn
+      git pull origin main
+   
+   4. Se falhar, veja o erro e corrija
+
+PROBLEMA: npm install falha
+SOLUÇÃO:
+   1. Verifique se Node.js está instalado:
+      node --version
+      npm --version
+   
+   2. Limpe o cache do npm:
+      npm cache clean --force
+   
+   3. Tente instalar novamente:
+      cd /var/www/mn
+      npm install
+   
+   4. Se persistir, verifique o arquivo package.json
+
+PROBLEMA: npm run build falha
+SOLUÇÃO:
+   1. Verifique se há erros de TypeScript:
+      npm run build 2>&1 | tail -20
+   
+   2. Corrija os erros no código
+   
+   3. Faça commit e push novamente
+
+PROBLEMA: Nginx não reinicia
+SOLUÇÃO:
+   1. Teste a configuração:
+      nginx -t
+   
+   2. Se houver erro, corrija a configuração:
+      nano /etc/nginx/sites-available/mn
+   
+   3. Reinicie:
+      systemctl restart nginx
+   
+   4. Verifique status:
+      systemctl status nginx
+
+============================================
+📈 FLUXO COMPLETO DE DEPLOY
+============================================
+
+1. Você faz alterações no código localmente
+   ↓
+2. Faz commit:
+   git commit -m "descrição da alteração"
+   ↓
+3. Faz push:
+   git push origin main
+   ↓
+4. GitHub recebe o push
+   ↓
+5. GitHub envia notificação para o webhook:
+   POST http://31.97.252.100:9000/hooks/mn-deploy
+   ↓
+6. Webhook verifica a assinatura SHA256
+   ↓
+7. Webhook executa os comandos:
+   - git pull origin main
+   - npm install
+   - npm run build
+   - pm2 restart mn-backend
+   - systemctl restart nginx
+   ↓
+8. Site é atualizado automaticamente
+   ↓
+9. Você acessa http://31.97.252.100 e vê as mudanças
+
+⏱️ Tempo total: ~2-3 minutos
+
+============================================
+🔐 SEGURANÇA
+============================================
+
+✅ IMPLEMENTADO:
+   - Verificação de assinatura SHA256
+   - Validação de branch (apenas main)
+   - Validação de evento (apenas push)
+   - Logs detalhados de todas as ações
+   - Usuário dedicado para o webhook
+   - Permissões restritivas
+
+🔜 MELHORIAS FUTURAS:
+   - [ ] Adicionar SSL/HTTPS (Let's Encrypt)
+   - [ ] Configurar domínio próprio
+   - [ ] Implementar rate limiting
+   - [ ] Adicionar autenticação adicional
+   - [ ] Backup automático antes do deploy
+   - [ ] Rollback automático em caso de erro
+
+============================================
+📚 ARQUIVOS CRIADOS
+============================================
+
+1. webhook-server.js
+   - Servidor Node.js que recebe webhooks do GitHub
+   - Verifica assinatura SHA256
+   - Executa script de deploy
+   - Logging detalhado
+
+2. WEBHOOK_SETUP_FINAL.sh
+   - Script de instalação e configuração
+   - Cria serviço systemd
+   - Configura Nginx
+   - Configura firewall
+
+3. WEBHOOK_GUIA_COMPLETO.txt
+   - Este arquivo
+   - Guia passo a passo
+   - Troubleshooting
+   - Referência rápida
+
+============================================
+✅ CHECKLIST FINAL
+============================================
+
+[  ] Copiar webhook-server.js para o VPS
+[  ] Copiar WEBHOOK_SETUP_FINAL.sh para o VPS
+[  ] Executar WEBHOOK_SETUP_FINAL.sh
+[  ] Verificar se webhook está rodando: systemctl status webhook
+[  ] Testar health check: curl http://31.97.252.100:9000/health
+[  ] Configurar webhook no GitHub
+[  ] Testar com commit vazio
+[  ] Verificar logs: journalctl -u webhook -f
+[  ] Recarregar site e verificar mudanças
+[  ] Documentar configuração
+
+============================================
+🎉 PRONTO!
+============================================
+
+Seu VPS agora tem deploy automático funcionando!
+
+Sempre que você fizer push no GitHub:
+1. GitHub notifica o webhook
+2. Webhook executa o deploy
+3. Site é atualizado automaticamente
+
+Qualquer dúvida, consulte os logs:
+   journalctl -u webhook -f
+
+Bom trabalho! 🚀

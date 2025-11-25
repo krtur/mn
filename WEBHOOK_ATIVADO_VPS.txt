@@ -1,0 +1,106 @@
+╔════════════════════════════════════════════════════════════════╗
+║    ✅ WEBHOOK ATIVADO COM SUCESSO NO VPS!                    ║
+║    Deploy Automático - M&N Terapeutas                        ║
+╚════════════════════════════════════════════════════════════════╝
+
+🎉 WEBHOOK ESTÁ RODANDO!
+
+════════════════════════════════════════════════════════════════
+
+📊 INFORMAÇÕES DO WEBHOOK
+
+Porta: 3002
+URL: http://31.97.252.100:3002
+Status: ✅ Active (running)
+Serviço: webhook (systemd)
+
+════════════════════════════════════════════════════════════════
+
+🔐 CONFIGURAÇÃO DO GITHUB WEBHOOK
+
+Acesse: https://github.com/krtur/mn/settings/hooks
+
+Clique em "Add webhook" e preencha:
+
+   Payload URL:
+   http://31.97.252.100:3002/hooks/mn-deploy
+
+   Content type:
+   application/json
+
+   Secret:
+   c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+
+   Events:
+   ○ Just the push event
+
+   Active:
+   ☑ Active
+
+Clique em "Add webhook"
+
+════════════════════════════════════════════════════════════════
+
+🧪 TESTAR WEBHOOK
+
+1. Teste health check:
+   curl http://31.97.252.100:3002/health
+
+   Resposta esperada:
+   {"status":"ok","timestamp":"2025-11-25T20:59:21.214Z"}
+
+2. Teste deploy manual:
+   curl -X POST http://31.97.252.100:3002/hooks/test
+
+3. Teste com commit real:
+   git commit -m "teste webhook" --allow-empty
+   git push origin main
+   
+   Aguarde 2-3 minutos e verifique os logs:
+   ssh root@31.97.252.100
+   journalctl -u webhook -f
+
+════════════════════════════════════════════════════════════════
+
+📋 COMANDOS ÚTEIS
+
+Ver status:
+   systemctl status webhook
+
+Ver logs em tempo real:
+   journalctl -u webhook -f
+
+Ver últimos 50 logs:
+   journalctl -u webhook -n 50
+
+Reiniciar webhook:
+   systemctl restart webhook
+
+Parar webhook:
+   systemctl stop webhook
+
+Iniciar webhook:
+   systemctl start webhook
+
+════════════════════════════════════════════════════════════════
+
+✅ PRÓXIMOS PASSOS
+
+1. Configure o webhook no GitHub (veja acima)
+2. Faça um commit e push
+3. Aguarde 2-3 minutos
+4. Recarregue o site: http://31.97.252.100
+5. Verifique os logs: journalctl -u webhook -f
+
+════════════════════════════════════════════════════════════════
+
+🎉 PRONTO!
+
+Seu VPS agora tem deploy automático funcionando!
+
+Sempre que você fizer:
+   git push origin main
+
+O site será atualizado em 2-3 minutos automaticamente! 🚀
+
+════════════════════════════════════════════════════════════════

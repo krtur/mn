@@ -1,0 +1,109 @@
+╔════════════════════════════════════════════════════════════════╗
+║         🚀 COMECE AQUI - DEPLOY AUTOMÁTICO                   ║
+║         3 passos para ativar o webhook                        ║
+╚════════════════════════════════════════════════════════════════╝
+
+Seu VPS não estava recebendo commits automaticamente.
+Agora vamos corrigir isso de uma vez por todas!
+
+════════════════════════════════════════════════════════════════
+
+📍 PASSO 1: COPIAR ARQUIVOS PARA O VPS (1 minuto)
+
+Execute no seu computador:
+
+   scp webhook-server.js root@31.97.252.100:/var/www/mn/
+   scp WEBHOOK_SETUP_FINAL.sh root@31.97.252.100:/var/www/mn/
+
+════════════════════════════════════════════════════════════════
+
+⚙️ PASSO 2: EXECUTAR SETUP NO VPS (1 minuto)
+
+Execute no VPS:
+
+   ssh root@31.97.252.100
+   cd /var/www/mn
+   chmod +x WEBHOOK_SETUP_FINAL.sh
+   ./WEBHOOK_SETUP_FINAL.sh
+
+Aguarde até ver: ✅ WEBHOOK CONFIGURADO COM SUCESSO!
+
+════════════════════════════════════════════════════════════════
+
+🔐 PASSO 3: CONFIGURAR WEBHOOK NO GITHUB (2 minutos)
+
+1. Acesse: https://github.com/krtur/mn/settings/hooks
+
+2. Clique em "Add webhook"
+
+3. Preencha exatamente assim:
+
+   Payload URL:
+   http://31.97.252.100:9000/hooks/mn-deploy
+
+   Content type:
+   application/json
+
+   Secret:
+   c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+
+   Events:
+   ○ Just the push event
+
+   Active:
+   ☑ Active
+
+4. Clique em "Add webhook"
+
+════════════════════════════════════════════════════════════════
+
+🧪 TESTE AGORA (5 minutos)
+
+1. No seu computador:
+   git commit -m "teste webhook" --allow-empty
+   git push origin main
+
+2. No VPS, veja os logs:
+   ssh root@31.97.252.100
+   journalctl -u webhook -f
+
+3. Aguarde 2-3 minutos e recarregue:
+   http://31.97.252.100
+
+Se viu os logs do deploy, está funcionando! ✅
+
+════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTAÇÃO
+
+Para mais detalhes, leia:
+
+   WEBHOOK_RESUMO_EXECUCAO.txt  → Resumo executivo
+   WEBHOOK_GUIA_COMPLETO.txt    → Guia detalhado
+   WEBHOOK_TESTE_RAPIDO.txt     → Teste em 5 minutos
+
+════════════════════════════════════════════════════════════════
+
+❓ DÚVIDAS?
+
+Webhook não responde?
+   → systemctl status webhook
+
+Deploy não executa?
+   → journalctl -u webhook -f
+
+Site não atualiza?
+   → Aguarde 2-3 minutos e limpe o cache
+
+════════════════════════════════════════════════════════════════
+
+🎉 PRONTO!
+
+Agora seu VPS receberá commits automaticamente!
+
+Sempre que você fizer:
+   git push origin main
+
+O site será atualizado em 2-3 minutos! 🚀
+
+════════════════════════════════════════════════════════════════

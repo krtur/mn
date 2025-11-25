@@ -1,0 +1,141 @@
+╔════════════════════════════════════════════════════════════════╗
+║         🧪 TESTE RÁPIDO - WEBHOOK                             ║
+║         5 minutos para verificar se tudo funciona             ║
+╚════════════════════════════════════════════════════════════════╝
+
+============================================
+✅ PASSO 1: VERIFICAR WEBHOOK NO VPS (1 min)
+============================================
+
+1. Conecte ao VPS:
+   ssh root@31.97.252.100
+
+2. Verifique se o serviço está rodando:
+   systemctl status webhook
+
+   Você deve ver:
+   ● webhook.service - M&N Terapeutas - Webhook Server
+        Loaded: loaded
+        Active: active (running)
+
+3. Se não estiver rodando, inicie:
+   systemctl start webhook
+   systemctl status webhook
+
+4. Teste o health check:
+   curl http://localhost:9000/health
+
+   Resposta esperada:
+   {"status":"ok","timestamp":"2025-01-01T12:00:00.000Z"}
+
+✅ PASSO 1 CONCLUÍDO!
+
+============================================
+✅ PASSO 2: CONFIGURAR WEBHOOK NO GITHUB (2 min)
+============================================
+
+1. Acesse: https://github.com/krtur/mn/settings/hooks
+
+2. Se já existe um webhook:
+   - Clique nele
+   - Verifique se a URL está correta:
+     http://31.97.252.100:9000/hooks/mn-deploy
+   - Verifique se o secret está correto:
+     c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+   - Se tudo está certo, vá para o PASSO 3
+
+3. Se não existe webhook:
+   - Clique em "Add webhook"
+   - Preencha:
+     Payload URL: http://31.97.252.100:9000/hooks/mn-deploy
+     Content type: application/json
+     Secret: c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8
+     Events: Just the push event
+     Active: ☑ Checked
+   - Clique em "Add webhook"
+
+✅ PASSO 2 CONCLUÍDO!
+
+============================================
+✅ PASSO 3: TESTAR DEPLOY MANUAL (1 min)
+============================================
+
+1. No seu computador, faça um commit vazio:
+   git commit -m "teste webhook" --allow-empty
+
+2. Faça push:
+   git push origin main
+
+3. No VPS, veja os logs em tempo real:
+   ssh root@31.97.252.100
+   journalctl -u webhook -f
+
+4. Você deve ver algo como:
+   [timestamp] 📨 Webhook recebido do GitHub
+   [timestamp] ✅ Assinatura do webhook verificada
+   [timestamp] ✅ Push na branch main detectado
+   [timestamp] 🚀 INICIANDO DEPLOY AUTOMÁTICO
+   [timestamp] 📥 Fazendo git pull origin main...
+   [timestamp] 📦 Instalando dependências...
+   [timestamp] 🔨 Fazendo build...
+   [timestamp] 🔄 Reiniciando servidor...
+   [timestamp] ✅ DEPLOY CONCLUÍDO COM SUCESSO!
+
+5. Aguarde 2-3 minutos para o deploy completar
+
+✅ PASSO 3 CONCLUÍDO!
+
+============================================
+✅ PASSO 4: VERIFICAR SITE (1 min)
+============================================
+
+1. Recarregue o site:
+   http://31.97.252.100
+
+2. Verifique se as mudanças aparecem
+
+3. Se não aparecer:
+   - Limpe o cache do navegador (Ctrl+Shift+Del)
+   - Recarregue a página (Ctrl+F5)
+   - Aguarde mais um pouco
+
+✅ PASSO 4 CONCLUÍDO!
+
+============================================
+🎉 TUDO FUNCIONANDO!
+============================================
+
+Se chegou aqui, o webhook está funcionando perfeitamente!
+
+De agora em diante:
+1. Você faz commit e push no GitHub
+2. GitHub notifica o webhook
+3. Webhook executa o deploy automaticamente
+4. Site é atualizado em 2-3 minutos
+
+============================================
+❌ ALGO DEU ERRADO?
+============================================
+
+ERRO: "Assinatura inválida"
+SOLUÇÃO: Verifique se o secret está correto no GitHub
+
+ERRO: "Deploy não executa"
+SOLUÇÃO: 
+   1. Verifique os logs: journalctl -u webhook -f
+   2. Teste manualmente: curl -X POST http://31.97.252.100:9000/hooks/test
+   3. Verifique se o webhook está configurado no GitHub
+
+ERRO: "Site não atualiza"
+SOLUÇÃO:
+   1. Aguarde 2-3 minutos
+   2. Limpe o cache do navegador
+   3. Verifique se o build foi bem-sucedido nos logs
+
+ERRO: "Webhook não responde"
+SOLUÇÃO:
+   1. Verifique se está rodando: systemctl status webhook
+   2. Reinicie: systemctl restart webhook
+   3. Verifique os logs: journalctl -u webhook -n 20
+
+Para mais detalhes, consulte: WEBHOOK_GUIA_COMPLETO.txt
