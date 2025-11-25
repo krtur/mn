@@ -12,6 +12,7 @@ export interface User {
   phone: string;
   role: UserRole;
   profileImage?: string;
+  therapist_id?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             phone: data.phone,
             role: data.role,
             profileImage: data.profile_image,
+            therapist_id: data.therapist_id,
             createdAt: new Date(data.created_at),
             updatedAt: new Date(data.updated_at),
           });
@@ -144,6 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           phone: userData.phone || '',
           role: userData.role,
           profileImage: userData.profileImage,
+          therapist_id: userData.therapist_id,
           createdAt: userData.createdAt ? new Date(userData.createdAt) : new Date(),
           updatedAt: userData.updatedAt ? new Date(userData.updatedAt) : new Date(),
         };
@@ -199,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         phone: response.user.phone || '',
         role: response.user.role,
         profileImage: response.user.profileImage,
+        therapist_id: response.user.therapist_id,
         createdAt: response.user.createdAt ? new Date(response.user.createdAt) : new Date(),
         updatedAt: response.user.updatedAt ? new Date(response.user.updatedAt) : new Date(),
       };
@@ -267,11 +271,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           cpf: userData.cpf,
           phone: userData.phone,
           role: userData.role,
+          therapist_id: userData.therapistId,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
         
-        console.log('✅ Usuário registrado com sucesso:', userData.email);
+        console.log('✅ Usuário registrado com sucesso:', userData.email, 'Terapeuta:', userData.therapistId);
       }
     } catch (error) {
       console.error('Erro ao cadastrar:', error);

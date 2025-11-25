@@ -21,12 +21,15 @@ export const useAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   useEffect(() => {
     if (!user) {
       setLoading(false);
       return;
     }
+
+    let isMounted = true;
 
     const fetchAppointments = async () => {
       try {
@@ -35,11 +38,7 @@ export const useAppointments = () => {
 
         let query = supabase
           .from('appointments')
-          .select(`
-            *,
-            patient:patient_id(name, email),
-            therapist:therapist_id(name, email)
-          `);
+          .select('*');
 
         // Se for paciente, buscar agendamentos do paciente
         if (user.role === 'patient') {
@@ -50,30 +49,29 @@ export const useAppointments = () => {
           query = query.eq('therapist_id', user.id);
         }
 
-        // Ordenar por data
-        query = query.order('start_time', { ascending: true });
+        // Ordenar por data e limitar
+        query = query.order('start_time', { ascending: true }).limit(100);
 
         const { data, error: fetchError } = await query;
 
         if (fetchError) {
           console.error('Erro ao buscar agendamentos:', fetchError);
-          setError(fetchError.message);
+          if (isMounted) setError(fetchError.message);
           return;
         }
 
-        console.log('Agendamentos carregados:', {
-          userRole: user.role,
-          userId: user.id,
-          count: data?.length || 0,
-          data
-        });
-
-        setAppointments(data || []);
+        if (isMounted) {
+          setAppointments(data || []);
+        }
       } catch (err) {
         console.error('Erro ao buscar agendamentos:', err);
-        setError(err instanceof Error ? err.message : 'Erro ao buscar agendamentos');
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Erro ao buscar agendamentos');
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -81,7 +79,7 @@ export const useAppointments = () => {
 
     // Subscribe to real-time updates
     const subscription = supabase
-      .channel('appointments')
+      .channel(`appointments_${user.id}`)
       .on(
         'postgres_changes',
         {
@@ -93,15 +91,18 @@ export const useAppointments = () => {
             : `therapist_id=eq.${user.id}`
         },
         () => {
-          fetchAppointments();
+          if (isMounted) {
+            fetchAppointments();
+          }
         }
       )
       .subscribe();
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
-  }, [user]);
+  }, [user, refetchTrigger]);
 
   const updateAppointment = async (
     appointmentId: string,
@@ -141,5 +142,10 @@ export const useAppointments = () => {
     }
   };
 
-  return { appointments, loading, error, updateAppointment, deleteAppointment };
+  const refetch = () => {
+    console.log('🔄 Refetch manual de agendamentos');
+    setRefetchTrigger(prev => prev + 1);
+  };
+
+  return { appointments, loading, error, updateAppointment, deleteAppointment, refetch };
 };

@@ -19,6 +19,7 @@ export interface User {
   phone?: string;
   role: 'patient' | 'therapist_a' | 'therapist_b';
   profileImage?: string;
+  therapist_id?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

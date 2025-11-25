@@ -1,0 +1,65 @@
+🔧 CORRIGIR LOGIN DO MARCELO
+
+=== PASSO 1: Verificar se Marcelo existe no Supabase Auth ===
+
+1. Acesse: https://supabase.com/dashboard
+2. Selecione seu projeto
+3. Vá em: Authentication > Users
+4. Procure por: marcelo@mnterapeutas.com
+
+Se NÃO existir:
+   - Clique em "Create new user"
+   - Email: marcelo@mnterapeutas.com
+   - Password: Perante@1202
+   - Marque "Auto confirm user"
+   - Clique em "Create user"
+
+=== PASSO 2: Verificar se Marcelo existe na tabela users ===
+
+1. Vá em: SQL Editor
+2. Execute o script: VERIFICAR_MARCELO.sql
+3. Se não retornar nada, execute:
+
+INSERT INTO users (id, email, name, role, cpf, phone, created_at, updated_at)
+VALUES (
+  '028d8869-679f-4093-b435-1a43b6ced0e2',
+  'marcelo@mnterapeutas.com',
+  'Marcelo',
+  'therapist_b',
+  '00000000000',
+  '00000000000',
+  NOW(),
+  NOW()
+);
+
+=== PASSO 3: Verificar RLS (Row Level Security) ===
+
+Se ainda não funcionar, execute no SQL Editor:
+
+-- Desabilitar RLS temporariamente para debug
+ALTER TABLE users DISABLE ROW LEVEL SECURITY;
+
+-- Depois de testar, reabilitar:
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+=== PASSO 4: Testar Login ===
+
+1. Abra o navegador em: http://localhost:3000
+2. Clique em "Entrar"
+3. Email: marcelo@mnterapeutas.com
+4. Senha: Perante@1202
+5. Clique em "Entrar"
+
+=== ERROS COMUNS ===
+
+❌ "Invalid login credentials"
+   → Marcelo não existe no Auth ou senha está errada
+
+❌ "User not found"
+   → Marcelo não existe na tabela users
+
+❌ "Permission denied"
+   → Problema com RLS - desabilitar temporariamente
+
+❌ "Unauthorized"
+   → Token inválido - limpar localStorage e tentar novamente

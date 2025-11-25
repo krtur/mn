@@ -1,0 +1,109 @@
+✏️ EDITAR E DELETAR AGENDAMENTOS - PACIENTE
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ O QUE FOI IMPLEMENTADO:
+
+**Funcionalidades Adicionadas:**
+1. Editar agendamentos (data, hora, notas)
+2. Deletar agendamentos
+3. Modal de edição com confirmação
+
+**Como Funciona:**
+- Paciente clica em um agendamento no calendário
+- Abre um modal com os dados do agendamento
+- Pode editar: Data, Hora Início, Hora Fim, Notas
+- Pode deletar o agendamento (com confirmação)
+- Pode cancelar a edição
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📁 ARQUIVOS MODIFICADOS:
+
+1. components/patient/Appointments.tsx
+   - Linha 10: Importação de updateAppointment e deleteAppointment do hook
+   - Linha 15-16: Estados para controlar modal de edição
+   - Linha 134-181: Funções para editar, atualizar e deletar agendamentos
+   - Linha 341-346: Evento de clique no calendário para abrir modal
+   - Linha 406-491: Modal de edição com formulário
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 FUNCIONALIDADES:
+
+**Modal de Edição:**
+- Terapeuta (somente leitura)
+- Data (editável)
+- Hora Início (editável)
+- Hora Fim (editável)
+- Notas (editável)
+
+**Botões:**
+- Salvar: Atualiza o agendamento
+- Deletar: Remove o agendamento (com confirmação)
+- Cancelar: Fecha o modal sem fazer alterações
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🧪 COMO TESTAR:
+
+1. Faça login como paciente
+2. Vá para Agendamentos
+3. Clique em um agendamento no calendário
+4. Abre o modal de edição
+5. Modifique os dados desejados
+6. Clique em "Salvar" para atualizar
+7. Ou clique em "Deletar" para remover (com confirmação)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 FLUXO DE EDIÇÃO:
+
+1. Paciente clica em agendamento no calendário
+   ↓
+2. Modal abre com dados do agendamento
+   ↓
+3. Paciente edita os campos desejados
+   ↓
+4. Clica em "Salvar"
+   ↓
+5. Agendamento é atualizado no banco de dados
+   ↓
+6. Modal fecha e calendário atualiza
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 FLUXO DE DELEÇÃO:
+
+1. Paciente clica em agendamento no calendário
+   ↓
+2. Modal abre com dados do agendamento
+   ↓
+3. Clica em "Deletar"
+   ↓
+4. Confirmação: "Tem certeza que deseja deletar?"
+   ↓
+5. Se sim: Agendamento é deletado do banco de dados
+   ↓
+6. Modal fecha e calendário atualiza
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔒 SEGURANÇA:
+
+- Confirmação antes de deletar
+- Validação de dados antes de atualizar
+- Tratamento de erros com mensagens ao usuário
+- Modal com overlay para evitar interações acidentais
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✨ PRÓXIMOS PASSOS (Opcional):
+
+1. Adicionar validação de datas (não permitir datas passadas)
+2. Adicionar validação de horários (não permitir hora fim antes de hora início)
+3. Adicionar confirmação visual antes de salvar
+4. Adicionar histórico de alterações
+5. Permitir reagendar para horários sugeridos pelo terapeuta
+
+═══════════════════════════════════════════════════════════════════════════════

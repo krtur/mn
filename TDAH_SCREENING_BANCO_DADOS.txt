@@ -1,0 +1,225 @@
+================================================================================
+TRIAGEM TDAH PARA ADULTO - INTEGRAÇÃO COM BANCO DE DADOS
+================================================================================
+
+📋 RESUMO EXECUTIVO
+================================================================================
+A Triagem TDAH para Adulto foi integrada ao banco de dados Supabase com:
+- Salvamento automático de respostas e resultados
+- Acesso para terapeutas visualizarem triagens dos pacientes
+- Interface completa para análise de resultados
+
+================================================================================
+🎯 FUNCIONALIDADES IMPLEMENTADAS
+================================================================================
+
+1. TABELA TDAH_SCREENINGS (Supabase)
+   - Armazena todas as 100 respostas em JSON
+   - Pontuações por categoria (A-F)
+   - Pontuação total e percentual
+   - Nível de risco (Baixo, Moderado, Alto, Muito Alto)
+   - Duração do teste em segundos
+   - Timestamps de criação e atualização
+
+2. HOOK useTdahScreening
+   - saveScreening(): Salva nova triagem
+   - getPatientScreenings(): Busca triagens do paciente
+   - getScreening(): Busca triagem específica
+   - getTherapistPatientScreenings(): Busca triagens de um paciente (para terapeutas)
+   - updateScreening(): Atualiza triagem existente
+
+3. COMPONENTE TdahScreening (Paciente)
+   - Botão "Salvar Resultados" após conclusão do teste
+   - Feedback visual de sucesso/erro
+   - Salvamento automático de todas as respostas
+
+4. COMPONENTE TdahResults (Terapeuta)
+   - Lista de pacientes com busca
+   - Histórico de triagens por paciente
+   - Visualização detalhada de cada triagem
+   - Análise por categoria com respostas expandíveis
+   - Informações de duração e data
+
+================================================================================
+🚀 COMO COMEÇAR
+================================================================================
+
+PASSO 1: Executar SQL no Supabase
+────────────────────────────────────
+1. Abra o Supabase Dashboard
+2. Vá para SQL Editor
+3. Copie todo o conteúdo do arquivo: TDAH_SCREENING_SETUP.sql
+4. Cole e execute
+5. Aguarde a conclusão
+
+PASSO 2: Testar como Paciente
+────────────────────────────────────
+1. Faça login como paciente
+2. Vá para Dashboard > Triagem TDAH
+3. Clique em "Iniciar Teste"
+4. Responda as 100 perguntas
+5. Clique em "Ver Resultados"
+6. Clique em "Salvar Resultados"
+7. Você verá a mensagem "Resultados salvos com sucesso!"
+
+PASSO 3: Testar como Terapeuta
+────────────────────────────────────
+1. Faça login como terapeuta
+2. Vá para Dashboard > Triagens TDAH
+3. Selecione um paciente na lista
+4. Visualize as triagens realizadas
+5. Clique em uma triagem para ver detalhes
+6. Expanda as categorias para ver respostas individuais
+
+================================================================================
+📊 ESTRUTURA DOS DADOS
+================================================================================
+
+Tabela: tdah_screenings
+
+Colunas Principais:
+├── id (UUID) - Identificador único
+├── patient_id (UUID) - ID do paciente
+├── therapist_id (UUID) - ID do terapeuta (opcional)
+├── answers (JSONB) - Todas as 100 respostas
+│   └── Formato: {1: 2, 2: 3, 3: 1, ...}
+├── category_a_score (INTEGER) - Pontuação categoria A
+├── category_b_score (INTEGER) - Pontuação categoria B
+├── category_c_score (INTEGER) - Pontuação categoria C
+├── category_d_score (INTEGER) - Pontuação categoria D
+├── category_e_score (INTEGER) - Pontuação categoria E
+├── category_f_score (INTEGER) - Pontuação categoria F
+├── total_score (INTEGER) - Soma de todas as categorias
+├── total_percentage (INTEGER) - Percentual total (0-100)
+├── risk_level (VARCHAR) - 'Baixo', 'Moderado', 'Alto', 'Muito Alto'
+├── test_duration (INTEGER) - Duração em segundos
+├── created_at (TIMESTAMP) - Data de criação
+└── updated_at (TIMESTAMP) - Data de atualização
+
+Índices Criados:
+├── idx_tdah_patient_id - Para buscar triagens por paciente
+├── idx_tdah_therapist_id - Para buscar triagens por terapeuta
+├── idx_tdah_created_at - Para ordenar por data
+└── idx_tdah_risk_level - Para filtrar por nível de risco
+
+================================================================================
+🔐 SEGURANÇA (Row Level Security)
+================================================================================
+
+Políticas RLS Implementadas:
+
+1. Pacientes podem ver suas próprias triagens
+   - Política: "Patients can view own screenings"
+   - Condição: auth.uid() = patient_id
+
+2. Pacientes podem inserir suas próprias triagens
+   - Política: "Patients can insert own screenings"
+   - Condição: auth.uid() = patient_id
+
+3. Pacientes podem atualizar suas próprias triagens
+   - Política: "Patients can update own screenings"
+   - Condição: auth.uid() = patient_id
+
+4. Terapeutas podem ver triagens de seus pacientes
+   - Política: "Therapists can view patient screenings"
+   - Condição: therapist_id = auth.uid() OU paciente está associado ao terapeuta
+
+================================================================================
+📁 ARQUIVOS CRIADOS/MODIFICADOS
+================================================================================
+
+CRIADOS:
+├── TDAH_SCREENING_SETUP.sql - SQL para criar tabela e políticas
+├── hooks/useTdahScreening.ts - Hook para gerenciar triagens
+└── components/therapist/TdahResults.tsx - Componente para terapeutas
+
+MODIFICADOS:
+├── components/patient/TdahScreening.tsx - Adicionado botão de salvar
+├── App.tsx - Adicionada rota /dashboard/therapist/tdah-results
+├── components/dashboard/Sidebar.tsx - Adicionado link no menu
+└── hooks/index.ts - Exportado novo hook
+
+================================================================================
+🧪 TESTES RECOMENDADOS
+================================================================================
+
+TESTE 1: Salvar Triagem
+────────────────────────────────────
+1. Login como paciente
+2. Ir para Triagem TDAH
+3. Responder todas as 100 perguntas
+4. Clicar em "Salvar Resultados"
+5. ✓ Deve aparecer mensagem de sucesso
+6. ✓ Dados devem estar no banco
+
+TESTE 2: Visualizar como Terapeuta
+────────────────────────────────────
+1. Login como terapeuta
+2. Ir para Dashboard > Triagens TDAH
+3. Selecionar paciente que fez triagem
+4. ✓ Deve listar as triagens
+5. ✓ Deve mostrar pontuação total
+6. ✓ Deve mostrar nível de risco
+
+TESTE 3: Expandir Categorias
+────────────────────────────────────
+1. Na tela de triagens do terapeuta
+2. Clicar em uma categoria para expandir
+3. ✓ Deve mostrar todas as perguntas e respostas
+4. ✓ Deve mostrar a resposta selecionada
+
+TESTE 4: Histórico de Triagens
+────────────────────────────────────
+1. Paciente faz triagem 1
+2. Paciente faz triagem 2
+3. Terapeuta visualiza paciente
+4. ✓ Deve listar ambas as triagens
+5. ✓ Deve permitir comparar resultados
+
+================================================================================
+🔧 TROUBLESHOOTING
+================================================================================
+
+PROBLEMA: "Erro ao salvar triagem"
+SOLUÇÃO:
+- Verifique se o SQL foi executado corretamente
+- Verifique se o RLS está habilitado
+- Verifique as políticas RLS na tabela
+- Verifique se o usuário está autenticado
+
+PROBLEMA: Terapeuta não vê triagens do paciente
+SOLUÇÃO:
+- Verifique se a política RLS está correta
+- Verifique se o therapist_id está configurado
+- Verifique se o paciente está associado ao terapeuta
+
+PROBLEMA: Botão "Salvar Resultados" não aparece
+SOLUÇÃO:
+- Verifique se o componente TdahScreening foi atualizado
+- Verifique se o hook useTdahScreening foi importado
+- Verifique o console do navegador para erros
+
+================================================================================
+📈 PRÓXIMOS PASSOS
+================================================================================
+
+1. Adicionar notas do terapeuta nas triagens
+2. Permitir comparação entre triagens
+3. Gerar relatórios em PDF
+4. Adicionar gráficos de evolução
+5. Integrar com agendamentos (triagem antes de sessão)
+6. Enviar notificação quando paciente completa triagem
+7. Adicionar análise de tendências
+
+================================================================================
+📞 SUPORTE
+================================================================================
+
+Se encontrar problemas:
+1. Verifique o console do navegador (F12)
+2. Verifique os logs do Supabase
+3. Verifique se o SQL foi executado corretamente
+4. Verifique as políticas RLS
+5. Teste com dados fictícios primeiro
+
+================================================================================

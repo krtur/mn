@@ -1,0 +1,168 @@
+================================================================================
+TROUBLESHOOTING - TRIAGEM TDAH NÃO APARECE PARA TERAPEUTA
+================================================================================
+
+🔴 PROBLEMA: Terapeuta não vê triagens do paciente
+
+================================================================================
+PASSO 1: VERIFICAR SE OS DADOS FORAM SALVOS
+================================================================================
+
+1. Abra Supabase Dashboard > SQL Editor
+2. Execute o arquivo: TDAH_VERIFICAR_DADOS.sql
+3. Verifique:
+   ✓ Há triagens na tabela tdah_screenings?
+   ✓ Os patient_id estão corretos?
+   ✓ Os pacientes têm therapist_id associado?
+
+Se NÃO há triagens:
+   → O botão "Salvar Resultados" não funcionou
+   → Verifique o console do navegador (F12)
+   → Procure por erros em vermelho
+
+Se HÁ triagens:
+   → Vá para PASSO 2
+
+================================================================================
+PASSO 2: VERIFICAR ASSOCIAÇÃO PACIENTE-TERAPEUTA
+================================================================================
+
+1. No Supabase, execute:
+   SELECT * FROM users WHERE role = 'patient' LIMIT 5;
+
+2. Verifique a coluna "therapist_id":
+   ✓ Está preenchida?
+   ✓ O ID corresponde a um terapeuta válido?
+
+Se therapist_id é NULL:
+   → O paciente não foi associado a um terapeuta
+   → Solução: Cadastre o paciente novamente selecionando um terapeuta
+
+Se therapist_id está preenchido:
+   → Vá para PASSO 3
+
+================================================================================
+PASSO 3: VERIFICAR POLÍTICAS RLS
+================================================================================
+
+1. No Supabase, execute:
+   SELECT * FROM pg_policies WHERE tablename = 'tdah_screenings';
+
+2. Você deve ver 4 políticas:
+   ✓ "Patients can view own screenings"
+   ✓ "Patients can insert own screenings"
+   ✓ "Patients can update own screenings"
+   ✓ "Therapists can view patient screenings"
+
+Se FALTAM políticas:
+   → Execute: TDAH_SCREENING_FIX_RLS.sql
+
+Se TODAS estão presentes:
+   → Vá para PASSO 4
+
+================================================================================
+PASSO 4: TESTAR ACESSO DO TERAPEUTA
+================================================================================
+
+1. Copie o ID do terapeuta (ex: 028d8869-679f-4093-b435-1a43b6ced0e2)
+
+2. No Supabase, execute:
+   SELECT * FROM tdah_screenings 
+   WHERE patient_id IN (
+     SELECT id FROM users WHERE therapist_id = 'COLE_O_ID_DO_TERAPEUTA_AQUI'
+   );
+
+3. Resultado:
+   ✓ Se retorna triagens → Política está funcionando
+   ✗ Se retorna vazio → Problema na política
+
+Se retorna vazio:
+   → Execute: TDAH_SCREENING_FIX_RLS.sql
+   → Teste novamente
+
+================================================================================
+PASSO 5: VERIFICAR CONSOLE DO NAVEGADOR
+================================================================================
+
+1. Abra o navegador e faça login como terapeuta
+2. Pressione F12 para abrir o console
+3. Vá para Dashboard > Triagens TDAH
+4. Procure por mensagens:
+   ✓ "🔍 Buscando triagens para paciente: ..."
+   ✓ "📊 Triagens encontradas: X"
+
+Se VÊ as mensagens:
+   → O código está funcionando
+   → Problema pode ser na política RLS
+
+Se NÃO vê as mensagens:
+   → O componente não está carregando
+   → Verifique se há erros em vermelho no console
+
+================================================================================
+PASSO 6: LIMPAR CACHE E RECARREGAR
+================================================================================
+
+1. Pressione Ctrl+Shift+Delete (limpar cache)
+2. Feche o navegador completamente
+3. Reabra e faça login novamente
+4. Teste novamente
+
+================================================================================
+SOLUÇÃO RÁPIDA: DESABILITAR RLS TEMPORARIAMENTE
+================================================================================
+
+Se nada funcionar, você pode desabilitar RLS temporariamente para debug:
+
+1. No Supabase, execute:
+   ALTER TABLE tdah_screenings DISABLE ROW LEVEL SECURITY;
+
+2. Teste se o terapeuta consegue ver as triagens
+
+3. Se funcionar:
+   → O problema é na política RLS
+   → Execute: TDAH_SCREENING_FIX_RLS.sql
+   → Depois reabilite RLS:
+      ALTER TABLE tdah_screenings ENABLE ROW LEVEL SECURITY;
+
+4. Se NÃO funciona:
+   → O problema é no código
+   → Verifique o console do navegador
+
+================================================================================
+CHECKLIST FINAL
+================================================================================
+
+Antes de reportar um problema, verifique:
+
+□ SQL foi executado no Supabase?
+□ Há triagens na tabela tdah_screenings?
+□ Paciente tem therapist_id preenchido?
+□ Políticas RLS existem?
+□ Console do navegador não tem erros?
+□ Cache foi limpo?
+□ Navegador foi reiniciado?
+
+Se TODOS os itens estão OK e ainda não funciona:
+→ Desabilite RLS temporariamente para debug
+→ Verifique os logs do Supabase
+→ Procure por mensagens de erro específicas
+
+================================================================================
+LOGS IMPORTANTES
+================================================================================
+
+No console do navegador, procure por:
+
+✓ "✓ Triagens encontradas para paciente X: 1"
+  → Significa que a triagem foi encontrada
+
+✗ "Erro ao buscar triagens: ..."
+  → Significa que há um erro na query
+
+✗ "Erro ao salvar triagem: ..."
+  → Significa que o salvamento falhou
+
+Copie a mensagem de erro completa para investigação.
+
+================================================================================

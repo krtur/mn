@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { UserRole } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,16 +11,24 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
   const location = useLocation();
+  const { logout } = useAuth();
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      window.location.href = '/login';
+    }
+  };
 
   const patientMenuItems = [
     { label: 'Dashboard', path: '/dashboard/patient', icon: '📊' },
     { label: 'Agendamentos', path: '/dashboard/patient/appointments', icon: '📅' },
     { label: 'Mensagens', path: '/dashboard/patient/messages', icon: '💬' },
-    { label: 'Relatórios', path: '/dashboard/patient/reports', icon: '📋' },
     { label: 'Loja de Testes', path: '/dashboard/patient/test-shop', icon: '🛍️' },
     { label: 'Triagem TDAH', path: '/dashboard/patient/tdah-screening', icon: '🧠' },
-    { label: 'Histórico', path: '/dashboard/patient/attendance', icon: '📈' },
-    { label: 'Perfil', path: '/dashboard/patient/profile', icon: '👤' },
   ];
 
   const therapistMenuItems = [
@@ -28,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
     { label: 'Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
     { label: 'Mensagens', path: '/dashboard/therapist/messages', icon: '💬' },
     { label: 'Documentos', path: '/dashboard/therapist/documents', icon: '📄' },
-    { label: 'Perfil', path: '/dashboard/therapist/profile', icon: '👤' },
+    { label: 'Triagens TDAH', path: '/dashboard/therapist/tdah-results', icon: '🧠' },
   ];
 
   const menuItems = userRole === 'patient' ? patientMenuItems : therapistMenuItems;
@@ -41,8 +50,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
         isOpen ? 'w-64' : 'w-20'
       } bg-slate-900 text-white transition-all duration-300 flex flex-col overflow-hidden`}
     >
-      <div className="p-4 border-b border-slate-700">
-        <div className="text-xl font-bold truncate">{isOpen ? 'M&N' : 'MN'}</div>
+      <div className="p-4 border-b border-slate-700 flex items-center justify-center">
+        <img 
+          src="/logo.png" 
+          alt="M&N Logo" 
+          className={`${isOpen ? 'h-12' : 'h-10'} transition-all duration-300`}
+        />
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4">
@@ -63,9 +76,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
         ))}
       </nav>
 
-      <div className="border-t border-slate-700 p-4">
-        <button className="w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded transition-colors">
-          {isOpen ? 'Sair' : '🚪'}
+      <div className="border-t border-slate-700 p-4 space-y-2">
+        <Link
+          to={userRole === 'patient' ? '/dashboard/patient/profile' : '/dashboard/therapist/profile'}
+          className="flex items-center px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded transition-colors"
+          title={!isOpen ? 'Perfil' : undefined}
+        >
+          <span className="w-6 h-6 flex items-center justify-center">👤</span>
+          {isOpen && <span className="ml-3">Perfil</span>}
+        </Link>
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center px-4 py-2 text-slate-300 hover:text-white hover:bg-red-600 rounded transition-colors"
+          title={!isOpen ? 'Sair' : undefined}
+        >
+          <span className="w-6 h-6 flex items-center justify-center">🚪</span>
+          {isOpen && <span className="ml-3">Sair</span>}
         </button>
       </div>
     </aside>

@@ -1,0 +1,100 @@
+🔧 CORREÇÕES IMPLEMENTADAS - PROBLEMAS DE AGENDAMENTOS
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEMA 1: Data agendada um dia antes
+─────────────────────────────────────────────────────────────────────────────
+
+CAUSA:
+- Ao enviar a data (ex: 2024-01-15), o JavaScript interpretava como UTC
+- Depois convertia para zona local, causando deslocamento de 1 dia
+
+SOLUÇÃO:
+- Arquivo: hooks/useAppointmentRequests.ts (linha 166-167)
+- Mudança: Usar Date.UTC() para criar a data corretamente
+- Antes:
+  const startDate = new Date(requestData.requested_date);
+  startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+- Depois:
+  const [year, month, day] = requestData.requested_date.split('-');
+  const startDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes), 0));
+
+RESULTADO: ✅ Data agora é agendada no dia correto
+
+
+PROBLEMA 2: Solicitação não aparece de primeira na tela
+─────────────────────────────────────────────────────────────────────────────
+
+CAUSA:
+- O hook useAppointmentRequests esperava o real-time subscription notificar
+- Havia delay de 500ms antes de refazer a busca
+- A lista não era atualizada imediatamente após criar
+
+SOLUÇÃO:
+- Arquivo: hooks/useAppointmentRequests.ts (linha 142-147)
+- Mudança: Adicionar a nova solicitação ao estado local imediatamente
+- Código adicionado:
+  // Atualizar lista imediatamente com a nova solicitação
+  if (data && data.length > 0) {
+    const newRequest = data[0];
+    console.log('✅ Adicionando nova solicitação à lista:', newRequest);
+    setRequests(prev => [newRequest, ...prev]);
+  }
+
+RESULTADO: ✅ Solicitação aparece imediatamente na tela
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEMA 3: Data errada na tela de aprovação do terapeuta
+─────────────────────────────────────────────────────────────────────────────
+
+CAUSA:
+- A tela de aprovação usava new Date(request.requested_date) que tinha o mesmo
+  problema de fuso horário
+- Mesmo que o agendamento fosse criado no dia correto, a exibição estava errada
+
+SOLUÇÃO:
+- Arquivo: components/therapist/ScheduleManager.tsx (linha 589-590)
+- Mudança: Usar o mesmo método de formatação segura de data
+- Código adicionado:
+  const [year, month, day] = request.requested_date.split('-');
+  const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('pt-BR');
+
+- Arquivo: components/patient/Appointments.tsx (linha 311-312)
+- Mudança: Aplicar o mesmo método no componente do paciente
+
+RESULTADO: ✅ Data exibida corretamente em ambas as telas
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ARQUIVOS MODIFICADOS:
+1. hooks/useAppointmentRequests.ts
+   - Linha 166-167: Correção da data com Date.UTC()
+   - Linha 142-147: Atualização imediata da lista
+
+2. components/patient/Appointments.tsx
+   - Linha 102: Adicionado console.log para debug
+   - Linha 311-312: Formatação segura de data
+
+3. components/therapist/ScheduleManager.tsx
+   - Linha 589-590: Formatação segura de data
+
+═══════════════════════════════════════════════════════════════════════════════
+
+COMO TESTAR:
+1. Faça login como paciente
+2. Vá para Agendamentos
+3. Clique em "Novo Agendamento"
+4. Selecione uma data (ex: 25 de dezembro)
+5. Selecione um horário
+6. Clique em "Enviar Solicitação"
+7. ✅ A solicitação deve aparecer imediatamente na lista
+8. ✅ A data deve estar correta (não um dia antes)
+9. Faça login como terapeuta
+10. Vá para Gerenciador de Agenda > Solicitações
+11. ✅ A data deve estar correta também na tela de aprovação
+
+═══════════════════════════════════════════════════════════════════════════════

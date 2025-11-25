@@ -1,0 +1,155 @@
+================================================================================
+DEBUG - TRIAGEM TDAH NÃO ESTÁ SENDO SALVA
+================================================================================
+
+🔍 NOVO TESTE COM LOGS DETALHADOS
+================================================================================
+
+Adicionei logs detalhados em:
+- components/patient/TdahScreening.tsx
+- hooks/useTdahScreening.ts
+
+Agora você verá mensagens como:
+✓ 💾 Iniciando salvamento de triagem...
+✓ 📝 Respostas: 100 perguntas respondidas
+✓ 📊 Pontuação total: 45 %
+✓ 🔐 Usuário autenticado: [ID]
+✓ 📊 Nível de risco: Moderado
+✓ 📤 Enviando dados para Supabase: {...}
+✓ ✅ Triagem salva com sucesso: {...}
+
+================================================================================
+PASSO 1: TESTAR SALVAMENTO
+================================================================================
+
+1. Abra o navegador e pressione F12 (Console)
+2. Faça login como paciente
+3. Vá para Dashboard > Triagem TDAH
+4. Responda todas as 100 perguntas
+5. Clique em "Ver Resultados"
+6. Clique em "Salvar Resultados"
+7. Procure no console por:
+
+   ✓ Se VÊ "✅ Triagem salva com sucesso":
+     → Triagem foi salva! Vá para PASSO 2
+
+   ✗ Se VÊ "❌ Erro ao salvar triagem":
+     → Há um erro. Copie a mensagem completa e vá para PASSO 3
+
+   ✗ Se NÃO vê nenhuma mensagem:
+     → O botão não está funcionando. Verifique se há erros em vermelho
+
+================================================================================
+PASSO 2: VERIFICAR NO BANCO DE DADOS
+================================================================================
+
+Se a triagem foi salva com sucesso:
+
+1. Abra Supabase Dashboard > SQL Editor
+2. Execute:
+   SELECT * FROM tdah_screenings ORDER BY created_at DESC LIMIT 1;
+
+3. Você deve ver:
+   ✓ id: [UUID]
+   ✓ patient_id: [ID do paciente]
+   ✓ total_percentage: [número]
+   ✓ risk_level: [Baixo/Moderado/Alto/Muito Alto]
+   ✓ created_at: [data/hora]
+
+Se VÊ os dados:
+   → Triagem foi salva corretamente!
+   → Vá para PASSO 3 (verificar acesso do terapeuta)
+
+Se NÃO vê os dados:
+   → Há um problema na política RLS
+   → Execute: TDAH_SCREENING_FIX_RLS.sql
+
+================================================================================
+PASSO 3: VERIFICAR ACESSO DO TERAPEUTA
+================================================================================
+
+1. Abra Supabase Dashboard > SQL Editor
+2. Copie o ID do paciente que fez a triagem
+3. Execute:
+   SELECT * FROM users WHERE id = 'COLE_O_ID_DO_PACIENTE';
+
+4. Procure pela coluna "therapist_id":
+   ✓ Se está preenchida → Paciente está associado a um terapeuta
+   ✗ Se é NULL → Paciente NÃO está associado
+
+Se therapist_id é NULL:
+   → Problema: Paciente não foi cadastrado com terapeuta
+   → Solução: Cadastre o paciente novamente selecionando um terapeuta
+
+Se therapist_id está preenchida:
+   → Vá para PASSO 4
+
+================================================================================
+PASSO 4: TESTAR ACESSO DO TERAPEUTA
+================================================================================
+
+1. Faça login como terapeuta
+2. Abra o console (F12)
+3. Vá para Dashboard > Triagens TDAH
+4. Procure no console por:
+   ✓ "🔍 Buscando triagens para paciente: [ID]"
+   ✓ "📊 Triagens encontradas: 1"
+
+Se VÊ "Triagens encontradas: 1":
+   → Funcionou! A triagem deve aparecer na tela
+
+Se VÊ "Triagens encontradas: 0":
+   → Problema na política RLS
+   → Execute: TDAH_SCREENING_FIX_RLS.sql
+   → Teste novamente
+
+================================================================================
+MENSAGENS DE ERRO COMUNS
+================================================================================
+
+❌ "Erro ao salvar triagem: Permission denied"
+   → Problema: Política RLS está bloqueando
+   → Solução: Execute TDAH_SCREENING_FIX_RLS.sql
+
+❌ "Erro ao salvar triagem: relation \"tdah_screenings\" does not exist"
+   → Problema: Tabela não foi criada
+   → Solução: Execute TDAH_SCREENING_SETUP.sql
+
+❌ "Erro ao salvar triagem: Usuário não autenticado"
+   → Problema: Sessão expirou
+   → Solução: Faça login novamente
+
+❌ "Erro ao salvar triagem: column \"answers\" is of type jsonb but expression is of type text"
+   → Problema: Tipo de dado incorreto
+   → Solução: Verifique se o JSON está sendo enviado corretamente
+
+================================================================================
+CHECKLIST ANTES DE REPORTAR
+================================================================================
+
+□ Respondeu todas as 100 perguntas?
+□ Clicou em "Salvar Resultados"?
+□ Viu a mensagem "Resultados salvos com sucesso!"?
+□ Abriu o console (F12) e procurou pelos logs?
+□ Executou o SQL de verificação?
+□ Paciente tem therapist_id preenchido?
+□ Executou TDAH_SCREENING_FIX_RLS.sql?
+□ Limpou o cache (Ctrl+Shift+Delete)?
+□ Reiniciou o navegador?
+
+================================================================================
+PRÓXIMOS PASSOS
+================================================================================
+
+Se tudo funcionar:
+1. Teste com vários pacientes
+2. Verifique se o terapeuta consegue ver todas as triagens
+3. Teste expandir as categorias para ver respostas
+4. Teste comparar triagens de diferentes datas
+
+Se ainda não funcionar:
+1. Copie a mensagem de erro completa do console
+2. Execute: TDAH_VERIFICAR_DADOS.sql
+3. Compartilhe os resultados para debug
+
+================================================================================

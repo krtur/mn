@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { supabaseAuth } from '../../services/supabase';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -22,31 +21,26 @@ export const Login: React.FC = () => {
       try {
         console.log('🔍 Login: Verificando status de autenticação');
         
-        // Verificar se há uma sessão ativa no Supabase
-        const { data } = await supabaseAuth.getSession();
+        // Verificar se há um token válido no localStorage (usando API backend)
+        const token = localStorage.getItem('token');
         
-        if (data?.session) {
-          console.log('✅ Login: Sessão válida encontrada');
-          
-          // Se o usuário já estiver carregado
-          if (user) {
-            console.log('✅ Login: Usuário já autenticado, redirecionando para dashboard');
-            hasRedirected.current = true;
-            setIsLoading(false);
-            navigate('/dashboard', { replace: true });
-          } else {
-            // Se há sessão mas não há usuário, aguardar o carregamento do usuário
-            console.log('⏳ Login: Sessão válida, aguardando carregamento do usuário');
-          }
+        if (token && user) {
+          console.log('✅ Login: Token válido e usuário carregado, redirecionando para dashboard');
+          hasRedirected.current = true;
+          setIsLoading(false);
+          navigate('/dashboard', { replace: true });
+        } else if (token && !user) {
+          // Se há token mas não há usuário, aguardar o carregamento do usuário
+          console.log('⏳ Login: Token válido, aguardando carregamento do usuário');
         } else {
-          // Se não houver sessão, limpar tokens
-          console.log('❌ Login: Nenhuma sessão válida encontrada');
+          // Se não houver token, limpar tokens
+          console.log('❌ Login: Nenhum token válido encontrado');
           localStorage.removeItem('token');
           localStorage.removeItem('supabase-auth');
           setIsLoading(false);
         }
       } catch (error) {
-        console.error('❌ Login: Erro ao verificar sessão:', error);
+        console.error('❌ Login: Erro ao verificar autenticação:', error);
         setIsLoading(false);
       }
     };

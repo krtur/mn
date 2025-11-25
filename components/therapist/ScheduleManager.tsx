@@ -21,7 +21,7 @@ export const ScheduleManager: React.FC = () => {
   const { appointments, loading: appointmentsLoading, updateAppointment, deleteAppointment } = useAppointments();
   const { availability, addAvailability, removeAvailability } = useTherapistAvailability();
   const { recurrences, createRecurrence, deleteRecurrence } = useAppointmentRecurrences();
-  const { requests, approveRequest, rejectRequest } = useAppointmentRequests();
+  const { requests, approveRequest, rejectRequest, refetch } = useAppointmentRequests();
 
   const [activeTab, setActiveTab] = useState<'calendar' | 'availability' | 'requests'>('calendar');
   const [showNewAppointment, setShowNewAppointment] = useState(false);
@@ -100,10 +100,16 @@ export const ScheduleManager: React.FC = () => {
     fetchPatients();
   }, [user, appointments]);
 
+  // Buscar nomes dos pacientes para os agendamentos
+  const getPatientName = (patientId: string): string => {
+    const patient = patients.find(p => p.id === patientId);
+    return patient?.name || 'Paciente';
+  };
+
   // Converter agendamentos para eventos do calendário
   const calendarEvents: CalendarEvent[] = appointments.map(apt => ({
     id: apt.id,
-    title: `Sessão com ${apt.patient?.name || 'Paciente'}`,
+    title: `Sessão com ${getPatientName(apt.patient_id)}`,
     start: new Date(apt.start_time),
     end: new Date(apt.end_time),
     status: apt.status as any,
@@ -203,6 +209,8 @@ export const ScheduleManager: React.FC = () => {
     try {
       await approveRequest(requestId);
       alert('Solicitação aprovada!');
+      // Refazer busca após aprovar
+      setTimeout(() => refetch(), 1000);
     } catch (err) {
       console.error('Erro ao aprovar:', err);
       alert('Erro ao aprovar solicitação');
@@ -213,6 +221,8 @@ export const ScheduleManager: React.FC = () => {
     try {
       await rejectRequest(requestId);
       alert('Solicitação rejeitada!');
+      // Refazer busca após rejeitar
+      setTimeout(() => refetch(), 1000);
     } catch (err) {
       console.error('Erro ao rejeitar:', err);
       alert('Erro ao rejeitar solicitação');
@@ -574,7 +584,12 @@ export const ScheduleManager: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {pendingRequests.map(request => (
+              {pendingRequests.map(request => {
+                // Formatar data corretamente sem problemas de fuso horário
+                const [year, month, day] = request.requested_date.split('-');
+                const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('pt-BR');
+                
+                return (
                 <div key={request.id} className="bg-white rounded-lg shadow p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
@@ -582,7 +597,7 @@ export const ScheduleManager: React.FC = () => {
                         {request.patient?.name || 'Paciente'}
                       </h3>
                       <p className="text-sm text-slate-600">
-                        📅 {new Date(request.requested_date).toLocaleDateString('pt-BR')} às{' '}
+                        📅 {formattedDate} às{' '}
                         {request.requested_time}
                       </p>
                       {request.reason && (
@@ -605,7 +620,8 @@ export const ScheduleManager: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>

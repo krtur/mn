@@ -1,0 +1,43 @@
+✅ CORREÇÃO: therapist_id não era salvo no cadastro
+
+PROBLEMA IDENTIFICADO:
+- Pacientes cadastrados não tinham therapist_id associado
+- Isso causava erro "Paciente sem therapist_id" na tela de agendamentos
+- O formulário passava o therapistId, mas não era salvo no banco
+
+CAUSA RAIZ:
+- AuthContext.register() estava salvando therapist_id no banco (correto)
+- MAS não estava incluindo therapist_id no setUser() (incorreto)
+- Isso causava inconsistência entre banco e contexto
+
+SOLUÇÃO IMPLEMENTADA:
+1. ✅ Adicionado therapist_id ao setUser() em AuthContext.tsx (linha 273)
+2. ✅ Adicionado log para verificar se therapist_id foi salvo
+3. ✅ Validação no formulário de cadastro (já estava correta)
+
+ARQUIVOS MODIFICADOS:
+- components/auth/AuthContext.tsx (linha 273)
+
+COMO TESTAR:
+1. Faça um novo cadastro de paciente
+2. Selecione um terapeuta (ex: Marcelo)
+3. Preencha os dados
+4. Clique em "Criar Conta"
+5. Faça login
+6. Vá para Agendamentos
+7. Verifique se o terapeuta aparece corretamente
+
+PRÓXIMAS AÇÕES:
+1. Executar SQL para atualizar paciente existente:
+   UPDATE users 
+   SET therapist_id = '028d8869-679f-4093-b435-1a43b6ced0e2' 
+   WHERE id = '7b47c09e-30e9-468d-abc9-d2dcdb1f1876';
+
+2. Fazer logout e login novamente
+3. Testar a tela de agendamentos
+
+VALIDAÇÃO COMPLETA:
+✅ Formulário de cadastro - correto
+✅ Salvamento no banco - correto
+✅ Carregamento no contexto - CORRIGIDO
+✅ Exibição na tela de agendamentos - funcionará após login

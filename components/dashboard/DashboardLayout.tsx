@@ -36,7 +36,7 @@ export const DashboardLayout: React.FC = () => {
     <div className="flex h-screen bg-slate-100">
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} userRole={user.role} />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} userName={user.name} />
+        <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} userName={user.name} userRole={user.role} />
         <main className="flex-1 overflow-auto">
           <div className="p-6">
             <Outlet />

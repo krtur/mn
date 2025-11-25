@@ -84,7 +84,8 @@ app.post('/api/login', async (req, res) => {
           id: data.user.id,
           email: data.user.email,
           name: data.user.user_metadata?.name || 'Usuário',
-          role: 'patient'
+          role: 'patient',
+          therapist_id: null
         };
       } else if (userRecord) {
         console.log('✅ Dados do usuário carregados:', userRecord.name);
@@ -97,7 +98,8 @@ app.post('/api/login', async (req, res) => {
         id: data.user.id,
         email: data.user.email,
         name: data.user.email.split('@')[0],
-        role: 'patient'
+        role: 'patient',
+        therapist_id: null
       };
     }
 
@@ -141,7 +143,8 @@ app.get('/api/user', async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.user_metadata?.name || 'Usuário',
-        role: 'patient'
+        role: 'patient',
+        therapist_id: null
       });
     }
     

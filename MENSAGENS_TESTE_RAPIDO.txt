@@ -1,0 +1,201 @@
+============================================
+TESTE RÁPIDO - FUNCIONALIDADE DE MENSAGENS
+============================================
+
+⏱️ TEMPO ESTIMADO: 10 minutos
+
+============================================
+PRÉ-REQUISITOS:
+============================================
+
+✓ Projeto rodando em http://localhost:3000
+✓ Tabela 'messages' criada no Supabase
+✓ 2 navegadores abertos (ou 2 abas)
+✓ Credenciais de teste disponíveis
+
+============================================
+TESTE 1: SETUP INICIAL (2 minutos)
+============================================
+
+1. Abra http://localhost:3000/login em 2 abas diferentes
+   
+2. ABA 1 - Login como PACIENTE:
+   [ ] Email: (seu email de paciente)
+   [ ] Senha: (sua senha)
+   [ ] Clique em "Entrar"
+   [ ] Aguarde carregar dashboard
+   [ ] Clique em "Mensagens" no menu
+
+3. ABA 2 - Login como TERAPEUTA:
+   [ ] Email: nadi@mnterapeutas.com
+   [ ] Senha: Perante@1202
+   [ ] Clique em "Entrar"
+   [ ] Aguarde carregar dashboard
+   [ ] Clique em "Mensagens" no menu
+
+RESULTADO ESPERADO:
+   ✓ Paciente vê 1 conversa (seu terapeuta)
+   ✓ Terapeuta vê lista de pacientes à esquerda
+
+============================================
+TESTE 2: ENVIO DE MENSAGEM (3 minutos)
+============================================
+
+ABA 1 (PACIENTE):
+   [ ] Você deve ver "Nadielma" ou seu terapeuta
+   [ ] Clique no campo de mensagem
+   [ ] Digite: "Olá, tudo bem?"
+   [ ] Clique no botão 📤
+   [ ] Aguarde a mensagem aparecer
+
+RESULTADO ESPERADO:
+   ✓ Mensagem aparece à direita em azul teal
+   ✓ Timestamp aparece abaixo
+   ✓ Campo de input é limpo
+
+ABA 2 (TERAPEUTA):
+   [ ] Você deve ver lista de pacientes à esquerda
+   [ ] Procure pelo nome do paciente
+   [ ] Clique no paciente
+   [ ] Aguarde carregar o chat
+
+RESULTADO ESPERADO:
+   ✓ Mensagem do paciente aparece à esquerda em branco
+   ✓ Timestamp aparece abaixo
+   ✓ Contador de não lidas desaparece (se havia)
+
+============================================
+TESTE 3: RESPOSTA DO TERAPEUTA (2 minutos)
+============================================
+
+ABA 2 (TERAPEUTA):
+   [ ] Clique no campo de mensagem
+   [ ] Digite: "Oi! Tudo bem sim! Como posso ajudar?"
+   [ ] Clique no botão 📤
+   [ ] Aguarde a mensagem aparecer
+
+RESULTADO ESPERADO:
+   ✓ Mensagem aparece à direita em azul teal
+   ✓ Timestamp aparece abaixo
+   ✓ Campo de input é limpo
+
+ABA 1 (PACIENTE):
+   [ ] Aguarde a mensagem aparecer (deve ser instantâneo)
+
+RESULTADO ESPERADO:
+   ✓ Mensagem do terapeuta aparece à esquerda em branco
+   ✓ Timestamp aparece abaixo
+   ✓ Auto-scroll para a nova mensagem
+
+============================================
+TESTE 4: BUSCA DE PACIENTE (2 minutos)
+============================================
+
+ABA 2 (TERAPEUTA):
+   [ ] Clique no campo de busca "Buscar paciente..."
+   [ ] Digite primeiras letras do nome do paciente
+   [ ] Aguarde filtrar
+
+RESULTADO ESPERADO:
+   ✓ Lista de pacientes é filtrada
+   ✓ Apenas pacientes que correspondem aparecem
+   ✓ Busca funciona por nome e email
+
+============================================
+TESTE 5: RESPONSIVIDADE (1 minuto)
+============================================
+
+DESKTOP:
+   [ ] Redimensione a janela para 1200px
+   [ ] Verifique se layout está correto
+   [ ] Mensagens aparecem corretamente
+
+TABLET:
+   [ ] Redimensione para 768px
+   [ ] Verifique se layout muda para coluna única
+   [ ] Scroll horizontal não deve aparecer
+
+MOBILE:
+   [ ] Redimensione para 375px
+   [ ] Verifique se layout é responsivo
+   [ ] Botões são clicáveis
+
+============================================
+CHECKLIST FINAL:
+============================================
+
+FUNCIONALIDADES:
+   [ ] Paciente vê apenas seu terapeuta
+   [ ] Terapeuta vê lista de pacientes
+   [ ] Envio de mensagem funciona
+   [ ] Recebimento em tempo real funciona
+   [ ] Auto-scroll para nova mensagem
+   [ ] Timestamp em português
+   [ ] Contador de não lidas funciona
+   [ ] Busca de paciente funciona
+
+DESIGN:
+   [ ] Cores estão corretas (azul teal vs branco)
+   [ ] Mensagens estão alinhadas corretamente
+   [ ] Espaçamento está bom
+   [ ] Fonte é legível
+   [ ] Ícones aparecem corretamente
+
+PERFORMANCE:
+   [ ] Carrega rápido
+   [ ] Sem lag ao digitar
+   [ ] Sem lag ao enviar
+   [ ] Sem lag ao receber
+   [ ] Scroll é suave
+
+SEGURANÇA:
+   [ ] Paciente não vê mensagens de outros pacientes
+   [ ] Terapeuta vê apenas suas conversas
+   [ ] Mensagens antigas aparecem
+   [ ] Não há erro de autenticação
+
+============================================
+RESULTADO:
+============================================
+
+Se TODOS os testes passaram:
+   ✅ IMPLEMENTAÇÃO COMPLETA E FUNCIONANDO!
+
+Se ALGUNS testes falharam:
+   ⚠️ Verifique o console do navegador (F12)
+   ⚠️ Procure por mensagens de erro
+   ⚠️ Verifique se tabela foi criada no Supabase
+   ⚠️ Verifique se RLS está configurado
+
+Se NENHUM teste funcionou:
+   ❌ Verifique se tabela 'messages' existe
+   ❌ Verifique se Supabase está conectado
+   ❌ Verifique se autenticação está funcionando
+   ❌ Recarregue a página
+
+============================================
+PRÓXIMOS PASSOS:
+============================================
+
+Após testes bem-sucedidos:
+
+1. Teste com múltiplos pacientes
+2. Teste com múltiplos terapeutas
+3. Teste com muitas mensagens (100+)
+4. Teste em navegadores diferentes
+5. Teste em dispositivos reais
+6. Teste com conexão lenta
+7. Teste com desconexão de internet
+
+============================================
+DÚVIDAS?
+============================================
+
+Verifique:
+1. Console do navegador (F12 > Console)
+2. Aba Network (F12 > Network)
+3. Logs do Supabase
+4. Arquivo MENSAGENS_IMPLEMENTACAO.txt
+5. Arquivo MESSAGES_SETUP.sql
+
+============================================

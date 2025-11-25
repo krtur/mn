@@ -1,0 +1,73 @@
+🔧 CORRIGIR: Não consigo aprovar ou rejeitar uma agenda
+
+=== PROBLEMA ===
+
+Erro: "Could not find the 'created_by' column of 'appointments' in the schema cache"
+
+Causa: A coluna created_by não existe ou não está visível no Supabase
+
+=== SOLUÇÃO RÁPIDA (2 MINUTOS) ===
+
+PASSO 1: Ir para Supabase Dashboard
+   1. Abra: https://supabase.com/dashboard
+   2. Selecione seu projeto M&N Terapeutas
+   3. Vá em: SQL Editor
+
+PASSO 2: Executar script de correção
+   1. Cole o conteúdo de: FIX_APPOINTMENTS_SIMPLE.sql
+   2. Clique em "Run"
+   3. Verifique se retornou sucesso
+
+PASSO 3: Recarregar página
+   1. Abra: http://localhost:3000
+   2. Faça login com Marcelo
+   3. Vá para: Dashboard > Gerenciar Agenda
+   4. Tente aprovar uma solicitação novamente
+
+=== O QUE FOI CORRIGIDO ===
+
+✅ Adicionada coluna created_by à tabela appointments
+✅ Preenchidos valores NULL com therapist_id
+✅ Removido created_by do código (deixa o Supabase preencher automaticamente)
+✅ Agora a aprovação deve funcionar
+
+=== SE AINDA NÃO FUNCIONAR ===
+
+OPÇÃO A: Verificar se a coluna foi criada
+   1. SQL Editor
+   2. Execute:
+      SELECT column_name FROM information_schema.columns 
+      WHERE table_name = 'appointments' AND column_name = 'created_by';
+   3. Se retornar vazio, a coluna não existe
+
+OPÇÃO B: Recriar a tabela
+   1. SQL Editor
+   2. Execute: AGENDAMENTOS_SETUP.sql (completo)
+   3. Isso vai recriar todas as tabelas
+
+OPÇÃO C: Limpar cache do Supabase
+   1. Vá em: Database > Tables
+   2. Clique em "appointments"
+   3. Verifique se a coluna created_by está listada
+   4. Se não estiver, adicione manualmente:
+      - Name: created_by
+      - Type: uuid
+      - Default: NULL
+      - Foreign Key: users(id)
+
+=== TESTE ===
+
+1. Login com Marcelo
+2. Vá para: Dashboard > Gerenciar Agenda
+3. Clique em "Aprovar" em uma solicitação
+4. Deve aparecer um agendamento confirmado
+5. Clique em "Rejeitar" em outra solicitação
+6. Status deve mudar para "Rejeitada"
+
+=== CHECKLIST ===
+
+✅ Coluna created_by existe na tabela appointments
+✅ Código foi atualizado para não enviar created_by
+✅ Página foi recarregada
+✅ Tentou aprovar uma solicitação
+✅ Funcionou!

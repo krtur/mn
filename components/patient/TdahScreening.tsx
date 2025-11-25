@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ChevronDown, ChevronUp, BarChart3, CheckCircle, AlertCircle, ArrowRight, Clock } from 'lucide-react';
+import { ChevronDown, ChevronUp, BarChart3, CheckCircle, AlertCircle, ArrowRight, Clock, Save, Loader } from 'lucide-react';
 import { TDAH_QUESTIONS, Question } from '../../data/tdahQuestions';
+import { useTdahScreening } from '../../hooks/useTdahScreening';
 
 interface Answer {
   questionId: number;
@@ -33,6 +34,9 @@ export const TdahScreening: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [testDuration, setTestDuration] = useState<number | null>(null);
   const [testStarted, setTestStarted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const { saveScreening, loading: savingLoading, error: savingError } = useTdahScreening();
 
   // Iniciar timer apenas quando o botão "Iniciar" for clicado
   const handleStartTest = () => {
@@ -68,9 +72,17 @@ export const TdahScreening: React.FC = () => {
     if (currentQuestion < TDAH_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Última pergunta respondida - mostrar resultados e salvar automaticamente
       setShowResults(true);
     }
   };
+
+  // Salvar automaticamente quando os resultados são mostrados
+  useEffect(() => {
+    if (showResults && testDuration !== null && !isSaving) {
+      handleSaveResults();
+    }
+  }, [showResults]);
 
   const categoryScores = useMemo(() => {
     const scores: Record<string, CategoryScore> = {
@@ -118,6 +130,48 @@ export const TdahScreening: React.FC = () => {
   const currentRisk = getRiskLevel(totalPercentage);
   const question = TDAH_QUESTIONS[currentQuestion];
   const currentAnswer = answers.get(question.id);
+
+  // Função para salvar resultados no banco de dados
+  const handleSaveResults = async () => {
+    setIsSaving(true);
+    try {
+      const answersObj: Record<number, number> = {};
+      answers.forEach((value, key) => {
+        answersObj[key] = value;
+      });
+
+      console.log('💾 Iniciando salvamento de triagem...');
+      console.log('📝 Respostas:', Object.keys(answersObj).length, 'perguntas respondidas');
+      console.log('📊 Pontuação total:', totalPercentage, '%');
+
+      const result = await saveScreening({
+        answers: answersObj,
+        categoryScores: {
+          A: categoryScores[0].score,
+          B: categoryScores[1].score,
+          C: categoryScores[2].score,
+          D: categoryScores[3].score,
+          E: categoryScores[4].score,
+          F: categoryScores[5].score,
+        },
+        totalScore,
+        totalPercentage,
+        testDuration,
+      });
+
+      if (result) {
+        console.log('✅ Triagem salva com sucesso! ID:', result.id);
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } else {
+        console.error('❌ Erro ao salvar triagem: resultado nulo');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao salvar triagem:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Tela de boas-vindas antes de iniciar o teste
   if (!testStarted) {
@@ -330,14 +384,36 @@ export const TdahScreening: React.FC = () => {
           </ul>
         </div>
 
+        {/* Saving Status */}
+        <div className="w-full space-y-3">
+          {isSaving || savingLoading ? (
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 flex items-center gap-2 text-blue-700">
+              <Loader className="w-5 h-5 animate-spin" />
+              <span className="font-semibold">Salvando seus resultados...</span>
+            </div>
+          ) : saveSuccess ? (
+            <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 flex items-center gap-2 text-green-700">
+              <CheckCircle className="w-5 h-5" />
+              <span className="font-semibold">✅ Resultados salvos com sucesso! Seu terapeuta pode visualizá-los.</span>
+            </div>
+          ) : savingError ? (
+            <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 flex items-center gap-2 text-red-700">
+              <AlertCircle className="w-5 h-5" />
+              <span className="font-semibold">Erro ao salvar: {savingError}</span>
+            </div>
+          ) : null}
+        </div>
+
         {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-4 justify-center flex-wrap">
           <button
             onClick={() => {
               setAnswers(new Map());
               setCurrentQuestion(0);
               setShowResults(false);
               setExpandedCategory(null);
+              setSaveSuccess(false);
+              setTestStarted(false);
             }}
             className="px-6 py-3 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-lg transition-colors"
           >
