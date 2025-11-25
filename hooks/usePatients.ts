@@ -22,6 +22,16 @@ export const usePatients = () => {
   useEffect(() => {
     if (!user || !user.role.startsWith('therapist')) {
       setLoading(false);
+      setPatients([]);
+      return;
+    }
+
+    // VALIDAÇÃO DE SEGURANÇA: Garantir que user.id é válido
+    if (!user.id || user.id.trim() === '') {
+      console.error('❌ ERRO DE SEGURANÇA: user.id inválido!', user.id);
+      setError('Erro de autenticação: ID do usuário inválido');
+      setLoading(false);
+      setPatients([]);
       return;
     }
 
@@ -29,6 +39,8 @@ export const usePatients = () => {
       try {
         setLoading(true);
         setError(null);
+
+        console.log('🔍 Buscando pacientes para terapeuta:', user.id, 'Nome:', user.name);
 
         // Buscar pacientes que foram cadastrados com este terapeuta (therapist_id)
         const { data: patientsData, error: patientsError } = await supabase
@@ -38,15 +50,18 @@ export const usePatients = () => {
           .eq('role', 'patient');
 
         if (patientsError) {
-          console.error('Erro ao buscar pacientes:', patientsError);
+          console.error('❌ Erro ao buscar pacientes:', patientsError);
           setError(patientsError.message);
+          setPatients([]);
           return;
         }
 
+        console.log('✅ Pacientes carregados:', patientsData?.length || 0, 'para terapeuta', user.name);
         setPatients(patientsData || []);
       } catch (err) {
-        console.error('Erro ao buscar pacientes:', err);
+        console.error('❌ Erro ao buscar pacientes:', err);
         setError(err instanceof Error ? err.message : 'Erro ao buscar pacientes');
+        setPatients([]);
       } finally {
         setLoading(false);
       }

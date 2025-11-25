@@ -38,6 +38,15 @@ export const useMessages = () => {
       return;
     }
 
+    // VALIDAÇÃO DE SEGURANÇA: Garantir que user.id é válido
+    if (!user.id || user.id.trim() === '') {
+      console.error('❌ ERRO DE SEGURANÇA: user.id inválido em useMessages!', user.id);
+      setError('Erro de autenticação: ID do usuário inválido');
+      setLoading(false);
+      setConversations([]);
+      return;
+    }
+
     let isMounted = true;
 
     const fetchConversations = async () => {
@@ -48,6 +57,8 @@ export const useMessages = () => {
           setLoading(true);
         }
         setError(null);
+
+        console.log('🔍 Buscando mensagens para usuário:', user.id, 'Role:', user.role);
 
         // Buscar todas as mensagens do usuário
         const { data: allMessages, error: messagesError } = await supabase

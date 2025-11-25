@@ -1,0 +1,308 @@
+═══════════════════════════════════════════════════════════════════════════════
+  TESTE RÁPIDO: SISTEMA DE GERENCIAMENTO DE PACIENTES
+═══════════════════════════════════════════════════════════════════════════════
+
+⏱️ TEMPO TOTAL: 15-20 minutos
+
+Este guia permite testar todas as funcionalidades em poucos minutos.
+
+═══════════════════════════════════════════════════════════════════════════════
+PASSO 1: SETUP DO BANCO DE DADOS (5 minutos)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abra Supabase Dashboard (https://app.supabase.com)
+2. Selecione seu projeto
+3. Vá para "SQL Editor"
+4. Clique em "New Query"
+5. Copie TODO o conteúdo de: PATIENT_MANAGEMENT_SETUP.sql
+6. Cole no editor SQL
+7. Clique em "Run"
+8. Aguarde a mensagem de sucesso
+
+✅ Verificação:
+  - Vá para "Tables"
+  - Verifique se existem 4 tabelas novas:
+    ✓ patient_notes
+    ✓ patient_progress
+    ✓ patient_goals
+    ✓ session_history
+
+═══════════════════════════════════════════════════════════════════════════════
+PASSO 2: INICIAR A APLICAÇÃO (2 minutos)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abra terminal
+2. Navegue para o projeto: cd /path/to/mn
+3. Execute: npm run dev
+4. Aguarde a compilação
+5. Abra: http://localhost:3000
+
+═══════════════════════════════════════════════════════════════════════════════
+PASSO 3: FAZER LOGIN (1 minuto)
+═══════════════════════════════════════════════════════════════════════════════
+
+Use as credenciais de um terapeuta:
+
+Email: marcelo@mnterapeutas.com
+Senha: Perante@1202
+
+OU
+
+Email: nadi@mnterapeutas.com
+Senha: Perante@1202
+
+═══════════════════════════════════════════════════════════════════════════════
+PASSO 4: TESTAR FUNCIONALIDADES (10-15 minutos)
+═══════════════════════════════════════════════════════════════════════════════
+
+TESTE 1: ACESSAR TELA DE PACIENTES (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique em "Meus Pacientes" no menu lateral
+2. Verifique se a lista de pacientes aparece
+3. Verifique se há contador de pacientes
+
+✅ Esperado: Lista de pacientes com informações
+
+TESTE 2: BUSCAR PACIENTE (2 minutos)
+─────────────────────────────────────────────────────────────────────────────
+1. Digite um nome na caixa de busca
+2. Verifique se a lista filtra em tempo real
+3. Tente buscar por CPF
+4. Tente buscar por email
+5. Limpe a busca
+
+✅ Esperado: Filtro funciona em tempo real
+
+TESTE 3: FILTRAR POR STATUS (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique no dropdown "Status"
+2. Selecione "Ativo"
+3. Verifique se filtra
+4. Selecione "Todos"
+
+✅ Esperado: Filtro funciona corretamente
+
+TESTE 4: ORDENAR PACIENTES (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique no dropdown "Ordenar por"
+2. Selecione "Nome (A-Z)"
+3. Verifique se ordena alfabeticamente
+4. Selecione "Última Sessão"
+5. Verifique se ordena por data
+
+✅ Esperado: Ordenação funciona
+
+TESTE 5: ALTERNAR VISUALIZAÇÃO (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique em "Tabela"
+2. Verifique se muda para visualização em tabela
+3. Clique em "Cards"
+4. Verifique se muda para visualização em grid
+5. Clique em "Tabela" novamente
+
+✅ Esperado: Alternância entre modos funciona
+
+TESTE 6: ABRIR MODAL DE DETALHES (2 minutos)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique no botão "Ver" em qualquer paciente
+2. Verifique se modal abre
+3. Verifique se mostra nome do paciente no header
+4. Verifique se há 5 abas
+
+✅ Esperado: Modal abre com 5 abas
+
+TESTE 7: ABA INFORMAÇÕES (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Verifique se a aba "Informações" está ativa
+2. Verifique se mostra:
+   ✓ Email
+   ✓ Telefone
+   ✓ Data de cadastro
+   ✓ Estatísticas de sessões
+
+✅ Esperado: Todas as informações aparecem
+
+TESTE 8: ABA ANOTAÇÕES (2 minutos)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique na aba "Anotações"
+2. Digite uma anotação no campo de texto
+3. (Opcional) Adicione uma tag
+4. Clique "Salvar Anotação"
+5. Verifique se a anotação aparece na lista
+6. Verifique se tem timestamp
+
+✅ Esperado: Anotação é salva e aparece na lista
+
+TESTE 9: ABA PROGRESSO (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique na aba "Progresso"
+2. Verifique se mostra "Metas de Tratamento"
+3. Verifique se mostra "Histórico de Progresso"
+4. Verifique se há cards com informações
+
+✅ Esperado: Dados de progresso aparecem
+
+TESTE 10: ABA SESSÕES (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique na aba "Sessões"
+2. Verifique se mostra estatísticas
+3. Verifique se mostra "Sessões Recentes"
+4. Verifique se há cards com informações
+
+✅ Esperado: Dados de sessões aparecem
+
+TESTE 11: ABA AGENDAMENTOS (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique na aba "Agendamentos"
+2. Verifique se mostra "Próximos Agendamentos"
+3. Verifique se mostra "Histórico de Agendamentos"
+4. Verifique se há informações de data/hora
+
+✅ Esperado: Dados de agendamentos aparecem
+
+TESTE 12: FECHAR MODAL (1 minuto)
+─────────────────────────────────────────────────────────────────────────────
+1. Clique no botão X no header do modal
+2. Verifique se modal fecha
+3. Verifique se volta para lista de pacientes
+
+✅ Esperado: Modal fecha corretamente
+
+═══════════════════════════════════════════════════════════════════════════════
+TESTE DE RESPONSIVIDADE (OPCIONAL)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abra DevTools (F12)
+2. Clique em "Toggle device toolbar" (Ctrl+Shift+M)
+3. Teste em diferentes tamanhos:
+   - Mobile (375px)
+   - Tablet (768px)
+   - Desktop (1920px)
+
+✅ Esperado: Layout se adapta em todos os tamanhos
+
+═══════════════════════════════════════════════════════════════════════════════
+TESTE DE PERFORMANCE (OPCIONAL)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abra DevTools (F12)
+2. Vá para "Performance"
+3. Clique em "Record"
+4. Faça algumas ações (buscar, filtrar, ordenar)
+5. Clique em "Stop"
+6. Analise o tempo de resposta
+
+✅ Esperado: Ações respondem em < 500ms
+
+═══════════════════════════════════════════════════════════════════════════════
+CHECKLIST DE TESTES
+═══════════════════════════════════════════════════════════════════════════════
+
+FUNCIONALIDADES:
+  ☐ Busca por nome
+  ☐ Busca por CPF
+  ☐ Busca por email
+  ☐ Filtro por status
+  ☐ Ordenação por nome
+  ☐ Ordenação por última sessão
+  ☐ Ordenação por próxima sessão
+  ☐ Visualização tabela
+  ☐ Visualização cards
+  ☐ Abrir modal
+  ☐ Aba Informações
+  ☐ Aba Anotações
+  ☐ Aba Progresso
+  ☐ Aba Sessões
+  ☐ Aba Agendamentos
+  ☐ Adicionar anotação
+  ☐ Adicionar tag
+  ☐ Fechar modal
+
+RESPONSIVIDADE:
+  ☐ Mobile (375px)
+  ☐ Tablet (768px)
+  ☐ Desktop (1920px)
+
+PERFORMANCE:
+  ☐ Busca < 500ms
+  ☐ Filtro < 500ms
+  ☐ Ordenação < 500ms
+  ☐ Abrir modal < 1s
+
+SEGURANÇA:
+  ☐ Só vê pacientes do terapeuta
+  ☐ Dados não vazam entre terapeutas
+  ☐ Logout limpa dados
+
+═══════════════════════════════════════════════════════════════════════════════
+PROBLEMAS COMUNS E SOLUÇÕES
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEMA: "Nenhum paciente encontrado"
+SOLUÇÃO:
+  1. Verifique se pacientes foram cadastrados
+  2. Verifique se estão associados ao terapeuta
+  3. Tente fazer logout e login novamente
+
+PROBLEMA: Modal não abre
+SOLUÇÃO:
+  1. Abra console (F12)
+  2. Verifique se há erros
+  3. Verifique se PatientDetail.tsx existe
+  4. Tente recarregar a página (F5)
+
+PROBLEMA: Anotação não salva
+SOLUÇÃO:
+  1. Verifique se tabela patient_notes existe
+  2. Verifique console para erros
+  3. Tente recarregar a página
+  4. Verifique RLS policies no Supabase
+
+PROBLEMA: Dados não atualizam em tempo real
+SOLUÇÃO:
+  1. Verifique se real-time está habilitado
+  2. Verifique se tabelas estão na publicação
+  3. Tente recarregar a página
+  4. Verifique conexão de internet
+
+PROBLEMA: Erro de permissão
+SOLUÇÃO:
+  1. Verifique se está logado como terapeuta
+  2. Verifique RLS policies
+  3. Re-execute PATIENT_MANAGEMENT_SETUP.sql
+  4. Tente logout e login novamente
+
+═══════════════════════════════════════════════════════════════════════════════
+PRÓXIMOS PASSOS APÓS TESTES
+═══════════════════════════════════════════════════════════════════════════════
+
+Se todos os testes passarem:
+  1. ✅ Sistema está pronto para uso
+  2. ✅ Implemente funcionalidades adicionais do roadmap
+  3. ✅ Colete feedback de usuários
+  4. ✅ Faça melhorias baseadas em feedback
+
+Se alguns testes falharem:
+  1. Consulte PATIENT_MANAGEMENT_GUIDE.txt (Troubleshooting)
+  2. Verifique console do navegador para erros
+  3. Verifique Supabase Dashboard para erros
+  4. Re-execute PATIENT_MANAGEMENT_SETUP.sql
+
+═══════════════════════════════════════════════════════════════════════════════
+CONTATO E SUPORTE
+═══════════════════════════════════════════════════════════════════════════════
+
+Documentação:
+  📄 PATIENT_MANAGEMENT_GUIDE.txt - Guia completo
+  📄 ADVANCED_FEATURES_ROADMAP.txt - Funcionalidades futuras
+  📄 PATIENT_MANAGEMENT_SUMMARY.txt - Resumo executivo
+
+Código:
+  📁 /hooks/ - Hooks customizados
+  📁 /components/therapist/ - Componentes
+  📁 SQL - Setup do banco de dados
+
+═══════════════════════════════════════════════════════════════════════════════
+Desenvolvido com ❤️ para M&N Terapeutas
+Novembro 2025
+═══════════════════════════════════════════════════════════════════════════════

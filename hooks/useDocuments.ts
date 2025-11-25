@@ -28,10 +28,21 @@ export const useDocuments = () => {
       return;
     }
 
+    // VALIDAÇÃO DE SEGURANÇA: Garantir que user.id é válido
+    if (!user.id || user.id.trim() === '') {
+      console.error('❌ ERRO DE SEGURANÇA: user.id inválido em useDocuments!', user.id);
+      setError('Erro de autenticação: ID do usuário inválido');
+      setLoading(false);
+      setDocuments([]);
+      return;
+    }
+
     const fetchDocuments = async () => {
       try {
         setLoading(true);
         setError(null);
+
+        console.log('🔍 Buscando documentos para usuário:', user.id, 'Role:', user.role);
 
         let query = supabase
           .from('documents')

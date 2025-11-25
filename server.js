@@ -79,28 +79,23 @@ app.post('/api/login', async (req, res) => {
         
       if (userError) {
         console.warn('⚠️ Erro ao buscar dados do usuário:', userError.message);
-        // Usar dados básicos do Auth
-        userData = {
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.name || 'Usuário',
-          role: 'patient',
-          therapist_id: null
-        };
+        console.error('❌ ERRO CRÍTICO: Não foi possível carregar dados do usuário do banco de dados!');
+        console.error('   Isso pode causar problemas de segurança. Verifique as políticas RLS do Supabase.');
+        // Não retornar dados incompletos - forçar erro
+        return res.status(500).json({ 
+          error: 'Erro ao carregar dados do usuário. Verifique as políticas RLS do Supabase.',
+          details: userError.message
+        });
       } else if (userRecord) {
-        console.log('✅ Dados do usuário carregados:', userRecord.name);
+        console.log('✅ Dados do usuário carregados:', userRecord.name, '- Role:', userRecord.role);
         userData = userRecord;
       }
     } catch (userDataError) {
       console.error('❌ Erro ao carregar dados do usuário:', userDataError);
-      // Usar dados básicos como fallback
-      userData = {
-        id: data.user.id,
-        email: data.user.email,
-        name: data.user.email.split('@')[0],
-        role: 'patient',
-        therapist_id: null
-      };
+      return res.status(500).json({ 
+        error: 'Erro ao carregar dados do usuário',
+        details: userDataError.message
+      });
     }
 
     // Retornar dados da sessão e do usuário

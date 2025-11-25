@@ -1,0 +1,406 @@
+═══════════════════════════════════════════════════════════════════════════════
+  GUIA COMPLETO: SISTEMA DE GERENCIAMENTO DE PACIENTES PARA TERAPEUTAS
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 ÍNDICE
+─────────────────────────────────────────────────────────────────────────────
+1. Visão Geral
+2. Funcionalidades Implementadas
+3. Como Usar
+4. Estrutura Técnica
+5. Próximos Passos
+6. Troubleshooting
+
+═══════════════════════════════════════════════════════════════════════════════
+1. VISÃO GERAL
+═══════════════════════════════════════════════════════════════════════════════
+
+O novo sistema de gerenciamento de pacientes transforma a tela "Meus Pacientes"
+de uma simples lista em uma plataforma completa de gestão clínica.
+
+ANTES:
+  - Tabela simples com dados básicos
+  - Sem histórico ou anotações
+  - Sem acompanhamento de progresso
+
+DEPOIS:
+  - Visualização em tabela ou cards
+  - Filtros avançados (status, busca)
+  - Ordenação (nome, última sessão, próxima sessão)
+  - Modal detalhado com 5 abas
+  - Anotações clínicas com tags
+  - Acompanhamento de progresso
+  - Metas de tratamento
+  - Histórico de sessões
+  - Estatísticas de comparecimento
+
+═══════════════════════════════════════════════════════════════════════════════
+2. FUNCIONALIDADES IMPLEMENTADAS
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 TELA PRINCIPAL (PatientList)
+─────────────────────────────────────────────────────────────────────────────
+
+✓ BUSCA AVANÇADA
+  - Buscar por nome
+  - Buscar por CPF
+  - Buscar por email
+  - Busca em tempo real
+
+✓ FILTROS
+  - Status: Todos, Ativo, Inativo, Em Pausa
+  - Aplicação instantânea
+
+✓ ORDENAÇÃO
+  - Nome (A-Z)
+  - Última Sessão (mais recente primeiro)
+  - Próxima Sessão (mais próxima primeiro)
+
+✓ VISUALIZAÇÃO
+  - Modo Tabela: Visão completa com todas as colunas
+  - Modo Cards: Visão em grid com informações resumidas
+  - Botão para alternar entre modos
+
+✓ INFORMAÇÕES POR PACIENTE
+  - Nome e CPF
+  - Email e Telefone
+  - Última sessão
+  - Próxima sessão
+  - Status (Ativo/Inativo/Pausa)
+
+✓ AÇÕES
+  - Botão "Ver" para abrir detalhes completos
+  - Clique em qualquer paciente abre modal
+
+─────────────────────────────────────────────────────────────────────────────
+📊 MODAL DETALHADO (PatientDetail) - 5 ABAS
+─────────────────────────────────────────────────────────────────────────────
+
+ABA 1: INFORMAÇÕES
+  ✓ Dados pessoais (email, telefone, CPF, data de cadastro)
+  ✓ Estatísticas de sessões:
+    - Total de sessões
+    - Sessões realizadas
+    - Não comparecimentos
+    - Taxa de comparecimento (%)
+    - Duração média das sessões
+
+ABA 2: ANOTAÇÕES CLÍNICAS
+  ✓ Adicionar nova anotação
+    - Campo de texto para conteúdo
+    - Sistema de tags (categorização)
+    - Salvar com timestamp
+  
+  ✓ Visualizar histórico de anotações
+    - Data e hora de criação
+    - Conteúdo da anotação
+    - Tags associadas
+    - Ordenado por data (mais recente primeiro)
+
+ABA 3: PROGRESSO
+  ✓ Metas de Tratamento
+    - Título e descrição
+    - Data alvo
+    - Status: Ativa, Concluída, Pausada
+    - Visualização com cores por status
+  
+  ✓ Histórico de Progresso
+    - Registros de evolução (escala 1-10)
+    - Categoria do progresso
+    - Data do registro
+    - Notas adicionais
+    - Últimos 10 registros
+
+ABA 4: SESSÕES
+  ✓ Estatísticas Resumidas
+    - Total de sessões
+    - Sessões realizadas
+    - Não comparecimentos
+    - Duração média
+  
+  ✓ Sessões Recentes
+    - Data da sessão
+    - Duração em minutos
+    - Status (Realizada, Não compareceu, Cancelada)
+    - Notas da sessão
+    - Últimas 5 sessões
+
+ABA 5: AGENDAMENTOS
+  ✓ Próximos Agendamentos
+    - Data e hora
+    - Status (Confirmado, Pendente)
+    - Lista ordenada por data
+  
+  ✓ Histórico de Agendamentos
+    - Agendamentos passados
+    - Últimos 5 registros
+
+═══════════════════════════════════════════════════════════════════════════════
+3. COMO USAR
+═══════════════════════════════════════════════════════════════════════════════
+
+PASSO 1: SETUP DO BANCO DE DADOS
+─────────────────────────────────────────────────────────────────────────────
+1. Abra Supabase Dashboard
+2. Vá para SQL Editor
+3. Copie todo o conteúdo de: PATIENT_MANAGEMENT_SETUP.sql
+4. Cole no editor SQL
+5. Clique em "Run"
+6. Aguarde a conclusão
+
+Tabelas criadas:
+  ✓ patient_notes (anotações clínicas)
+  ✓ patient_progress (progresso)
+  ✓ patient_goals (metas)
+  ✓ session_history (histórico de sessões)
+
+PASSO 2: USAR A INTERFACE
+─────────────────────────────────────────────────────────────────────────────
+
+VISUALIZAR PACIENTES:
+1. Login como terapeuta
+2. Clique em "Meus Pacientes" no menu
+3. Veja lista de pacientes
+
+BUSCAR PACIENTE:
+1. Digite nome, CPF ou email na caixa de busca
+2. Lista filtra em tempo real
+
+FILTRAR POR STATUS:
+1. Selecione status no dropdown "Status"
+2. Selecione ordenação no dropdown "Ordenar por"
+
+ALTERNAR VISUALIZAÇÃO:
+1. Clique em "Tabela" para visualização em tabela
+2. Clique em "Cards" para visualização em grid
+
+VER DETALHES DO PACIENTE:
+1. Clique no botão "Ver" em qualquer paciente
+2. Modal abre com 5 abas
+
+ADICIONAR ANOTAÇÃO CLÍNICA:
+1. Abra detalhes do paciente
+2. Vá para aba "Anotações"
+3. Digite a anotação no campo de texto
+4. (Opcional) Adicione tags (ex: "Ansiedade", "Progresso")
+5. Clique "Salvar Anotação"
+
+ADICIONAR META DE TRATAMENTO:
+1. Abra detalhes do paciente
+2. Vá para aba "Progresso"
+3. Veja metas existentes
+4. (Funcionalidade de adicionar será implementada)
+
+REGISTRAR PROGRESSO:
+1. Abra detalhes do paciente
+2. Vá para aba "Progresso"
+3. Veja histórico de progresso
+4. (Funcionalidade de adicionar será implementada)
+
+REGISTRAR SESSÃO:
+1. Abra detalhes do paciente
+2. Vá para aba "Sessões"
+3. Veja estatísticas e histórico
+4. (Funcionalidade de adicionar será implementada)
+
+═══════════════════════════════════════════════════════════════════════════════
+4. ESTRUTURA TÉCNICA
+═══════════════════════════════════════════════════════════════════════════════
+
+ARQUIVOS CRIADOS:
+─────────────────────────────────────────────────────────────────────────────
+
+Hooks (em /hooks/):
+  ✓ usePatientNotes.ts
+    - Gerencia anotações clínicas
+    - Funções: addNote(), updateNote(), deleteNote()
+    - Real-time updates
+
+  ✓ usePatientProgress.ts
+    - Gerencia progresso e metas
+    - Funções: addProgressEntry(), addGoal(), updateGoal()
+    - Cálculos: getAverageScore(), getProgressTrend()
+
+  ✓ useSessionHistory.ts
+    - Gerencia histórico de sessões
+    - Funções: recordSession()
+    - Estatísticas: getStatistics(), getRecentSessions()
+
+Componentes (em /components/therapist/):
+  ✓ PatientDetail.tsx
+    - Modal com 5 abas
+    - Integra todos os hooks
+    - Responsivo e acessível
+
+  ✓ PatientList.tsx (melhorado)
+    - Busca, filtros, ordenação
+    - Visualização em tabela/cards
+    - Integração com PatientDetail
+
+BANCO DE DADOS (Supabase):
+─────────────────────────────────────────────────────────────────────────────
+
+Tabelas:
+  ✓ patient_notes
+    - id, patient_id, therapist_id
+    - content, tags
+    - created_at, updated_at
+
+  ✓ patient_progress
+    - id, patient_id, therapist_id
+    - date, score (1-10), category, notes
+    - created_at
+
+  ✓ patient_goals
+    - id, patient_id, therapist_id
+    - title, description, status
+    - target_date, created_at, updated_at
+
+  ✓ session_history
+    - id, appointment_id, patient_id, therapist_id
+    - session_date, duration_minutes, status, notes
+    - created_at
+
+Índices (para performance):
+  ✓ Todos os patient_id, therapist_id, datas
+  ✓ Campos de busca e filtro
+
+RLS (Row Level Security):
+  ✓ Terapeutas só veem dados de seus pacientes
+  ✓ Pacientes não podem acessar dados de outros
+
+Real-time:
+  ✓ WebSocket habilitado em todas as tabelas
+  ✓ Atualizações instantâneas
+
+FLUXO DE DADOS:
+─────────────────────────────────────────────────────────────────────────────
+
+PatientList
+    ↓
+    ├─→ usePatients (lista de pacientes)
+    ├─→ useAppointments (para calcular última/próxima sessão)
+    └─→ PatientDetail (ao clicar "Ver")
+            ↓
+            ├─→ usePatientNotes (anotações)
+            ├─→ usePatientProgress (progresso e metas)
+            ├─→ useSessionHistory (histórico de sessões)
+            └─→ useAppointments (agendamentos)
+
+═══════════════════════════════════════════════════════════════════════════════
+5. PRÓXIMOS PASSOS
+═══════════════════════════════════════════════════════════════════════════════
+
+FUNCIONALIDADES A IMPLEMENTAR:
+─────────────────────────────────────────────────────────────────────────────
+
+1. ADICIONAR PROGRESSO E METAS
+   - Formulário para adicionar entrada de progresso
+   - Formulário para adicionar meta
+   - Validações
+
+2. EDITAR/DELETAR ANOTAÇÕES
+   - Botão de editar em cada anotação
+   - Botão de deletar com confirmação
+   - Histórico de edições
+
+3. GRÁFICOS DE EVOLUÇÃO
+   - Gráfico de linha mostrando progresso ao longo do tempo
+   - Gráfico de pizza com categorias
+   - Comparação período a período
+
+4. EXPORTAR RELATÓRIOS
+   - Exportar anotações em PDF
+   - Exportar progresso em gráficos
+   - Enviar relatório para paciente
+
+5. INTEGRAÇÃO COM TRIAGEM TDAH
+   - Mostrar resultados de triagens anteriores
+   - Comparar resultados ao longo do tempo
+   - Gráfico de evolução
+
+6. NOTIFICAÇÕES
+   - Lembrete de pacientes sem sessão há muito tempo
+   - Alerta de metas próximas do vencimento
+   - Notificação de não comparecimento
+
+7. ANÁLISE AVANÇADA
+   - Dashboard com estatísticas gerais
+   - Taxa de sucesso por tipo de tratamento
+   - Comparação entre pacientes (anonimizado)
+
+═══════════════════════════════════════════════════════════════════════════════
+6. TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEMA: "Nenhum paciente encontrado"
+─────────────────────────────────────────────────────────────────────────────
+Causa: Pacientes não estão associados ao terapeuta
+Solução:
+  1. Verifique se pacientes foram cadastrados
+  2. Verifique se foram associados ao terapeuta correto
+  3. Verifique o therapist_id no banco de dados
+
+PROBLEMA: Modal não abre ao clicar "Ver"
+─────────────────────────────────────────────────────────────────────────────
+Causa: Componente PatientDetail não foi importado
+Solução:
+  1. Verifique se PatientDetail.tsx existe em /components/therapist/
+  2. Verifique se está importado em PatientList.tsx
+  3. Verifique console do navegador para erros
+
+PROBLEMA: Anotações não aparecem
+─────────────────────────────────────────────────────────────────────────────
+Causa: Tabela patient_notes não foi criada
+Solução:
+  1. Execute PATIENT_MANAGEMENT_SETUP.sql no Supabase
+  2. Verifique se tabelas foram criadas em Supabase Dashboard
+  3. Verifique RLS policies
+
+PROBLEMA: Erro de permissão ao salvar anotação
+─────────────────────────────────────────────────────────────────────────────
+Causa: RLS policy não está configurada corretamente
+Solução:
+  1. Vá para Supabase Dashboard > Authentication > Policies
+  2. Verifique se policies estão habilitadas
+  3. Re-execute o SQL de setup
+
+PROBLEMA: Dados não atualizam em tempo real
+─────────────────────────────────────────────────────────────────────────────
+Causa: Real-time não está habilitado
+Solução:
+  1. Vá para Supabase Dashboard > Realtime
+  2. Verifique se tabelas estão na publicação
+  3. Re-execute: ALTER PUBLICATION supabase_realtime ADD TABLE...
+
+═══════════════════════════════════════════════════════════════════════════════
+RESUMO EXECUTIVO
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ IMPLEMENTADO:
+  • Visualização avançada de pacientes (tabela/cards)
+  • Busca, filtros e ordenação
+  • Modal detalhado com 5 abas
+  • Anotações clínicas com tags
+  • Histórico de progresso
+  • Metas de tratamento
+  • Histórico de sessões
+  • Estatísticas de comparecimento
+  • Real-time updates
+  • Row Level Security
+
+📊 IMPACTO:
+  • Terapeutas têm visão 360° de cada paciente
+  • Melhor acompanhamento de progresso
+  • Documentação clínica organizada
+  • Facilita tomada de decisão
+  • Melhora qualidade do atendimento
+
+🚀 PRÓXIMOS PASSOS:
+  1. Executar PATIENT_MANAGEMENT_SETUP.sql
+  2. Testar funcionalidades
+  3. Implementar formulários de adição
+  4. Adicionar gráficos
+  5. Integrar com triagem TDAH
+
+═══════════════════════════════════════════════════════════════════════════════

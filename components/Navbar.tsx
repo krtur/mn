@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import ChevronDownIcon from './icons/ChevronDownIcon';
@@ -10,8 +11,26 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
+
+  // Mapa de pageKey para rotas
+  const pageKeyToRoute: { [key: string]: string } = {
+    'home': '/',
+    'meu-atendimento': '/meu-atendimento',
+    'depoimentos': '/depoimentos',
+    'credenciais': '/credenciais',
+    'terapia-corporativa': '/terapia-corporativa',
+    'projeto-escola': '/projeto-escola',
+    'mentoria': '/mentoria',
+    'terapia-baixo-custo': '/terapia-baixo-custo',
+    'o-que-e-trg': '/o-que-e-trg',
+    'faq': '/faq',
+    'ebooks': '/ebooks',
+    'fobias': '/fobias',
+    'frases': '/frases',
+  };
 
   const navLinks = [
     { nameKey: 'nav.home', pageKey: 'home' },
@@ -56,9 +75,11 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
     e.preventDefault();
     if (pageKey) {
       setCurrentPage(pageKey);
+      const route = pageKeyToRoute[pageKey] || '/';
+      navigate(route);
     }
     setMobileMenuOpen(false);
-    setOpenDropdown(null); // Close dropdown on link click
+    setOpenDropdown(null);
   };
 
   return (

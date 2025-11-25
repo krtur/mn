@@ -1,0 +1,520 @@
+═══════════════════════════════════════════════════════════════════════════════
+  ROADMAP: FUNCIONALIDADES AVANÇADAS PARA SISTEMA ROBUSTO E COMPLETO
+═══════════════════════════════════════════════════════════════════════════════
+
+Este documento sugere funcionalidades que um sistema de gestão clínica robusto
+e completo deveria ter. Estas são as melhores práticas da indústria.
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 1: ANÁLISE E RELATÓRIOS (Prioridade: ALTA)
+═══════════════════════════════════════════════════════════════════════════════
+
+1.1 DASHBOARD ANALÍTICO
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Dashboard com gráficos e estatísticas gerais
+
+Funcionalidades:
+  ✓ Gráfico de evolução de progresso (linha)
+  ✓ Gráfico de categorias de progresso (pizza)
+  ✓ Comparação período a período
+  ✓ Taxa de comparecimento (% ao longo do tempo)
+  ✓ Duração média de sessões
+  ✓ Tendências de melhora/piora
+
+Benefícios:
+  • Visualizar tendências rapidamente
+  • Identificar padrões de progresso
+  • Tomar decisões baseadas em dados
+  • Comunicar progresso ao paciente
+
+Tecnologia:
+  • Recharts ou Chart.js
+  • Cálculos no hook usePatientProgress
+
+Estimativa: 8-10 horas
+
+1.2 EXPORTAR RELATÓRIOS
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Gerar relatórios em PDF/Excel
+
+Funcionalidades:
+  ✓ Relatório de anotações clínicas
+  ✓ Relatório de progresso com gráficos
+  ✓ Relatório de metas (cumpridas/pendentes)
+  ✓ Relatório de sessões (presença, duração)
+  ✓ Relatório consolidado (tudo junto)
+  ✓ Personalizar período (últimos 30 dias, 6 meses, etc)
+  ✓ Enviar por email
+
+Benefícios:
+  • Documentação clínica formal
+  • Compartilhar com paciente
+  • Arquivar para registros
+  • Facilita comunicação com outros profissionais
+
+Tecnologia:
+  • jsPDF ou pdfkit
+  • xlsx para Excel
+  • nodemailer para email
+
+Estimativa: 12-15 horas
+
+1.3 COMPARAÇÃO ENTRE PACIENTES (ANONIMIZADO)
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Comparar progresso entre pacientes (sem revelar identidade)
+
+Funcionalidades:
+  ✓ Comparar taxa de progresso
+  ✓ Comparar taxa de comparecimento
+  ✓ Comparar duração média de sessões
+  ✓ Benchmarking (como está vs média)
+  ✓ Identificar pacientes com dificuldade
+
+Benefícios:
+  • Identificar outliers
+  • Melhorar qualidade do atendimento
+  • Pesquisa e análise
+  • Conformidade com ética
+
+Estimativa: 6-8 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 2: COMUNICAÇÃO E NOTIFICAÇÕES (Prioridade: ALTA)
+═══════════════════════════════════════════════════════════════════════════════
+
+2.1 SISTEMA DE NOTIFICAÇÕES
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Alertas inteligentes para terapeutas
+
+Notificações:
+  ✓ Paciente não compareceu (automática)
+  ✓ Paciente não tem sessão agendada há X dias
+  ✓ Meta próxima do vencimento
+  ✓ Progresso estagnado (sem melhora há X semanas)
+  ✓ Novo resultado de triagem disponível
+  ✓ Paciente enviou mensagem urgente
+
+Canais:
+  ✓ In-app (sino no dashboard)
+  ✓ Email
+  ✓ SMS (opcional)
+  ✓ Push notification (app mobile)
+
+Benefícios:
+  • Não esquecer pacientes
+  • Acompanhamento proativo
+  • Melhor retenção de pacientes
+  • Reduz abandono de tratamento
+
+Tecnologia:
+  • Supabase Realtime para in-app
+  • SendGrid/Mailgun para email
+  • Twilio para SMS
+
+Estimativa: 10-12 horas
+
+2.2 COMPARTILHAMENTO COM PACIENTE
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Paciente pode ver seu progresso e metas
+
+Funcionalidades:
+  ✓ Paciente vê seu progresso (gráficos)
+  ✓ Paciente vê suas metas
+  ✓ Paciente vê histórico de sessões
+  ✓ Paciente recebe relatório mensal
+  ✓ Paciente pode comentar em progresso
+  ✓ Paciente vê recomendações do terapeuta
+
+Benefícios:
+  • Aumenta engajamento do paciente
+  • Paciente entende seu progresso
+  • Melhora motivação
+  • Aumenta adesão ao tratamento
+
+Tecnologia:
+  • Componentes React reutilizáveis
+  • Permissões RLS para pacientes
+
+Estimativa: 12-15 horas
+
+2.3 COMUNICAÇÃO ESTRUTURADA
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Melhorar sistema de mensagens
+
+Funcionalidades:
+  ✓ Mensagens com prioridade (normal, urgente)
+  ✓ Mensagens com anexos (documentos, imagens)
+  ✓ Histórico de conversas organizado
+  ✓ Busca em mensagens
+  ✓ Marcar como importante
+  ✓ Respostas automáticas (fora do consultório)
+  ✓ Agendamento de mensagens
+
+Benefícios:
+  • Comunicação mais eficiente
+  • Menos perda de informações
+  • Melhor organização
+  • Conformidade com LGPD
+
+Estimativa: 8-10 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 3: GESTÃO DE DOCUMENTOS (Prioridade: MÉDIA)
+═══════════════════════════════════════════════════════════════════════════════
+
+3.1 ARMAZENAMENTO DE DOCUMENTOS
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Gerenciar documentos clínicos
+
+Tipos de Documentos:
+  ✓ Diagnósticos
+  ✓ Planos de tratamento
+  ✓ Relatórios de progresso
+  ✓ Avaliações (TDAH, depressão, etc)
+  ✓ Consentimentos informados
+  ✓ Prescrições/Recomendações
+  ✓ Notas de evolução
+
+Funcionalidades:
+  ✓ Upload de documentos
+  ✓ Categorização automática
+  ✓ Versionamento (histórico de versões)
+  ✓ Assinatura digital
+  ✓ Criptografia
+  ✓ Backup automático
+  ✓ Retenção de dados (LGPD)
+
+Benefícios:
+  • Documentação clínica formal
+  • Conformidade legal
+  • Fácil acesso a histórico
+  • Segurança de dados
+
+Tecnologia:
+  • Supabase Storage
+  • PDF.js para visualização
+  • Crypto para criptografia
+
+Estimativa: 15-20 horas
+
+3.2 GERAÇÃO AUTOMÁTICA DE DOCUMENTOS
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Gerar documentos automaticamente
+
+Documentos:
+  ✓ Plano de tratamento (baseado em metas)
+  ✓ Relatório de progresso mensal
+  ✓ Resumo de sessões
+  ✓ Certificado de conclusão
+  ✓ Recomendações personalizadas
+
+Benefícios:
+  • Economiza tempo
+  • Padroniza documentação
+  • Profissionalismo
+  • Reduz erros
+
+Tecnologia:
+  • Docxtemplater ou similar
+  • jsPDF
+
+Estimativa: 10-12 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 4: AGENDAMENTO AVANÇADO (Prioridade: MÉDIA)
+═══════════════════════════════════════════════════════════════════════════════
+
+4.1 AGENDAMENTO INTELIGENTE
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Melhorar sistema de agendamento
+
+Funcionalidades:
+  ✓ Sugestões automáticas de horários
+  ✓ Agendamento em grupo (terapia de grupo)
+  ✓ Agendamento com múltiplos terapeutas
+  ✓ Salas de espera virtual
+  ✓ Confirmação automática por SMS/email
+  ✓ Lembrete 24h antes
+  ✓ Cancelamento automático se não confirmar
+
+Benefícios:
+  • Reduz no-shows
+  • Melhor utilização de horários
+  • Menos administrativo
+  • Melhor experiência do paciente
+
+Estimativa: 12-15 horas
+
+4.2 INTEGRAÇÃO COM CALENDÁRIOS
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Sincronizar com Google Calendar, Outlook, etc
+
+Funcionalidades:
+  ✓ Sincronizar agendamentos
+  ✓ Receber atualizações em tempo real
+  ✓ Visualizar calendário externo
+  ✓ Evitar conflitos de horário
+  ✓ Exportar para iCal
+
+Benefícios:
+  • Menos conflitos
+  • Melhor organização
+  • Integração com ferramentas existentes
+
+Tecnologia:
+  • Google Calendar API
+  • Microsoft Graph API
+
+Estimativa: 8-10 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 5: AVALIAÇÕES E TRIAGENS (Prioridade: MÉDIA)
+═══════════════════════════════════════════════════════════════════════════════
+
+5.1 BIBLIOTECA DE AVALIAÇÕES
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Adicionar mais triagens e avaliações
+
+Avaliações Sugeridas:
+  ✓ Escala de Depressão (PHQ-9)
+  ✓ Escala de Ansiedade (GAD-7)
+  ✓ Escala de Burnout
+  ✓ Escala de Qualidade de Vida
+  ✓ Escala de Autoestima
+  ✓ Escala de Relacionamentos
+  ✓ Escala de Sono
+  ✓ Escala de Estresse
+
+Funcionalidades:
+  ✓ Aplicar avaliação
+  ✓ Calcular pontuação automaticamente
+  ✓ Interpretar resultados
+  ✓ Comparar com normas
+  ✓ Histórico de resultados
+  ✓ Gráfico de evolução
+
+Benefícios:
+  • Avaliação padronizada
+  • Documentação clínica
+  • Acompanhamento objetivo
+  • Pesquisa
+
+Estimativa: 20-25 horas
+
+5.2 RECOMENDAÇÕES BASEADAS EM IA
+─────────────────────────────────────────────────────────────────────────────
+Descrição: Sugerir intervenções baseadas em dados
+
+Funcionalidades:
+  ✓ Analisar padrões de progresso
+  ✓ Sugerir mudanças de abordagem
+  ✓ Alertar sobre riscos
+  ✓ Recomendar recursos
+  ✓ Sugerir próximas avaliações
+
+Benefícios:
+  • Melhora qualidade do atendimento
+  • Decisões baseadas em dados
+  • Reduz viés clínico
+
+Tecnologia:
+  • OpenAI API ou similar
+  • Machine Learning
+
+Estimativa: 15-20 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 6: CONFORMIDADE E SEGURANÇA (Prioridade: CRÍTICA)
+═══════════════════════════════════════════════════════════════════════════════
+
+6.1 CONFORMIDADE COM LGPD
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ Consentimento explícito para coleta de dados
+  ✓ Direito ao esquecimento (deletar dados)
+  ✓ Portabilidade de dados (exportar)
+  ✓ Auditoria de acessos
+  ✓ Retenção automática de dados
+  ✓ Política de privacidade
+  ✓ Termos de serviço
+
+Estimativa: 10-15 horas
+
+6.2 CONFORMIDADE COM HIPAA (se aplicável)
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ Criptografia end-to-end
+  ✓ Auditoria de acessos
+  ✓ Backup seguro
+  ✓ Destruição segura de dados
+  ✓ Conformidade com padrões
+
+Estimativa: 20-30 horas
+
+6.3 SEGURANÇA AVANÇADA
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ Autenticação de dois fatores (2FA)
+  ✓ Biometria (fingerprint, face)
+  ✓ Detecção de atividades suspeitas
+  ✓ Rate limiting
+  ✓ CORS e CSRF protection
+  ✓ Validação de entrada
+  ✓ SQL injection prevention
+
+Estimativa: 15-20 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 7: MOBILE E OFFLINE (Prioridade: MÉDIA)
+═══════════════════════════════════════════════════════════════════════════════
+
+7.1 APLICATIVO MOBILE
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ App iOS (React Native ou Swift)
+  ✓ App Android (React Native ou Kotlin)
+  ✓ Sincronização automática
+  ✓ Notificações push
+  ✓ Offline mode
+  ✓ Biometria
+
+Estimativa: 40-60 horas
+
+7.2 MODO OFFLINE
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ Cache local de dados
+  ✓ Sincronização quando online
+  ✓ Indicador de status
+  ✓ Conflito resolution
+
+Estimativa: 12-15 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+FASE 8: INTEGRAÇÃO COM SISTEMAS EXTERNOS (Prioridade: BAIXA)
+═══════════════════════════════════════════════════════════════════════════════
+
+8.1 INTEGRAÇÃO COM EHR
+─────────────────────────────────────────────────────────────────────────────
+Integrar com:
+  ✓ Epic
+  ✓ Cerner
+  ✓ Medidata
+  ✓ Outros EHR
+
+Estimativa: 30-50 horas
+
+8.2 INTEGRAÇÃO COM TELEMEDICINA
+─────────────────────────────────────────────────────────────────────────────
+Integrar com:
+  ✓ Zoom
+  ✓ Google Meet
+  ✓ Jitsi
+  ✓ Twilio
+
+Funcionalidades:
+  ✓ Iniciar sessão de vídeo direto do app
+  ✓ Registrar sessão
+  ✓ Transcrição automática
+  ✓ Compartilhamento de tela
+
+Estimativa: 15-20 horas
+
+8.3 INTEGRAÇÃO COM FARMÁCIAS
+─────────────────────────────────────────────────────────────────────────────
+Funcionalidades:
+  ✓ Prescrição digital
+  ✓ Sincronização com farmácia
+  ✓ Rastreamento de medicação
+
+Estimativa: 20-30 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+RESUMO DE PRIORIDADES E ESTIMATIVAS
+═══════════════════════════════════════════════════════════════════════════════
+
+FASE 1 - ANÁLISE E RELATÓRIOS (ALTA)
+  • Dashboard Analítico: 8-10h
+  • Exportar Relatórios: 12-15h
+  • Comparação Pacientes: 6-8h
+  TOTAL: 26-33 horas
+
+FASE 2 - COMUNICAÇÃO (ALTA)
+  • Notificações: 10-12h
+  • Compartilhamento: 12-15h
+  • Comunicação Estruturada: 8-10h
+  TOTAL: 30-37 horas
+
+FASE 3 - DOCUMENTOS (MÉDIA)
+  • Armazenamento: 15-20h
+  • Geração Automática: 10-12h
+  TOTAL: 25-32 horas
+
+FASE 4 - AGENDAMENTO (MÉDIA)
+  • Agendamento Inteligente: 12-15h
+  • Integração Calendários: 8-10h
+  TOTAL: 20-25 horas
+
+FASE 5 - AVALIAÇÕES (MÉDIA)
+  • Biblioteca de Avaliações: 20-25h
+  • Recomendações IA: 15-20h
+  TOTAL: 35-45 horas
+
+FASE 6 - CONFORMIDADE (CRÍTICA)
+  • LGPD: 10-15h
+  • HIPAA: 20-30h
+  • Segurança: 15-20h
+  TOTAL: 45-65 horas
+
+FASE 7 - MOBILE (MÉDIA)
+  • App Mobile: 40-60h
+  • Offline Mode: 12-15h
+  TOTAL: 52-75 horas
+
+FASE 8 - INTEGRAÇÕES (BAIXA)
+  • EHR: 30-50h
+  • Telemedicina: 15-20h
+  • Farmácias: 20-30h
+  TOTAL: 65-100 horas
+
+═══════════════════════════════════════════════════════════════════════════════
+RECOMENDAÇÃO DE SEQUÊNCIA
+═══════════════════════════════════════════════════════════════════════════════
+
+CURTO PRAZO (1-2 meses):
+  1. Dashboard Analítico (FASE 1)
+  2. Exportar Relatórios (FASE 1)
+  3. Sistema de Notificações (FASE 2)
+  4. Compartilhamento com Paciente (FASE 2)
+
+MÉDIO PRAZO (2-4 meses):
+  1. Armazenamento de Documentos (FASE 3)
+  2. Agendamento Inteligente (FASE 4)
+  3. Biblioteca de Avaliações (FASE 5)
+  4. Conformidade LGPD (FASE 6)
+
+LONGO PRAZO (4+ meses):
+  1. App Mobile (FASE 7)
+  2. Conformidade HIPAA (FASE 6)
+  3. Integrações Externas (FASE 8)
+
+═══════════════════════════════════════════════════════════════════════════════
+CONCLUSÃO
+═══════════════════════════════════════════════════════════════════════════════
+
+Um sistema robusto e completo de gestão clínica deve incluir:
+
+✓ Análise e Relatórios (para tomada de decisão)
+✓ Comunicação Eficiente (para engajamento)
+✓ Documentação Segura (para conformidade)
+✓ Agendamento Inteligente (para eficiência)
+✓ Avaliações Padronizadas (para qualidade)
+✓ Conformidade Legal (para proteção)
+✓ Acesso Mobile (para conveniência)
+✓ Integrações (para ecossistema)
+
+Tempo Total Estimado: 273-412 horas (3-5 meses de desenvolvimento full-time)
+
+Prioridade Recomendada: FASE 1 + FASE 2 + FASE 6 (Conformidade)
+
+═══════════════════════════════════════════════════════════════════════════════

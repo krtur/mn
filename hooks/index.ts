@@ -30,3 +30,12 @@ export type { AppointmentRequest } from './useAppointmentRequests';
 
 export { useTdahScreening } from './useTdahScreening';
 export type { TdahScreeningResult, TdahScreeningInput } from './useTdahScreening';
+
+export { usePatientNotes } from './usePatientNotes';
+export type { PatientNote } from './usePatientNotes';
+
+export { usePatientProgress } from './usePatientProgress';
+export type { ProgressEntry, PatientGoal } from './usePatientProgress';
+
+export { useSessionHistory } from './useSessionHistory';
+export type { SessionHistory } from './useSessionHistory';

@@ -294,23 +294,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Fazer logout na API
       await authApi.logout();
       
-      // Limpar estado local
+      // Limpar estado local COMPLETAMENTE
       setUser(null);
       setIsAuthenticated(false);
       setEmailPendingConfirmation(null);
       
-      // Remover token do localStorage
+      // Remover TODOS os tokens e dados do localStorage
       localStorage.removeItem('token');
+      localStorage.removeItem('supabase-auth');
+      localStorage.removeItem('supabase.auth.token');
       
-      console.log('✅ Logout bem-sucedido!');
+      // Limpar sessionStorage também
+      sessionStorage.clear();
+      
+      console.log('✅ Logout bem-sucedido! Estado completamente limpo.');
     } catch (error) {
       console.error('❌ Erro ao fazer logout:', error);
       
-      // Mesmo com erro, garantir que o estado local foi limpo
+      // Mesmo com erro, garantir que o estado local foi limpo COMPLETAMENTE
       setUser(null);
       setIsAuthenticated(false);
       setEmailPendingConfirmation(null);
       localStorage.removeItem('token');
+      localStorage.removeItem('supabase-auth');
+      localStorage.removeItem('supabase.auth.token');
+      sessionStorage.clear();
       
       throw error;
     }

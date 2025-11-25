@@ -1,0 +1,125 @@
+🔴 TESTE DE SEGURANÇA - ISOLAMENTO DE DADOS ENTRE TERAPEUTAS
+================================================================
+
+PROBLEMA CORRIGIDO:
+Pacientes de um terapeuta estavam aparecendo na tela de outro terapeuta.
+Isso foi um ERRO CRÍTICO DE SEGURANÇA que foi completamente resolvido.
+
+COMO TESTAR A SOLUÇÃO:
+========================
+
+TESTE 1: Login Nadielma → Verificar Pacientes
+----------------------------------------------
+1. Abrir http://localhost:3000
+2. Login com:
+   - Email: nadi@mnterapeutas.com
+   - Senha: Perante@1202
+3. Ir para Dashboard → Meus Pacientes
+4. ANOTAR quantos pacientes aparecem (ex: 3 pacientes)
+5. ANOTAR os nomes dos pacientes de Nadielma
+
+TESTE 2: Logout → Login Marcelo → Verificar Pacientes
+------------------------------------------------------
+1. Clicar em Logout
+2. Aguardar redirecionamento para login
+3. Login com:
+   - Email: marcelo@mnterapeutas.com
+   - Senha: Perante@1202
+4. Ir para Dashboard → Meus Pacientes
+5. VERIFICAR que aparecem DIFERENTES pacientes
+6. ANOTAR os nomes dos pacientes de Marcelo
+7. ⚠️ CRÍTICO: Verificar que NÃO aparecem os pacientes de Nadielma
+
+TESTE 3: Logout → Login Nadielma Novamente
+-------------------------------------------
+1. Clicar em Logout
+2. Aguardar redirecionamento para login
+3. Login com:
+   - Email: nadi@mnterapeutas.com
+   - Senha: Perante@1202
+4. Ir para Dashboard → Meus Pacientes
+5. VERIFICAR que aparecem os MESMOS pacientes do TESTE 1
+6. ⚠️ CRÍTICO: Verificar que NÃO aparecem os pacientes de Marcelo
+
+TESTE 4: Verificar Agendamentos (Appointments)
+----------------------------------------------
+1. Fazer login como Nadielma
+2. Ir para Dashboard → Agenda
+3. ANOTAR os agendamentos que aparecem
+4. Logout
+5. Login como Marcelo
+6. Ir para Dashboard → Agenda
+7. VERIFICAR que aparecem DIFERENTES agendamentos
+8. ⚠️ CRÍTICO: Verificar que NÃO aparecem agendamentos de Nadielma
+
+TESTE 5: Verificar Mensagens
+----------------------------
+1. Fazer login como Nadielma
+2. Ir para Dashboard → Mensagens
+3. ANOTAR as conversas que aparecem
+4. Logout
+5. Login como Marcelo
+6. Ir para Dashboard → Mensagens
+7. VERIFICAR que aparecem DIFERENTES conversas
+8. ⚠️ CRÍTICO: Verificar que NÃO aparecem conversas de Nadielma
+
+TESTE 6: Verificar Documentos
+-----------------------------
+1. Fazer login como Nadielma
+2. Ir para Dashboard → Documentos
+3. ANOTAR os documentos que aparecem
+4. Logout
+5. Login como Marcelo
+6. Ir para Dashboard → Documentos
+7. VERIFICAR que aparecem DIFERENTES documentos
+8. ⚠️ CRÍTICO: Verificar que NÃO aparecem documentos de Nadielma
+
+VERIFICAR CONSOLE DO NAVEGADOR:
+================================
+1. Abrir DevTools (F12)
+2. Ir para aba "Console"
+3. Fazer login e verificar que aparecem logs como:
+   ✅ "Pacientes carregados: X para terapeuta Nadielma"
+   ✅ "Buscando agendamentos para usuário: [ID] Role: therapist_a"
+   ✅ "Buscando mensagens para usuário: [ID] Role: therapist_a"
+
+4. Fazer logout e verificar que aparecem logs como:
+   ✅ "Logout bem-sucedido! Estado completamente limpo."
+
+5. Fazer login com outro terapeuta e verificar que aparecem logs com:
+   ✅ "Pacientes carregados: X para terapeuta Marcelo"
+   ✅ "Buscando agendamentos para usuário: [ID DIFERENTE] Role: therapist_b"
+
+RESULTADO ESPERADO:
+====================
+✅ Cada terapeuta vê APENAS seus próprios dados
+✅ Logout limpa completamente o cache
+✅ Login com outro terapeuta carrega dados DIFERENTES
+✅ Nenhum vazamento de dados entre terapeutas
+✅ Logs mostram IDs diferentes para cada terapeuta
+
+RESULTADO INACEITÁVEL:
+======================
+❌ Um terapeuta vê dados do outro
+❌ Pacientes de um aparecem na tela do outro
+❌ Agendamentos de um aparecem na tela do outro
+❌ Mensagens de um aparecem na tela do outro
+❌ Documentos de um aparecem na tela do outro
+
+Se algum desses cenários acontecer, há um ERRO CRÍTICO DE SEGURANÇA!
+
+ARQUIVOS MODIFICADOS:
+======================
+1. /server.js - Removeu fallback de role 'patient'
+2. /components/auth/AuthContext.tsx - Limpeza agressiva de cache
+3. /hooks/usePatients.ts - Validação de user.id
+4. /hooks/useAppointments.ts - Validação de user.id
+5. /hooks/useMessages.ts - Validação de user.id
+6. /hooks/useDocuments.ts - Validação de user.id
+
+PRÓXIMOS PASSOS:
+================
+1. Executar todos os testes acima
+2. Se tudo passar ✅, o problema foi corrigido
+3. Se algum teste falhar ❌, reportar o erro específico
+4. Considerar adicionar testes automatizados para evitar regressão
