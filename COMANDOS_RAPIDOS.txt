@@ -1,0 +1,265 @@
+============================================
+⚡ COMANDOS RÁPIDOS - VPS
+============================================
+
+🔌 CONECTAR AO VPS:
+ssh root@31.97.252.100
+(senha: Taliteus@1202)
+
+============================================
+🚀 SETUP INICIAL (EXECUTAR UMA VEZ)
+============================================
+
+# 1. Upload do script
+scp vps-setup.sh root@31.97.252.100:/root/
+
+# 2. No VPS, executar:
+chmod +x /root/vps-setup.sh
+/root/vps-setup.sh
+
+# 3. Configurar .env
+nano /var/www/mn/.env
+# Cole suas credenciais Supabase
+
+# 4. Gerar secret para webhook
+openssl rand -hex 32
+
+# 5. Configurar webhook
+nano /var/www/webhook/hooks.json
+# Substitua "seu_secret_aqui_mude_isso"
+
+# 6. Reiniciar webhook
+systemctl restart webhook
+
+# 7. Primeiro deploy
+/var/www/mn/deploy.sh
+
+============================================
+🔄 DEPLOY MANUAL
+============================================
+
+/var/www/mn/deploy.sh
+
+============================================
+📊 VER LOGS
+============================================
+
+# Logs do webhook (deploy automático)
+journalctl -u webhook -f
+
+# Logs do Nginx (erros)
+tail -f /var/log/nginx/error.log
+
+# Logs do Nginx (acessos)
+tail -f /var/log/nginx/access.log
+
+# Últimas 50 linhas do webhook
+journalctl -u webhook -n 50
+
+# Últimas 50 linhas do Nginx
+journalctl -u nginx -n 50
+
+============================================
+🔧 REINICIAR SERVIÇOS
+============================================
+
+# Reiniciar webhook
+systemctl restart webhook
+
+# Reiniciar Nginx
+systemctl restart nginx
+
+# Reiniciar ambos
+systemctl restart webhook nginx
+
+============================================
+✅ VER STATUS
+============================================
+
+# Status do webhook
+systemctl status webhook
+
+# Status do Nginx
+systemctl status nginx
+
+# Ver portas abertas
+netstat -tulpn
+
+# Ver processos
+ps aux | grep webhook
+ps aux | grep nginx
+
+============================================
+🔍 VERIFICAR CONFIGURAÇÕES
+============================================
+
+# Testar config do Nginx
+nginx -t
+
+# Ver arquivo .env
+cat /var/www/mn/.env
+
+# Ver config do webhook
+cat /var/www/webhook/hooks.json
+
+# Ver config do Nginx
+cat /etc/nginx/sites-available/mn
+
+============================================
+📦 ATUALIZAR CÓDIGO MANUALMENTE
+============================================
+
+cd /var/www/mn
+git pull origin main
+npm install
+npm run build
+systemctl restart nginx
+
+============================================
+🗑️ LIMPAR E REINSTALAR
+============================================
+
+# Limpar node_modules e reinstalar
+cd /var/www/mn
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+
+# Limpar cache do npm
+npm cache clean --force
+
+============================================
+💾 BACKUP
+============================================
+
+# Backup manual
+tar -czf /root/backup-$(date +%Y%m%d).tar.gz /var/www/mn
+
+# Restaurar backup
+tar -xzf /root/backup-20241124.tar.gz -C /
+
+============================================
+🔒 FIREWALL
+============================================
+
+# Ver status
+ufw status
+
+# Permitir porta
+ufw allow 80
+ufw allow 9000
+
+# Bloquear porta
+ufw deny 8080
+
+# Recarregar
+ufw reload
+
+============================================
+📈 MONITORAMENTO
+============================================
+
+# Uso de disco
+df -h
+
+# Uso de memória
+free -h
+
+# Uso de CPU
+top
+
+# Processos por uso de memória
+ps aux --sort=-%mem | head
+
+# Processos por uso de CPU
+ps aux --sort=-%cpu | head
+
+============================================
+🌐 TESTAR SITE
+============================================
+
+# Testar do VPS
+curl http://localhost
+
+# Testar do seu PC
+curl http://31.97.252.100
+
+# Ver headers HTTP
+curl -I http://31.97.252.100
+
+# Testar webhook
+curl -X POST http://31.97.252.100:9000/hooks/mn-deploy
+
+============================================
+🐛 DEBUG RÁPIDO
+============================================
+
+# Site não carrega?
+systemctl restart nginx
+nginx -t
+
+# Webhook não funciona?
+systemctl status webhook
+journalctl -u webhook -n 50
+
+# Deploy não atualiza?
+/var/www/mn/deploy.sh
+cat /var/log/nginx/error.log
+
+# Erro 502?
+systemctl restart nginx
+journalctl -u nginx -n 50
+
+# Sem espaço em disco?
+df -h
+du -sh /var/www/mn/*
+npm cache clean --force
+
+============================================
+🔄 ATUALIZAR SISTEMA
+============================================
+
+# Atualizar pacotes
+apt update && apt upgrade -y
+
+# Atualizar Node.js (se necessário)
+npm install -g n
+n lts
+
+# Atualizar PM2
+npm install -g pm2@latest
+
+============================================
+📝 EDITAR ARQUIVOS
+============================================
+
+# Editar .env
+nano /var/www/mn/.env
+
+# Editar config Nginx
+nano /etc/nginx/sites-available/mn
+
+# Editar config webhook
+nano /var/www/webhook/hooks.json
+
+# Editar script de deploy
+nano /var/www/mn/deploy.sh
+
+============================================
+🎯 COMANDOS MAIS USADOS
+============================================
+
+1. Ver logs do deploy:
+   journalctl -u webhook -f
+
+2. Deploy manual:
+   /var/www/mn/deploy.sh
+
+3. Reiniciar tudo:
+   systemctl restart webhook nginx
+
+4. Ver status:
+   systemctl status webhook nginx
+
+5. Testar site:
+   curl http://31.97.252.100

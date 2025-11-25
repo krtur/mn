@@ -1,0 +1,155 @@
+============================================
+🚀 COMECE AQUI - DEPLOY NO VPS EM 10 MINUTOS
+============================================
+
+📋 INFORMAÇÕES:
+- IP: 31.97.252.100
+- GitHub: https://github.com/krtur/mn
+- Seu site ficará em: http://31.97.252.100
+
+============================================
+PASSO 1: CONECTAR E FAZER UPLOAD (2 min)
+============================================
+
+1. Abra o PowerShell
+
+2. Faça upload do script:
+   scp vps-setup.sh root@31.97.252.100:/root/
+   
+   (senha: Taliteus@1202)
+
+3. Conecte ao VPS:
+   ssh root@31.97.252.100
+
+============================================
+PASSO 2: EXECUTAR SETUP AUTOMÁTICO (5 min)
+============================================
+
+No VPS, execute:
+
+chmod +x /root/vps-setup.sh
+/root/vps-setup.sh
+
+☕ Aguarde ~5 minutos enquanto instala tudo!
+
+============================================
+PASSO 3: CONFIGURAR SUPABASE (1 min)
+============================================
+
+1. Edite o .env:
+   nano /var/www/mn/.env
+
+2. Cole suas credenciais:
+   VITE_SUPABASE_URL=https://sua-url.supabase.co
+   VITE_SUPABASE_ANON_KEY=sua_key_aqui
+
+3. Salve: Ctrl+X, Y, Enter
+
+============================================
+PASSO 4: CONFIGURAR WEBHOOK GITHUB (2 min)
+============================================
+
+1. Gere um secret:
+   openssl rand -hex 32
+   
+   (copie o resultado)
+
+2. Edite o webhook:
+   nano /var/www/webhook/hooks.json
+   
+   Substitua "seu_secret_aqui_mude_isso" pelo secret copiado
+   Salve: Ctrl+X, Y, Enter
+
+3. Reinicie:
+   systemctl restart webhook
+
+4. Configure no GitHub:
+   https://github.com/krtur/mn/settings/hooks
+   
+   - Add webhook
+   - Payload URL: http://31.97.252.100:9000/hooks/mn-deploy
+   - Content type: application/json
+   - Secret: [cole o secret do passo 1]
+   - Events: Just the push event
+   - Add webhook
+
+============================================
+PASSO 5: PRIMEIRO DEPLOY (3 min)
+============================================
+
+Execute:
+/var/www/mn/deploy.sh
+
+Aguarde o build terminar...
+
+============================================
+✅ PRONTO! ACESSE SEU SITE
+============================================
+
+🌐 http://31.97.252.100
+
+============================================
+🧪 TESTAR DEPLOY AUTOMÁTICO
+============================================
+
+1. No seu PC, faça uma alteração:
+   echo "teste" >> README.md
+   git add .
+   git commit -m "teste"
+   git push
+
+2. No VPS, veja o deploy acontecendo:
+   journalctl -u webhook -f
+
+3. Aguarde 2-3 minutos e recarregue o site!
+
+============================================
+📊 COMANDOS ÚTEIS
+============================================
+
+Ver logs do deploy:
+journalctl -u webhook -f
+
+Deploy manual:
+/var/www/mn/deploy.sh
+
+Reiniciar serviços:
+systemctl restart webhook nginx
+
+Ver status:
+systemctl status webhook nginx
+
+============================================
+🆘 PROBLEMAS?
+============================================
+
+Site não carrega?
+→ systemctl restart nginx
+
+Webhook não funciona?
+→ journalctl -u webhook -n 50
+
+Deploy não atualiza?
+→ /var/www/mn/deploy.sh
+
+============================================
+📚 DOCUMENTAÇÃO COMPLETA
+============================================
+
+Veja os arquivos:
+- DEPLOY_VPS_GUIA.txt (guia completo)
+- COMANDOS_RAPIDOS.txt (referência rápida)
+
+============================================
+🎉 TUDO PRONTO!
+============================================
+
+Agora a cada commit no GitHub:
+✓ Webhook detecta automaticamente
+✓ Faz git pull
+✓ Instala dependências
+✓ Faz build
+✓ Reinicia Nginx
+✓ Site atualizado em ~2-3 minutos!
+
+Divirta-se! 🚀

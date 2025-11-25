@@ -1,0 +1,297 @@
+============================================
+🚀 GUIA COMPLETO - DEPLOY VPS HOSTINGER
+============================================
+
+📋 INFORMAÇÕES DO VPS:
+- IP: 31.97.252.100
+- OS: Ubuntu 24.04
+- SSH: root@31.97.252.100
+- Senha: Taliteus@1202
+- GitHub: https://github.com/krtur/mn
+- Branch: main
+
+============================================
+PASSO 1: CONECTAR AO VPS E EXECUTAR SETUP
+============================================
+
+1. Abra o PowerShell/Terminal
+
+2. Conecte ao VPS:
+   ssh root@31.97.252.100
+   (senha: Taliteus@1202)
+
+3. Faça upload do script de setup:
+   
+   # No seu computador local (outro terminal):
+   scp vps-setup.sh root@31.97.252.100:/root/
+   
+   # Ou copie e cole o conteúdo manualmente:
+   nano /root/vps-setup.sh
+   # Cole o conteúdo do arquivo vps-setup.sh
+   # Ctrl+X, Y, Enter para salvar
+
+4. Dê permissão de execução:
+   chmod +x /root/vps-setup.sh
+
+5. Execute o script:
+   /root/vps-setup.sh
+
+   ⏱️ Isso vai levar ~5-10 minutos
+   ☕ Pegue um café enquanto instala tudo!
+
+============================================
+PASSO 2: CONFIGURAR VARIÁVEIS DE AMBIENTE
+============================================
+
+1. Edite o arquivo .env:
+   nano /var/www/mn/.env
+
+2. Cole suas credenciais do Supabase:
+   VITE_SUPABASE_URL=https://sua-url.supabase.co
+   VITE_SUPABASE_ANON_KEY=sua_key_aqui
+
+3. Salve: Ctrl+X, Y, Enter
+
+============================================
+PASSO 3: CONFIGURAR WEBHOOK DO GITHUB
+============================================
+
+1. Gere um secret seguro:
+   openssl rand -hex 32
+   
+   # Copie o resultado (exemplo: a1b2c3d4e5f6...)
+
+2. Edite a configuração do webhook:
+   nano /var/www/webhook/hooks.json
+   
+   # Substitua "seu_secret_aqui_mude_isso" pelo secret gerado
+   # Salve: Ctrl+X, Y, Enter
+
+3. Reinicie o serviço webhook:
+   systemctl restart webhook
+
+4. Configure no GitHub:
+   - Acesse: https://github.com/krtur/mn/settings/hooks
+   - Clique em "Add webhook"
+   - Preencha:
+     * Payload URL: http://31.97.252.100:9000/hooks/mn-deploy
+     * Content type: application/json
+     * Secret: [cole o secret gerado no passo 1]
+     * SSL verification: Disable (por enquanto, sem HTTPS)
+     * Events: "Just the push event"
+     * Active: ✓ (marcado)
+   - Clique em "Add webhook"
+
+============================================
+PASSO 4: PRIMEIRO DEPLOY MANUAL
+============================================
+
+1. Execute o script de deploy:
+   /var/www/mn/deploy.sh
+
+2. Aguarde o build terminar (~2-3 minutos)
+
+3. Acesse no navegador:
+   http://31.97.252.100
+
+   ✅ Seu site deve estar funcionando!
+
+============================================
+PASSO 5: TESTAR DEPLOY AUTOMÁTICO
+============================================
+
+1. No seu computador, faça uma alteração pequena:
+   # Exemplo: edite o README.md
+   echo "# Teste de deploy automático" >> README.md
+
+2. Commit e push:
+   git add .
+   git commit -m "Teste deploy automático"
+   git push origin main
+
+3. No VPS, veja os logs do webhook:
+   journalctl -u webhook -f
+   
+   # Você deve ver:
+   # "Deploy iniciado!"
+   # "Deploy concluído com sucesso!"
+
+4. Aguarde ~2-3 minutos e recarregue o site
+
+   ✅ Mudanças devem aparecer automaticamente!
+
+============================================
+📊 COMANDOS ÚTEIS
+============================================
+
+# Ver logs do webhook (deploy automático)
+journalctl -u webhook -f
+
+# Ver logs do Nginx
+tail -f /var/log/nginx/error.log
+tail -f /var/log/nginx/access.log
+
+# Fazer deploy manual
+/var/www/mn/deploy.sh
+
+# Reiniciar serviços
+systemctl restart webhook
+systemctl restart nginx
+
+# Ver status dos serviços
+systemctl status webhook
+systemctl status nginx
+
+# Atualizar código manualmente
+cd /var/www/mn
+git pull origin main
+npm install
+npm run build
+systemctl restart nginx
+
+# Ver processos rodando
+ps aux | grep webhook
+ps aux | grep nginx
+
+# Testar configuração do Nginx
+nginx -t
+
+# Ver uso de disco
+df -h
+
+# Ver uso de memória
+free -h
+
+# Ver portas abertas
+netstat -tulpn
+
+============================================
+🔧 TROUBLESHOOTING
+============================================
+
+PROBLEMA: Site não carrega (502 Bad Gateway)
+SOLUÇÃO:
+  systemctl restart nginx
+  journalctl -u nginx -n 50
+
+PROBLEMA: Webhook não funciona
+SOLUÇÃO:
+  systemctl status webhook
+  journalctl -u webhook -n 50
+  # Verifique se a porta 9000 está aberta:
+  ufw status
+  netstat -tulpn | grep 9000
+
+PROBLEMA: Deploy não atualiza o site
+SOLUÇÃO:
+  # Execute manualmente para ver erros:
+  /var/www/mn/deploy.sh
+  # Verifique se o .env está correto:
+  cat /var/www/mn/.env
+
+PROBLEMA: Erro de permissão
+SOLUÇÃO:
+  chown -R root:root /var/www/mn
+  chmod +x /var/www/mn/deploy.sh
+
+PROBLEMA: Build falha
+SOLUÇÃO:
+  cd /var/www/mn
+  rm -rf node_modules package-lock.json
+  npm install
+  npm run build
+
+============================================
+🔒 SEGURANÇA (RECOMENDAÇÕES)
+============================================
+
+1. Criar usuário não-root:
+   adduser deploy
+   usermod -aG sudo deploy
+   # Use este usuário em vez de root
+
+2. Desabilitar login root via SSH:
+   nano /etc/ssh/sshd_config
+   # Mude: PermitRootLogin no
+   systemctl restart sshd
+
+3. Configurar chaves SSH:
+   ssh-keygen -t rsa -b 4096
+   ssh-copy-id deploy@31.97.252.100
+
+4. Instalar Fail2Ban:
+   apt install fail2ban
+   systemctl enable fail2ban
+
+5. Configurar backups automáticos:
+   # Adicione ao crontab
+   0 2 * * * tar -czf /root/backup-$(date +\%Y\%m\%d).tar.gz /var/www/mn
+
+============================================
+📈 PRÓXIMAS MELHORIAS
+============================================
+
+✅ FEITO:
+- Deploy automático via GitHub webhook
+- Nginx configurado
+- Firewall ativo
+- Script de deploy
+
+🔜 FUTURO (OPCIONAL):
+- [ ] Configurar domínio próprio
+- [ ] Adicionar SSL/HTTPS com Let's Encrypt
+- [ ] Configurar CDN (Cloudflare)
+- [ ] Adicionar monitoramento (Uptime Robot)
+- [ ] Configurar backups automáticos
+- [ ] Adicionar CI/CD com GitHub Actions
+- [ ] Configurar logs centralizados
+- [ ] Adicionar cache Redis
+
+============================================
+📞 SUPORTE
+============================================
+
+Se algo der errado:
+
+1. Verifique os logs:
+   journalctl -u webhook -f
+   tail -f /var/log/nginx/error.log
+
+2. Teste manualmente:
+   /var/www/mn/deploy.sh
+
+3. Reinicie os serviços:
+   systemctl restart webhook nginx
+
+4. Verifique o status:
+   systemctl status webhook nginx
+
+============================================
+✅ CHECKLIST FINAL
+============================================
+
+[ ] VPS configurado com script vps-setup.sh
+[ ] Arquivo .env configurado com credenciais Supabase
+[ ] Webhook configurado no GitHub
+[ ] Secret do webhook atualizado
+[ ] Primeiro deploy manual executado
+[ ] Site acessível em http://31.97.252.100
+[ ] Deploy automático testado com commit
+[ ] Logs do webhook funcionando
+
+============================================
+🎉 PRONTO!
+============================================
+
+Seu site está no ar e atualiza automaticamente
+a cada push no GitHub!
+
+🌐 Acesse: http://31.97.252.100
+
+Qualquer commit na branch main vai:
+1. Acionar o webhook
+2. Executar git pull
+3. Instalar dependências
+4. Fazer build
+5. Reiniciar Nginx
+6. Site atualizado em ~2-3 minutos!
