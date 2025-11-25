@@ -14,9 +14,9 @@ const HeroSection: React.FC = () => {
   const nadielmaWhatsapp = 'https://wa.me/5519981740279';
 
   const stats = [
-    { number: '500+', label: t('stats.patients'), icon: '👥' },
+    { number: '200+', label: t('stats.patients'), icon: '👥' },
     { number: '95%', label: t('stats.satisfaction'), icon: '⭐' },
-    { number: '10+', label: t('stats.experience'), icon: '🎓' },
+    { number: '5', label: t('stats.experience'), icon: '🎓' },
   ];
 
   const benefits = [
@@ -39,13 +39,13 @@ const HeroSection: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Badge */}
           <div className="mb-12 animate-fade-in">
-            <span className="inline-block px-6 py-3 bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 rounded-full text-sm font-bold tracking-wide border border-primary-200">
+            <span className="inline-block px-6 py-3 bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 rounded-full text-base font-bold tracking-wide border border-primary-200">
               {t('hero.badge')}
             </span>
           </div>
 
           {/* Main Heading - Disruptive */}
-          <h1 className="text-5xl md:text-7xl font-black leading-tight mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <span className="gradient-text">{t('hero.title1')}</span> {t('hero.title2')}<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-accent-600 to-primary-600">{t('hero.title3')}</span>
           </h1>
@@ -235,7 +235,7 @@ const HeroSection: React.FC = () => {
               className="btn-whatsapp-accent flex items-center justify-center w-full sm:w-auto gap-3 text-lg"
             >
               <WhatsappIcon className="w-6 h-6" />
-              <span>Agendar com Nadielma</span>
+              <span>Agendar com Nadi</span>
             </a>
           </div>
         </div>
