@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
               className="cursor-pointer group"
             >
               <img 
-                src="/logo.png" 
+                src="/logo1.jpeg" 
                 alt="Logo M&N Terapeutas" 
                 className="h-14 w-auto object-contain group-hover:opacity-80 transition-opacity duration-300"
               />
