@@ -1,0 +1,143 @@
+╔════════════════════════════════════════════════════════════════╗
+║    🔧 CORREÇÃO DO DEPLOY AUTOMÁTICO - GUIA COMPLETO           ║
+║    M&N Terapeutas - VPS                                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+🚨 PROBLEMA: O deploy automático no VPS não está funcionando corretamente.
+
+📋 PLANO DE AÇÃO
+
+Este guia contém instruções detalhadas para diagnosticar e corrigir problemas
+com o deploy automático no VPS. Siga os passos abaixo na ordem indicada.
+
+════════════════════════════════════════════════════════════════
+
+📊 PASSO 1: DIAGNÓSTICO
+
+1. Faça upload do arquivo 'webhook-diagnostico.sh' para o VPS:
+   
+   scp webhook-diagnostico.sh root@31.97.252.100:/root/
+
+2. Conecte-se ao VPS via SSH:
+   
+   ssh root@31.97.252.100
+
+3. Execute o script de diagnóstico:
+   
+   cd /root
+   chmod +x webhook-diagnostico.sh
+   ./webhook-diagnostico.sh
+
+4. Analise os resultados do diagnóstico para identificar os problemas.
+
+════════════════════════════════════════════════════════════════
+
+🔧 PASSO 2: CORREÇÃO
+
+1. Faça upload do arquivo 'webhook-correcao.sh' para o VPS:
+   
+   scp webhook-correcao.sh root@31.97.252.100:/root/
+
+2. Conecte-se ao VPS via SSH:
+   
+   ssh root@31.97.252.100
+
+3. Execute o script de correção:
+   
+   cd /root
+   chmod +x webhook-correcao.sh
+   ./webhook-correcao.sh
+
+4. Aguarde a conclusão do script. Ele irá:
+   - Reinstalar o serviço webhook
+   - Configurar o Nginx como proxy reverso
+   - Configurar verificação periódica
+   - Reiniciar todos os serviços necessários
+
+════════════════════════════════════════════════════════════════
+
+🧪 PASSO 3: TESTE
+
+1. Teste o webhook localmente no VPS:
+   
+   /var/www/mn/test-webhook.sh
+
+2. Verifique se o serviço está respondendo:
+   
+   curl http://localhost:9001/health
+
+3. Verifique os logs do serviço:
+   
+   journalctl -u webhook -f
+
+4. Faça um commit de teste no GitHub:
+   
+   git commit -m "teste webhook" --allow-empty
+   git push origin main
+
+5. Aguarde 2-3 minutos e verifique se o deploy foi executado.
+
+════════════════════════════════════════════════════════════════
+
+📋 PASSO 4: VERIFICAÇÃO
+
+1. Verifique se o serviço webhook está ativo:
+   
+   systemctl status webhook
+
+2. Verifique se o site foi atualizado:
+   
+   curl -I http://31.97.252.100
+
+3. Verifique os logs do deploy:
+   
+   journalctl -u webhook -n 100
+
+════════════════════════════════════════════════════════════════
+
+🔍 PROBLEMAS COMUNS E SOLUÇÕES
+
+1. Webhook não inicia:
+   - Verifique permissões: chmod +x /var/www/mn/webhook-server.js
+   - Verifique logs: journalctl -u webhook -n 50
+   - Reinicie manualmente: systemctl restart webhook
+
+2. Webhook inicia mas não recebe eventos:
+   - Verifique firewall: ufw status
+   - Verifique configuração do GitHub: https://github.com/krtur/mn/settings/hooks
+   - Verifique Nginx: nginx -t && systemctl status nginx
+
+3. Webhook recebe eventos mas deploy falha:
+   - Verifique permissões do diretório: ls -la /var/www/mn
+   - Verifique logs do deploy: journalctl -u webhook -f
+   - Teste deploy manual: /var/www/mn/test-webhook.sh
+
+════════════════════════════════════════════════════════════════
+
+📊 VERIFICAÇÃO PERIÓDICA
+
+O script de correção configurou uma verificação automática a cada 5 minutos
+que irá:
+
+1. Verificar se o serviço webhook está rodando
+2. Verificar se o webhook está respondendo
+3. Reiniciar automaticamente se necessário
+
+Logs desta verificação são salvos em: /var/log/webhook-check.log
+
+════════════════════════════════════════════════════════════════
+
+🎉 CONCLUSÃO
+
+Após seguir todos os passos acima, o deploy automático deve estar funcionando
+corretamente. O sistema agora:
+
+1. Detecta automaticamente novos commits no GitHub
+2. Executa o deploy (git pull, npm install, npm run build)
+3. Reinicia o servidor (PM2 + Nginx)
+4. Verifica periodicamente o funcionamento do webhook
+
+Se ainda houver problemas, execute novamente o script de diagnóstico para
+identificar quaisquer questões remanescentes.
+
+════════════════════════════════════════════════════════════════
