@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, CalendarEvent } from '../calendar/Calendar';
 import { useAppointments } from '../../hooks/useAppointments';
 import { useTherapistAvailability } from '../../hooks/useTherapistAvailability';
@@ -6,6 +6,7 @@ import { useAppointmentRecurrences } from '../../hooks/useAppointmentRecurrences
 import { useAppointmentRequests } from '../../hooks/useAppointmentRequests';
 import { useAuth } from '../auth/AuthContext';
 import { supabase } from '../../services/supabase';
+import { useLocation } from 'react-router-dom';
 
 interface NewAppointment {
   patientId: string;
@@ -18,19 +19,38 @@ interface NewAppointment {
 
 export const ScheduleManager: React.FC = () => {
   const { user } = useAuth();
+  const location = useLocation();
   const { appointments, loading: appointmentsLoading, updateAppointment, deleteAppointment } = useAppointments();
   const { availability, addAvailability, removeAvailability } = useTherapistAvailability();
   const { recurrences, createRecurrence, deleteRecurrence } = useAppointmentRecurrences();
   const { requests, approveRequest, rejectRequest, refetch } = useAppointmentRequests();
 
-  const [activeTab, setActiveTab] = useState<'calendar' | 'availability' | 'requests'>('calendar');
-  const [showNewAppointment, setShowNewAppointment] = useState(false);
+  // Extrair parâmetros da query string
+  const queryParams = new URLSearchParams(location.search);
+  const tabParam = queryParams.get('tab');
+  const actionParam = queryParams.get('action');
+
+  // Definir aba ativa com base no parâmetro da URL
+  const [activeTab, setActiveTab] = useState<'calendar' | 'availability' | 'requests'>(tabParam === 'requests' ? 'requests' : 'calendar');
+  const [showNewAppointment, setShowNewAppointment] = useState(actionParam === 'new');
   const [showNewAvailability, setShowNewAvailability] = useState(false);
   const [showEditAppointment, setShowEditAppointment] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [patients, setPatients] = useState<any[]>([]);
   const [loadingPatients, setLoadingPatients] = useState(false);
+  
+  // Atualizar estado quando os parâmetros da URL mudarem
+  useEffect(() => {
+    if (tabParam === 'requests') {
+      setActiveTab('requests');
+    }
+    
+    if (actionParam === 'new') {
+      setShowNewAppointment(true);
+      setActiveTab('calendar');
+    }
+  }, [tabParam, actionParam]);
 
   const [newAppointment, setNewAppointment] = useState<NewAppointment>({
     patientId: '',
