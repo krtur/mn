@@ -9,10 +9,6 @@ const rules = [
     description: 'Será oferecido quatro (4) atendimentos gratuitos. Após este período, estaremos verificando a melhor condição de pagamento de acordo com suas necessidades e condições.',
   },
   {
-    title: 'Sistema de Indicação',
-    description: 'A cada cliente por indicação sua, você terá um atendimento gratuito adicional.',
-  },
-  {
     title: 'Política de Cancelamento',
     description: 'Durante o período de atendimento gratuito não poderá ocorrer falta. Caso haja necessidade de cancelamento, deverá ser avisado com 24 horas de antecedência, assim daremos a oportunidade para outras pessoas terem o mesmo acesso.',
   },
@@ -26,8 +22,7 @@ const TerapiaBaixoCusto: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
 
-  // NOTE: This will link to the 'Anamnese (Formulário)' page or a specific sign-up form later.
-  const ctaLink = '#'; 
+  const ctaLink = 'https://forms.gle/BYeuu3kixMzP5NNm9'; 
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 text-center animate-fade-in">
@@ -74,12 +69,9 @@ const TerapiaBaixoCusto: React.FC = () => {
         <div className="mt-12">
           <a
             href={ctaLink}
-            // For now, let's make it look disabled since the form isn't ready.
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-primary rounded-full"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('O formulário de inscrição será disponibilizado em breve!');
-            }}
           >
             Formulário de Inscrição (Entrar na Fila de Espera)
           </a>

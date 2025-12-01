@@ -40,15 +40,27 @@ const MeuAtendimento: React.FC = () => {
               <ul className="space-y-2">
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Certificação Internacional em TRG (CITRG)</span>
+                  <span className="text-slate-700">Master Terapeuta TRG</span>
                 </li>
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Especialização em Ansiedade e Estresse Pós-Traumático</span>
+                  <span className="text-slate-700">Psicanalista</span>
                 </li>
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Formação em Terapia Focada nas Emoções</span>
+                  <span className="text-slate-700">Pós em Neuropsicologia</span>
+                </li>
+                <li className="flex items-start gap-3 justify-center md:justify-start">
+                  <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
+                  <span className="text-slate-700">Pós em Psicologia Clínica</span>
+                </li>
+                <li className="flex items-start gap-3 justify-center md:justify-start">
+                  <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
+                  <span className="text-slate-700">PNL</span>
+                </li>
+                <li className="flex items-start gap-3 justify-center md:justify-start">
+                  <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
+                  <span className="text-slate-700">TCC</span>
                 </li>
               </ul>
             </div>
@@ -77,15 +89,19 @@ const MeuAtendimento: React.FC = () => {
               <ul className="space-y-2">
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Certificação Internacional em TRG (CITRG)</span>
+                  <span className="text-slate-700">Master Terapeuta TRG</span>
                 </li>
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Especialização em Terapia de Casal e Família</span>
+                  <span className="text-slate-700">Psicanalista</span>
                 </li>
                 <li className="flex items-start gap-3 justify-center md:justify-start">
                   <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
-                  <span className="text-slate-700">Pós-graduação em Neurociência e Comportamento</span>
+                  <span className="text-slate-700">Pós em Neuropsicopedagogia</span>
+                </li>
+                <li className="flex items-start gap-3 justify-center md:justify-start">
+                  <span className="text-primary-600 font-bold flex-shrink-0">✓</span>
+                  <span className="text-slate-700">Pós em Psicologia Clínica</span>
                 </li>
               </ul>
             </div>

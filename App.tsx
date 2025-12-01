@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import TerapiaCorporativa from './components/TerapiaCorporativa';
 import ProjetoEscola from './components/ProjetoEscola';
 import TerapiaBaixoCusto from './components/TerapiaBaixoCusto';
-import Mentoria from './components/Mentoria';
 import MeuAtendimento from './components/MeuAtendimento';
 import Credenciais from './components/Credenciais';
 import Depoimentos from './components/Depoimentos';
@@ -91,14 +90,6 @@ function App() {
               element={
                 <PublicLayout>
                   <TerapiaBaixoCusto />
-                </PublicLayout>
-              }
-            />
-            <Route
-              path="/mentoria"
-              element={
-                <PublicLayout>
-                  <Mentoria />
                 </PublicLayout>
               }
             />

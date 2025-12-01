@@ -69,11 +69,11 @@ const ProjetoEscola: React.FC = () => {
         </div>
 
         <div className="mt-12 bg-gradient-to-b from-slate-900 to-slate-800 text-white p-8 rounded-lg">
-          <h3 className="text-3xl font-bold mb-8">Vantagens da TRG com a Neuroplasticidade Infanto-Juvenil</h3>
+          <h3 className="text-3xl font-bold mb-8 text-white">Vantagens da TRG com a Neuroplasticidade Infanto-Juvenil</h3>
           <div className="space-y-4 text-left">
             <div className="flex items-start gap-3">
               <span className="text-green-400 font-bold text-xl">✓</span>
-              <p className="text-gray-100">O tempo de superação a traumas é entre 8 a 12 sessões, podendo chegar a penas uma de um adulto, podendo chegar a penas uma</p>
+              <p className="text-gray-100">O tempo de superação varia de pessoa para pessoa e de trauma para trauma, porém na infância é significativamente mais rápido do que em adultos</p>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-green-400 font-bold text-xl">✓</span>
@@ -103,7 +103,7 @@ const ProjetoEscola: React.FC = () => {
         </div>
 
         <div className="mt-12">
-          <h3 className="heading-secondary mb-8">📰 Acompanhe as Últimas Notícias</h3>
+          <h3 className="heading-secondary mb-8">📰 Acompanhe algumas Notícias</h3>
           <p className="text-slate-700 mb-8 text-center">
             Clique nos links para acessar a reportagem na íntegra
           </p>
@@ -195,7 +195,7 @@ const ProjetoEscola: React.FC = () => {
             </a>
           </div>
           <p className="mt-6 text-sm text-slate-600">
-            Atendimento: Português / English / Español
+            Atendimento: Português e Español
           </p>
         </div>
       </div>

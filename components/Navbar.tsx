@@ -23,7 +23,6 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
     'credenciais': '/credenciais',
     'terapia-corporativa': '/terapia-corporativa',
     'projeto-escola': '/projeto-escola',
-    'mentoria': '/mentoria',
     'terapia-baixo-custo': '/terapia-baixo-custo',
     'o-que-e-trg': '/o-que-e-trg',
     'faq': '/faq',
@@ -47,7 +46,6 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
       dropdown: [
         { nameKey: 'nav.corporateTherapy', pageKey: 'terapia-corporativa' },
         { nameKey: 'nav.schoolProject', pageKey: 'projeto-escola' },
-        { nameKey: 'nav.mentoring', pageKey: 'mentoria' },
         { nameKey: 'nav.lowCostTherapy', pageKey: 'terapia-baixo-custo' },
       ],
     },

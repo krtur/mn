@@ -201,6 +201,14 @@ const OQueETrg: React.FC = () => {
             <h4 className="text-xl font-bold text-slate-900 mb-4">Regras do Inconsciente na TRG:</h4>
             <div className="space-y-4">
               <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                <p className="font-bold text-slate-900 mb-2">💾 Registra e Guarda 100%</p>
+                <p className="text-slate-700">Registra e guarda 100% de tudo em cada acontecimento, temperatura, cheiro, sons, o que está no campo de visão, tato...</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                <p className="font-bold text-slate-900 mb-2">🔗 Generaliza</p>
+                <p className="text-slate-700">Generaliza tudo que guardou e se a dor não foi dissipada, qualquer coisa semelhante pode ser um gatilho emocional.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
                 <p className="font-bold text-slate-900 mb-2">⏰ Atemporalidade</p>
                 <p className="text-slate-700">Não tem passado ou futuro, ou seja, eventos passados continuam a impactar o presente através de um simples gatilho.</p>
               </div>

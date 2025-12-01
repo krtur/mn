@@ -42,7 +42,6 @@ const Credenciais: React.FC = () => {
         {/* Título */}
         <div className="text-center mb-16">
           <h2 className="heading-primary mb-4">
-            {t('nossas_credenciais')} <span className="gradient-text">{t('credenciais')}</span>
             Nossas <span className="gradient-text">Credenciais</span>
           </h2>
           <p className="text-xl text-slate-600">
