@@ -52,16 +52,28 @@ export const useContacts = () => {
             }
           }
         } else {
-          // Se é terapeuta, buscar todos os pacientes
-          const { data, error: err } = await supabase
-            .from('users')
-            .select('id, name, email, role')
-            .eq('role', 'patient');
-
-          if (err) {
-            console.error('Erro ao buscar pacientes:', err);
+          // Se é terapeuta, buscar APENAS os pacientes associados a este terapeuta
+          // CORREÇÃO DE SEGURANÇA: Filtrar por therapist_id
+          console.log('🔍 Buscando pacientes para terapeuta:', user.id, 'Nome:', user.name);
+          
+          // VALIDAÇÃO DE SEGURANÇA: Garantir que user.id é válido
+          if (!user.id || user.id.trim() === '') {
+            console.error('❌ ERRO DE SEGURANÇA: user.id inválido em useContacts!', user.id);
+            setError('Erro de autenticação: ID do usuário inválido');
+            contactsData = [];
           } else {
-            contactsData = data || [];
+            const { data, error: err } = await supabase
+              .from('users')
+              .select('id, name, email, role')
+              .eq('role', 'patient')
+              .eq('therapist_id', user.id);
+
+            if (err) {
+              console.error('❌ Erro ao buscar pacientes:', err);
+            } else {
+              console.log('✅ Pacientes carregados:', data?.length || 0, 'para terapeuta', user.name);
+              contactsData = data || [];
+            }
           }
         }
 

@@ -37,6 +37,7 @@ import { TherapistDashboard } from './components/therapist/TherapistDashboard';
 import { Schedule } from './components/therapist/Schedule';
 import { ScheduleManager } from './components/therapist/ScheduleManager';
 import { PatientList } from './components/therapist/PatientList';
+import { PatientRegistration } from './components/therapist/PatientRegistration';
 import { Messages as TherapistMessages } from './components/therapist/Messages';
 import { DocumentGeneration } from './components/therapist/DocumentGeneration';
 import { Profile as TherapistProfile } from './components/therapist/Profile';
@@ -202,6 +203,7 @@ function App() {
               <Route path="" element={<TherapistDashboard />} />
               <Route path="schedule" element={<ScheduleManager />} />
               <Route path="patients" element={<PatientList />} />
+              <Route path="patient-registration" element={<PatientRegistration />} />
               <Route path="messages" element={<TherapistMessages />} />
               <Route path="documents" element={<DocumentGeneration />} />
               <Route path="tdah-results" element={<TdahResults />} />

@@ -1,0 +1,70 @@
+🔒 CORREÇÃO DE SEGURANÇA - ISOLAMENTO DE MENSAGENS ENTRE TERAPEUTAS
+==================================================================
+
+PROBLEMA IDENTIFICADO:
+---------------------
+Pacientes do terapeuta Marcelo estavam aparecendo nas conversas da terapeuta Nadielma.
+Este é um ERRO CRÍTICO DE SEGURANÇA que viola a confidencialidade dos dados dos pacientes.
+
+CAUSA RAIZ:
+-----------
+1. O hook useContacts estava buscando TODOS os pacientes, sem filtrar por therapist_id
+2. O hook useMessages estava buscando TODAS as mensagens do usuário, sem filtrar por pacientes associados
+3. O componente Messages.tsx não validava se os contatos eram realmente do terapeuta atual
+
+SOLUÇÃO IMPLEMENTADA:
+--------------------
+
+1. CORREÇÃO NO HOOK useContacts:
+--------------------------------
+- Adicionado filtro por therapist_id na query de pacientes
+- Adicionada validação de user.id
+- Adicionados logs detalhados para debug
+
+2. CORREÇÃO NO HOOK useMessages:
+-------------------------------
+- Adicionada busca prévia de IDs de pacientes do terapeuta
+- Construído filtro específico para mensagens usando apenas IDs de pacientes do terapeuta
+- Adicionada validação adicional nas conversas para ignorar pacientes não associados
+- Adicionados logs detalhados para debug
+
+3. CORREÇÃO NO COMPONENTE Messages.tsx:
+--------------------------------------
+- Adicionada validação para garantir que o contato selecionado está na lista de contatos permitidos
+- Bloqueio de mensagens de contatos não autorizados
+- Adicionados logs detalhados para debug
+
+COMO TESTAR:
+-----------
+1. Login como Nadielma (nadi@mnterapeutas.com)
+2. Verificar que apenas pacientes dela aparecem nas mensagens
+3. Logout
+4. Login como Marcelo (marcelo@mnterapeutas.com)
+5. Verificar que apenas pacientes dele aparecem nas mensagens
+6. Logout
+7. Login como Nadielma novamente
+8. Verificar que APENAS pacientes dela aparecem nas mensagens
+
+ARQUIVOS MODIFICADOS:
+-------------------
+1. /hooks/useContacts.ts - Adicionado filtro por therapist_id
+2. /hooks/useMessages.ts - Adicionada busca prévia de IDs de pacientes e filtro específico
+3. /components/therapist/Messages.tsx - Adicionada validação de contatos permitidos
+
+LOGS PARA VERIFICAÇÃO:
+--------------------
+Ao fazer login como terapeuta, verifique no console do navegador:
+- "🔍 Pacientes encontrados para terapeuta [Nome]: [Número]"
+- "🔍 Buscando mensagens com filtro: [Filtro]"
+- "🔒 Ignorando mensagem de paciente não associado: [Nome]" (se houver tentativa de acesso indevido)
+
+CONCLUSÃO:
+---------
+O sistema agora garante que cada terapeuta veja APENAS as mensagens de seus próprios pacientes,
+respeitando a confidencialidade dos dados e a segurança do sistema.
+
+PRÓXIMOS PASSOS:
+--------------
+1. Considerar adicionar testes automatizados para esta funcionalidade
+2. Implementar auditoria de acesso para detectar tentativas de acesso não autorizado
+3. Revisar outras áreas do sistema para garantir isolamento completo de dados entre terapeutas

@@ -1,0 +1,95 @@
+🧑‍⚕️ CADASTRO DE PACIENTES PELO TERAPEUTA - GUIA COMPLETO
+===========================================================
+
+VISÃO GERAL:
+-----------
+Esta funcionalidade permite que terapeutas cadastrem novos pacientes diretamente
+ou enviem convites por email para que os pacientes se cadastrem por conta própria.
+
+FUNCIONALIDADES IMPLEMENTADAS:
+----------------------------
+1. Cadastro direto de pacientes pelo terapeuta
+2. Envio de convites por email
+3. Gerenciamento de convites enviados
+4. Visualização de status dos convites
+
+COMO CONFIGURAR:
+--------------
+1. Execute o arquivo SQL PATIENT_INVITES_SETUP.sql no Supabase
+2. Verifique se a tabela patient_invites foi criada corretamente
+3. Verifique se as políticas de segurança (RLS) foram aplicadas
+
+COMO USAR:
+---------
+
+1. CADASTRO DIRETO DE PACIENTES:
+   - Acesse o Dashboard do Terapeuta
+   - Clique em "Cadastrar Paciente" no menu lateral
+   - Preencha o formulário com os dados do paciente:
+     * Nome completo
+     * Email
+     * CPF
+     * Telefone
+     * Senha (ou deixe em branco para gerar uma senha aleatória)
+   - Clique em "Cadastrar Paciente"
+   - O paciente será cadastrado automaticamente e associado ao terapeuta
+
+2. ENVIO DE CONVITES:
+   - Acesse o Dashboard do Terapeuta
+   - Clique em "Cadastrar Paciente" no menu lateral
+   - Clique na aba "Enviar Convite"
+   - Preencha o formulário com:
+     * Nome do paciente
+     * Email do paciente
+   - Clique em "Enviar Convite"
+   - O sistema enviará um email para o paciente com um link para cadastro
+   - O convite será válido por 7 dias
+
+3. GERENCIAMENTO DE CONVITES:
+   - Na mesma tela de "Cadastrar Paciente", abaixo do formulário de convite
+   - Você verá uma lista de todos os convites enviados
+   - Para cada convite, você pode ver:
+     * Nome do paciente
+     * Email
+     * Status (Pendente, Aceito, Expirado)
+     * Data de envio
+     * Data de expiração
+   - Você pode cancelar convites pendentes clicando em "Cancelar"
+
+4. ACEITAÇÃO DO CONVITE PELO PACIENTE:
+   - O paciente receberá um email com um link para cadastro
+   - Ao clicar no link, será direcionado para a página de cadastro
+   - Os campos de nome e email já estarão preenchidos
+   - O paciente precisará completar o cadastro com:
+     * CPF
+     * Telefone
+     * Senha
+   - Ao concluir o cadastro, o paciente será automaticamente associado ao terapeuta
+
+FLUXO DE DADOS:
+-------------
+1. Terapeuta cadastra paciente ou envia convite
+2. Dados são salvos no Supabase (tabela users ou patient_invites)
+3. Paciente recebe email com link de convite (se for convite)
+4. Paciente completa cadastro (se for convite)
+5. Paciente é associado ao terapeuta (therapist_id)
+
+SEGURANÇA:
+---------
+- Apenas terapeutas podem cadastrar pacientes
+- Cada terapeuta só pode ver seus próprios pacientes e convites
+- Convites expiram após 7 dias
+- Senhas são armazenadas com hash seguro pelo Supabase Auth
+- Políticas de Row Level Security (RLS) garantem isolamento de dados
+
+PRÓXIMOS PASSOS:
+--------------
+1. Implementar envio real de emails (atualmente simulado)
+2. Adicionar opção para reenviar convites
+3. Adicionar notificações quando um paciente aceitar o convite
+4. Implementar validação de CPF e telefone
+5. Adicionar opção para importar pacientes em lote (CSV)
+
+SUPORTE:
+-------
+Em caso de dúvidas ou problemas, entre em contato com o suporte técnico.

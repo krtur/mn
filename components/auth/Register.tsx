@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth, UserRole } from './AuthContext';
 import { useTherapists } from '../../hooks/useTherapists';
+import { supabase } from '../../services/supabase';
 
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,10 @@ export const Register: React.FC = () => {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [inviteData, setInviteData] = useState<any>(null);
+  const [loadingInvite, setLoadingInvite] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { register, user } = useAuth();
   const { therapists, loading: therapistsLoading } = useTherapists();
   const hasRedirected = useRef(false);
@@ -28,6 +32,59 @@ export const Register: React.FC = () => {
       navigate('/dashboard', { replace: true });
     }
   }, [user, navigate]);
+  
+  // Verificar se há um convite na URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const inviteId = searchParams.get('invite');
+    
+    if (inviteId) {
+      loadInviteData(inviteId);
+    }
+  }, [location]);
+  
+  // Função para carregar dados do convite
+  const loadInviteData = async (inviteId: string) => {
+    setLoadingInvite(true);
+    setError('');
+    
+    try {
+      const { data: invite, error: inviteError } = await supabase
+        .from('patient_invites')
+        .select('*')
+        .eq('id', inviteId)
+        .eq('status', 'pending')
+        .single();
+      
+      if (inviteError || !invite) {
+        setError('Convite inválido ou expirado');
+        return;
+      }
+      
+      // Verificar se o convite está expirado
+      const expiresAt = new Date(invite.expires_at);
+      if (expiresAt < new Date()) {
+        setError('Este convite expirou');
+        return;
+      }
+      
+      setInviteData(invite);
+      
+      // Preencher formulário com dados do convite
+      setFormData(prev => ({
+        ...prev,
+        name: invite.name,
+        email: invite.email,
+        therapistId: invite.therapist_id
+      }));
+      
+    } catch (err) {
+      console.error('Erro ao carregar convite:', err);
+      setError('Erro ao carregar convite');
+    } finally {
+      setLoadingInvite(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -52,12 +109,15 @@ export const Register: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Buscar o terapeuta selecionado
-      const selectedTherapist = therapists.find((t) => t.id === formData.therapistId);
-
-      if (!selectedTherapist) {
-        setError('Terapeuta inválido');
-        return;
+      // Buscar o terapeuta selecionado (se não for de um convite)
+      let selectedTherapist;
+      if (!inviteData) {
+        selectedTherapist = therapists.find((t) => t.id === formData.therapistId);
+        if (!selectedTherapist) {
+          setError('Terapeuta inválido');
+          setIsLoading(false);
+          return;
+        }
       }
 
       // Registrar o usuário com therapist_id
@@ -73,9 +133,22 @@ export const Register: React.FC = () => {
 
       await register(registerData);
 
+      // Se for um convite, atualizar o status para 'accepted'
+      if (inviteData?.id) {
+        await supabase
+          .from('patient_invites')
+          .update({ status: 'accepted' })
+          .eq('id', inviteData.id);
+      }
+
+      // Mensagem personalizada baseada em se é convite ou não
+      const successMessage = inviteData
+        ? `Cadastro realizado com sucesso! Você aceitou o convite do terapeuta. Faça login para continuar.`
+        : `Cadastro realizado com sucesso! Você está associado ao terapeuta ${selectedTherapist?.name}. Faça login para continuar.`;
+
       navigate('/login', {
         state: {
-          message: `Cadastro realizado com sucesso! Você está associado ao terapeuta ${selectedTherapist.name}. Faça login para continuar.`,
+          message: successMessage,
         },
       });
     } catch (err) {
@@ -109,34 +182,46 @@ export const Register: React.FC = () => {
             </div>
           )}
 
+          {/* Mensagem de convite */}
+          {inviteData && (
+            <div className="mb-6 p-4 bg-green-50/80 border border-green-200 rounded-xl backdrop-blur-sm">
+              <p className="text-green-700 text-sm font-medium">
+                Você foi convidado(a) pelo terapeuta para se cadastrar. Complete seu cadastro abaixo.
+              </p>
+            </div>
+          )}
+          
           {/* Formulário */}
           <form onSubmit={handleSubmit} className="space-y-4 max-h-96 overflow-y-auto pr-2">
-            <div>
-              <label htmlFor="therapistId" className="block text-sm font-semibold text-slate-700 mb-2">
-                Selecione seu Terapeuta
-              </label>
-              {therapistsLoading ? (
-                <div className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 text-slate-600 text-sm">
-                  Carregando terapeutas...
-                </div>
-              ) : (
-                <select
-                  id="therapistId"
-                  name="therapistId"
-                  value={formData.therapistId}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all"
-                  required
-                >
-                  <option value="">-- Escolha um terapeuta --</option>
-                  {therapists.map((therapist) => (
-                    <option key={therapist.id} value={therapist.id}>
-                      {therapist.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
+            {/* Seleção de terapeuta - mostrar apenas se não for convite */}
+            {!inviteData && (
+              <div>
+                <label htmlFor="therapistId" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Selecione seu Terapeuta
+                </label>
+                {therapistsLoading ? (
+                  <div className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 text-slate-600 text-sm">
+                    Carregando terapeutas...
+                  </div>
+                ) : (
+                  <select
+                    id="therapistId"
+                    name="therapistId"
+                    value={formData.therapistId}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all"
+                    required
+                  >
+                    <option value="">-- Escolha um terapeuta --</option>
+                    {therapists.map((therapist) => (
+                      <option key={therapist.id} value={therapist.id}>
+                        {therapist.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
 
             <div>
               <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
@@ -149,9 +234,13 @@ export const Register: React.FC = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Seu nome completo"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
+                className={`w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${inviteData ? 'bg-slate-100' : 'bg-slate-50/50'} transition-all placeholder:text-slate-400`}
                 required
+                readOnly={!!inviteData}
               />
+              {inviteData && (
+                <p className="mt-1 text-xs text-slate-500">Nome preenchido automaticamente do convite</p>
+              )}
             </div>
 
             <div>
@@ -165,9 +254,13 @@ export const Register: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="seu@email.com"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
+                className={`w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${inviteData ? 'bg-slate-100' : 'bg-slate-50/50'} transition-all placeholder:text-slate-400`}
                 required
+                readOnly={!!inviteData}
               />
+              {inviteData && (
+                <p className="mt-1 text-xs text-slate-500">Email preenchido automaticamente do convite</p>
+              )}
             </div>
 
             <div>

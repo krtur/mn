@@ -26,8 +26,17 @@ export const Messages: React.FC = () => {
   }, [selectedConversation, allMessages]);
 
   // Filtrar mensagens da conversa selecionada
+  // CORREÇÃO DE SEGURANÇA: Garantir que só mostra mensagens de pacientes deste terapeuta
   const selectedMessages = selectedConversation
     ? allMessages.filter((msg) => {
+        // Verificar se o contato está na lista de contatos permitidos
+        const isContactAllowed = allContacts.some(contact => contact.id === selectedConversation);
+        
+        if (!isContactAllowed) {
+          console.log('🔒 Bloqueando mensagens de contato não autorizado:', selectedConversation);
+          return false;
+        }
+        
         const isFromSelected =
           (msg.sender_id === user?.id && msg.recipient_id === selectedConversation) ||
           (msg.recipient_id === user?.id && msg.sender_id === selectedConversation);

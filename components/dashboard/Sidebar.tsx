@@ -35,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
     { label: 'Dashboard', path: '/dashboard/therapist', icon: '📊' },
     { label: 'Gerenciar Agenda', path: '/dashboard/therapist/schedule', icon: '📅' },
     { label: 'Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
+    { label: 'Cadastrar Paciente', path: '/dashboard/therapist/patient-registration', icon: '➕' },
     { label: 'Mensagens', path: '/dashboard/therapist/messages', icon: '💬' },
     { label: 'Documentos', path: '/dashboard/therapist/documents', icon: '📄' },
     { label: 'Triagens TDAH', path: '/dashboard/therapist/tdah-results', icon: '🧠' },

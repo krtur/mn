@@ -60,7 +60,43 @@ export const useMessages = () => {
 
         console.log('🔍 Buscando mensagens para usuário:', user.id, 'Role:', user.role);
 
-        // Buscar todas as mensagens do usuário
+        // CORREÇÃO DE SEGURANÇA: Se for terapeuta, primeiro buscar IDs dos pacientes
+        let therapistPatientIds: string[] = [];
+        
+        if (user.role.startsWith('therapist')) {
+          try {
+            const { data: patientData, error: patientError } = await supabase
+              .from('users')
+              .select('id')
+              .eq('role', 'patient')
+              .eq('therapist_id', user.id);
+            
+            if (patientError) {
+              console.error('❌ Erro ao buscar IDs de pacientes:', patientError);
+            } else {
+              therapistPatientIds = (patientData || []).map(p => p.id);
+              console.log('🔍 Pacientes encontrados para terapeuta', user.name, ':', therapistPatientIds.length);
+            }
+          } catch (err) {
+            console.error('❌ Erro ao buscar pacientes do terapeuta:', err);
+          }
+        }
+        
+        // Construir filtro para mensagens
+        let messageFilter = `sender_id.eq.${user.id},recipient_id.eq.${user.id}`;
+        
+        // Se for terapeuta, adicionar filtro para mensagens de seus pacientes
+        if (user.role.startsWith('therapist') && therapistPatientIds.length > 0) {
+          // Adicionar cada paciente ao filtro OR
+          const patientFilters = therapistPatientIds.map(patientId => 
+            `sender_id.eq.${patientId},recipient_id.eq.${patientId}`
+          );
+          messageFilter = `${messageFilter},${patientFilters.join(',')}`;
+        }
+        
+        console.log('🔍 Buscando mensagens com filtro:', messageFilter);
+        
+        // Buscar mensagens com filtro aprimorado
         const { data: allMessages, error: messagesError } = await supabase
           .from('messages')
           .select(`
@@ -68,7 +104,7 @@ export const useMessages = () => {
             sender:sender_id(name, email, role),
             recipient:recipient_id(name, email, role)
           `)
-          .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
+          .or(messageFilter)
           .order('created_at', { ascending: true });
 
         if (messagesError) {
@@ -83,12 +119,40 @@ export const useMessages = () => {
           // Agrupar em conversas
           const conversationMap = new Map<string, Conversation>();
 
+          // Buscar lista de IDs de pacientes deste terapeuta para filtrar mensagens
+          let therapistPatientIds: string[] = [];
+          
+          // Se é terapeuta, buscar IDs dos pacientes para filtrar mensagens
+          if (user.role.startsWith('therapist')) {
+            try {
+              const { data: patientData } = await supabase
+                .from('users')
+                .select('id')
+                .eq('role', 'patient')
+                .eq('therapist_id', user.id);
+              
+              therapistPatientIds = (patientData || []).map(p => p.id);
+              console.log('🔍 Filtrando mensagens para', therapistPatientIds.length, 'pacientes do terapeuta', user.name);
+            } catch (err) {
+              console.error('❌ Erro ao buscar IDs de pacientes para filtrar mensagens:', err);
+            }
+          }
+
           (allMessages || []).forEach((msg) => {
             const otherUserId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
             const otherUser = msg.sender_id === user.id ? msg.recipient : msg.sender;
 
-            // Se é paciente, filtrar apenas conversas com terapeutas
+            // CORREÇÃO DE SEGURANÇA: Filtrar mensagens
+            // Se é paciente, filtrar apenas conversas com seu terapeuta
             if (user.role === 'patient' && !otherUser?.role?.startsWith('therapist')) {
+              return;
+            }
+            
+            // Se é terapeuta, filtrar apenas mensagens de seus pacientes
+            if (user.role.startsWith('therapist') && 
+                otherUser?.role === 'patient' && 
+                !therapistPatientIds.includes(otherUserId)) {
+              console.log('🔒 Ignorando mensagem de paciente não associado:', otherUser?.name || otherUserId);
               return;
             }
 
