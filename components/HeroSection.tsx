@@ -270,6 +270,22 @@ const HeroSection: React.FC = () => {
           <p className="text-xl text-slate-600 mb-16">
             {t('cta.description')}
           </p>
+          {/* Main CTA Button */}
+          <div className="mb-8">
+            <button
+              onClick={() => setShowMarceloForm(true)}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-lg"
+            >
+              <span className="flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Agende sua sessão
+              </span>
+            </button>
+          </div>
+          
+          {/* WhatsApp Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
             <a
               href={marceloWhatsapp}
