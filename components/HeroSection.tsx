@@ -17,6 +17,7 @@ const HeroSection: React.FC = () => {
   // Estados para controlar os modais de agendamento
   const [showMarceloForm, setShowMarceloForm] = useState(false);
   const [showNadielmaForm, setShowNadielmaForm] = useState(false);
+  const [showGenericForm, setShowGenericForm] = useState(false);
 
   const stats = [
     { number: '200+', label: t('stats.patients'), icon: '👥' },
@@ -159,6 +160,29 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {/* Modal para Agendamento Genérico (com seleção de terapeuta) */}
+            {showGenericForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
+                  <button 
+                    onClick={() => setShowGenericForm(false)}
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+                    title="Fechar formulário"
+                    aria-label="Fechar formulário"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <PublicApiForm 
+                    onSuccess={() => setTimeout(() => setShowGenericForm(false), 3000)}
+                    onCancel={() => setShowGenericForm(false)}
+                    isModal={true}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -273,7 +297,7 @@ const HeroSection: React.FC = () => {
           {/* Main CTA Button */}
           <div className="mb-8">
             <button
-              onClick={() => setShowMarceloForm(true)}
+              onClick={() => setShowGenericForm(true)}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-lg"
             >
               <span className="flex items-center justify-center gap-2">
