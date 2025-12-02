@@ -88,6 +88,18 @@
   .animation-delay-200 {
     animation-delay: 0.2s;
   }
+  
+  .animation-delay-250 {
+    animation-delay: 0.25s;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
 
   .gradient-text {
     background: linear-gradient(to right, #0284c7, #3b5fb3);
@@ -192,5 +204,17 @@
 
   .animation-delay-2000 {
     animation-delay: 2s;
+  }
+  
+  /* Animation delays for dynamic indexes */
+  .animation-delay-100 { animation-delay: 0.1s; }
+  .animation-delay-200 { animation-delay: 0.2s; }
+  .animation-delay-300 { animation-delay: 0.3s; }
+  .animation-delay-400 { animation-delay: 0.4s; }
+  .animation-delay-500 { animation-delay: 0.5s; }
+  
+  /* Aspect ratios */
+  .aspect-video {
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
   }
 }

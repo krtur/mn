@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import WhatsappIcon from './icons/WhatsappIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import HeartIcon from './icons/HeartIcon';
 import BoltIcon from './icons/BoltIcon';
+import PublicApiForm from './PublicApiForm';
 
 const HeroSection: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
-  // WhatsApp links for therapists
+  // WhatsApp links for therapists (mantidos como fallback)
   const marceloWhatsapp = 'https://wa.me/5519981109732';
   const nadielmaWhatsapp = 'https://wa.me/5519981740279';
+  
+  // Estados para controlar os modais de agendamento
+  const [showMarceloForm, setShowMarceloForm] = useState(false);
+  const [showNadielmaForm, setShowNadielmaForm] = useState(false);
 
   const stats = [
     { number: '200+', label: t('stats.patients'), icon: '👥' },
@@ -45,18 +50,18 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Main Heading - Disruptive */}
-          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-8 animate-slide-up animation-delay-100">
             <span className="gradient-text">{t('hero.title1')}</span> {t('hero.title2')}<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-accent-600 to-primary-600">{t('hero.title3')}</span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed max-w-4xl mx-auto mb-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed max-w-4xl mx-auto mb-8 animate-slide-up animation-delay-200">
             {t('hero.subtitle')}
           </p>
 
           {/* Key Promise */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up" style={{ animationDelay: '0.25s' }}>
+          <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up animation-delay-250">
             <div className="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-200">
               <CheckCircleIcon className="w-5 h-5 text-green-600" />
               <span className="text-sm font-semibold text-green-700">{t('hero.promise1')}</span>
@@ -72,7 +77,7 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* CTA Box - Premium */}
-          <div className="mt-12 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <div className="mt-12 animate-slide-up animation-delay-300">
             <div className="glass-effect bg-gradient-to-br from-primary-50 via-accent-50 to-primary-50 rounded-3xl border-2 border-primary-200 shadow-2xl p-12 mb-12 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-accent-200 to-primary-200 rounded-full opacity-10 -mr-20 -mt-20"></div>
               <div className="relative z-10">
@@ -106,6 +111,54 @@ const HeroSection: React.FC = () => {
                 <span>{t('cta.buttonNadielma')}</span>
               </a>
             </div>
+            
+            {/* Modal para Marcelo */}
+            {showMarceloForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
+                  <button 
+                    onClick={() => setShowMarceloForm(false)}
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+                    title="Fechar formulário"
+                    aria-label="Fechar formulário"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <PublicApiForm 
+                    onSuccess={() => setTimeout(() => setShowMarceloForm(false), 3000)}
+                    onCancel={() => setShowMarceloForm(false)}
+                    preselectedTherapist="028d8869-679f-4093-b435-1a43b6ced0e2"
+                    isModal={true}
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* Modal para Nadielma */}
+            {showNadielmaForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
+                  <button 
+                    onClick={() => setShowNadielmaForm(false)}
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+                    title="Fechar formulário"
+                    aria-label="Fechar formulário"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <PublicApiForm 
+                    onSuccess={() => setTimeout(() => setShowNadielmaForm(false), 3000)}
+                    onCancel={() => setShowNadielmaForm(false)}
+                    preselectedTherapist="83273ffc-c878-4abc-a24b-e35fd4801339"
+                    isModal={true}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -115,7 +168,7 @@ const HeroSection: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center text-white animate-fade-in" style={{ animationDelay: `${0.1 * (index + 1)}s` }}>
+              <div key={index} className={`text-center text-white animate-fade-in animation-delay-${(index + 1) * 100}`}>
                 <div className="text-4xl md:text-5xl font-black mb-4">{stat.icon}</div>
                 <div className="text-3xl md:text-4xl font-bold mb-3">{stat.number}</div>
                 <div className="text-sm md:text-base text-slate-300">{stat.label}</div>
@@ -141,8 +194,7 @@ const HeroSection: React.FC = () => {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="card-premium p-10 hover:shadow-2xl transition-all duration-300 animate-slide-up"
-                style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+                className={`card-premium p-10 hover:shadow-2xl transition-all duration-300 animate-slide-up animation-delay-${(index + 1) * 100}`}
               >
                 <div className="text-5xl mb-6">{benefit.icon}</div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">{benefit.title}</h3>
@@ -226,7 +278,7 @@ const HeroSection: React.FC = () => {
               className="btn-whatsapp flex items-center justify-center w-full sm:w-auto gap-3 text-lg"
             >
               <WhatsappIcon className="w-6 h-6" />
-              <span>Agendar com Marcelo</span>
+              <span>Falar com Marcelo</span>
             </a>
             <a
               href={nadielmaWhatsapp}
@@ -235,7 +287,7 @@ const HeroSection: React.FC = () => {
               className="btn-whatsapp-accent flex items-center justify-center w-full sm:w-auto gap-3 text-lg"
             >
               <WhatsappIcon className="w-6 h-6" />
-              <span>Agendar com Nadi</span>
+              <span>Falar com Nadi</span>
             </a>
           </div>
         </div>

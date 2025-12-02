@@ -42,6 +42,12 @@ import { Messages as TherapistMessages } from './components/therapist/Messages';
 import { DocumentGeneration } from './components/therapist/DocumentGeneration';
 import { Profile as TherapistProfile } from './components/therapist/Profile';
 import { TdahResults } from './components/therapist/TdahResults';
+import { NewClientRequests } from './components/therapist/NewClientRequests';
+import { DebugRequests } from './components/therapist/DebugRequests';
+import { TestRequestForm } from './components/TestRequestForm';
+import DirectApiForm from './components/DirectApiForm';
+import PublicApiForm from './components/PublicApiForm';
+import DirectRestApiForm from './components/DirectRestApiForm';
 
 // Public Layout Component
 const PublicLayout = ({ children }: { children: React.ReactNode }) => (
@@ -158,6 +164,38 @@ function App() {
                 </PublicLayout>
               }
             />
+            <Route
+              path="/teste-solicitacao"
+              element={
+                <PublicLayout>
+                  <TestRequestForm />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/teste-api-direta"
+              element={
+                <PublicLayout>
+                  <DirectApiForm />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/teste-api-publica"
+              element={
+                <PublicLayout>
+                  <PublicApiForm />
+                </PublicLayout>
+              }
+            />
+            <Route
+              path="/teste-api-rest"
+              element={
+                <PublicLayout>
+                  <DirectRestApiForm />
+                </PublicLayout>
+              }
+            />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />
@@ -207,6 +245,8 @@ function App() {
               <Route path="messages" element={<TherapistMessages />} />
               <Route path="documents" element={<DocumentGeneration />} />
               <Route path="tdah-results" element={<TdahResults />} />
+              <Route path="new-clients" element={<NewClientRequests />} />
+              <Route path="debug-requests" element={<DebugRequests />} />
               <Route path="profile" element={<TherapistProfile />} />
             </Route>
 

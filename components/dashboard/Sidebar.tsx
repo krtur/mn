@@ -68,7 +68,9 @@ const therapistMenuItems: MenuItem[] = [
       icon: '👥',
       children: [
         { label: 'Meus Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
-        { label: 'Adicionar Paciente', path: '/dashboard/therapist/patient-registration', icon: '➕' }
+        { label: 'Adicionar Paciente', path: '/dashboard/therapist/patient-registration', icon: '➕' },
+        { label: 'Novos Clientes', path: '/dashboard/therapist/new-clients', icon: '🆕' },
+        { label: 'Debug Solicitações', path: '/dashboard/therapist/debug-requests', icon: '🔧' }
       ] 
     },
     { label: 'Mensagens', path: '/dashboard/therapist/messages', icon: '💬' },

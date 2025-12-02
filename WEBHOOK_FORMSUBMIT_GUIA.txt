@@ -1,0 +1,107 @@
+# GUIA DE CONFIGURAÇÃO DO WEBHOOK FORMSUBMIT
+
+## Sobre o FormSubmit
+
+O FormSubmit (https://formsubmit.co/) é um serviço gratuito que permite enviar dados de formulários diretamente para seu e-mail sem precisar de backend. Ele também oferece a opção de configurar webhooks para processar os dados em seu próprio servidor.
+
+## Passo a Passo para Configurar o Webhook
+
+### 1. Ativar o FormSubmit
+
+Quando você envia um formulário pela primeira vez para um novo e-mail, o FormSubmit envia um e-mail de ativação. Você precisa clicar no link de ativação para confirmar que é o proprietário do e-mail.
+
+### 2. Configurar o Webhook
+
+Após ativar o FormSubmit, você pode configurar um webhook para processar os dados do formulário:
+
+1. Acesse https://formsubmit.co/
+2. Faça login com o e-mail que você usou (poindi3ti@hotmail.com)
+3. Vá para "Dashboard" > "Forms" > Selecione seu formulário
+4. Clique em "Settings" > "Webhook"
+5. Configure o URL do seu webhook (você precisará criar um endpoint para isso)
+
+### 3. Criar um Endpoint para o Webhook
+
+Você pode criar um endpoint serverless usando Netlify Functions, Vercel Functions ou AWS Lambda. Aqui está um exemplo usando Netlify Functions:
+
+```javascript
+// netlify/functions/formsubmit-webhook.js
+const { createClient } = require('@supabase/supabase-js');
+
+exports.handler = async (event) => {
+  // Verificar se é um POST
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
+  try {
+    // Parsear os dados do formulário
+    const data = JSON.parse(event.body);
+    
+    // Configurar cliente Supabase
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // Inserir no Supabase
+    const { data: insertedData, error } = await supabase
+      .from('new_client_requests')
+      .insert([
+        {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          therapist_id: data.therapist_id,
+          status: 'pending'
+        }
+      ]);
+    
+    if (error) {
+      console.error('Erro ao inserir no Supabase:', error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Erro ao inserir no banco de dados' })
+      };
+    }
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ success: true, data: insertedData })
+    };
+  } catch (err) {
+    console.error('Erro no webhook:', err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Erro interno do servidor' })
+    };
+  }
+};
+```
+
+### 4. Configurar Variáveis de Ambiente
+
+No seu provedor de funções serverless (Netlify, Vercel, etc.), configure as seguintes variáveis de ambiente:
+
+- `SUPABASE_URL`: URL do seu projeto Supabase
+- `SUPABASE_SERVICE_KEY`: Chave de serviço do Supabase (não a chave anônima)
+
+### 5. Testar o Webhook
+
+1. Implante a função serverless
+2. Configure o URL do webhook no FormSubmit
+3. Envie um formulário de teste
+4. Verifique se os dados foram inseridos no Supabase
+
+## Solução Alternativa: Usar um Serviço de Automação
+
+Se você não quiser configurar um webhook personalizado, pode usar serviços de automação como:
+
+1. **Zapier**: Conecte o FormSubmit ao Supabase
+2. **Make (Integromat)**: Crie um cenário para processar os dados do FormSubmit
+3. **n8n**: Configure um fluxo de trabalho para inserir os dados no Supabase
+
+## Considerações Finais
+
+- O FormSubmit é uma solução temporária até que você resolva os problemas de autenticação do Supabase
+- Para uma solução mais robusta, considere implementar um backend próprio ou usar uma API serverless
+- Lembre-se de proteger suas chaves de API e dados sensíveis

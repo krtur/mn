@@ -4,6 +4,7 @@ import { getTranslation } from '../i18n/translations';
 import { knowledgeBase, Message, initialGreeting } from './chatbotData';
 import SendIcon from './icons/SendIcon';
 import XIcon from './icons/XIcon';
+import PublicApiForm from './PublicApiForm';
 
 const Chatbot: React.FC = () => {
   const { language } = useLanguage();
@@ -20,6 +21,14 @@ const Chatbot: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedTherapist, setSelectedTherapist] = useState<string | null>(null);
+  
+  // IDs dos terapeutas
+  const therapistIds = {
+    marcelo: '028d8869-679f-4093-b435-1a43b6ced0e2',
+    nadielma: '83273ffc-c878-4abc-a24b-e35fd4801339'
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -97,7 +106,7 @@ Para conhecer melhor nossos serviços e valores:
 - Eles podem responder todas suas dúvidas
 - Agende uma consulta profissional
 
-Qual terapeuta você prefere?`;
+Clique em "Agendar Sessão" abaixo para preencher o formulário e um de nossos terapeutas entrará em contato com você!`;
     }
 
     // Check for FAQ questions
@@ -141,13 +150,11 @@ Escolha o formato que melhor se adequa à sua rotina!`;
 
 Temos dois terapeutas incríveis disponíveis:
 
-**Marcelo** - Clique no link abaixo para conversar no WhatsApp:
-https://wa.me/5519981109732
+**Marcelo** - Especialista em ansiedade e traumas
 
-**Nadielma** - Clique no link abaixo para conversar no WhatsApp:
-https://wa.me/5519981740279
+**Nadielma** - Especialista em terapia de casal e família
 
-Nossos terapeutas certificados estão prontos para ajudá-lo!
+Clique em "Agendar Sessão" abaixo e preencha o formulário para que um de nossos terapeutas entre em contato com você!
 
 Qual terapeuta você prefere?`;
     }
@@ -226,6 +233,17 @@ O que prefere?`;
     }
   };
 
+  const handleScheduleClick = (therapist: string | null) => {
+    if (therapist === 'marcelo') {
+      window.open('https://wa.me/5519981109732', '_blank');
+    } else if (therapist === 'nadielma') {
+      window.open('https://wa.me/5519981740279', '_blank');
+    } else {
+      // If no specific therapist, open Marcelo's WhatsApp as default
+      window.open('https://wa.me/5519981109732', '_blank');
+    }
+  };
+  
   return (
     <>
       {/* Chat Button */}
@@ -282,6 +300,32 @@ O que prefere?`;
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
+                  {message.sender === 'bot' && message.text.includes('Agendar Sessão') && (
+                    <div className="mt-3">
+                      <button 
+                        onClick={() => handleScheduleClick(null)}
+                        className="bg-primary-500 hover:bg-primary-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Agendar Sessão
+                      </button>
+                    </div>
+                  )}
+                  {message.sender === 'bot' && message.text.includes('Qual terapeuta você prefere?') && (
+                    <div className="mt-3 flex flex-col space-y-2">
+                      <button 
+                        onClick={() => handleScheduleClick('marcelo')}
+                        className="bg-primary-500 hover:bg-primary-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Falar com Marcelo
+                      </button>
+                      <button 
+                        onClick={() => handleScheduleClick('nadielma')}
+                        className="bg-accent-500 hover:bg-accent-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Falar com Nadi
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -319,6 +363,30 @@ O que prefere?`;
                 <SendIcon className="w-5 h-5" />
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Modal do formulário */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
+            <button 
+              onClick={() => setShowForm(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+              title="Fechar formulário"
+              aria-label="Fechar formulário"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <PublicApiForm 
+              onSuccess={() => setTimeout(() => setShowForm(false), 3000)}
+              onCancel={() => setShowForm(false)}
+              preselectedTherapist={selectedTherapist || undefined}
+              isModal={true}
+            />
           </div>
         </div>
       )}

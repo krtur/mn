@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
+import PublicApiForm from './PublicApiForm';
 
 interface Video {
   name: string;
@@ -30,7 +31,7 @@ const videos: Video[] = [
 const YouTubeEmbed: React.FC<{ videoId: string; name: string }> = ({ videoId, name }) => {
   return (
     <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+      <div className="relative w-full aspect-video">
         <iframe
           className="absolute top-0 left-0 w-full h-full"
           src={`https://www.youtube.com/embed/${videoId}`}
@@ -47,6 +48,7 @@ const YouTubeEmbed: React.FC<{ videoId: string; name: string }> = ({ videoId, na
 const Depoimentos: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
+  const [showForm, setShowForm] = useState(false);
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto mb-16">
@@ -78,13 +80,35 @@ const Depoimentos: React.FC = () => {
         <p className="text-lg text-slate-600 mb-8">
           Agende agora uma sessão gratuita de 30 minutos e descubra como a TRG pode transformar sua vida.
         </p>
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); alert('Redirecionando para agendamento...'); }}
+        <button
+          onClick={() => setShowForm(true)}
           className="btn-primary"
         >
           Agende Sua Sessão Gratuita
-        </a>
+        </button>
+        
+        {/* Modal do formulário */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
+              <button 
+                onClick={() => setShowForm(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+                title="Fechar formulário"
+                aria-label="Fechar formulário"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <PublicApiForm 
+                onSuccess={() => setTimeout(() => setShowForm(false), 3000)}
+                onCancel={() => setShowForm(false)}
+                isModal={true}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="card-premium bg-gradient-to-r from-accent-50 to-primary-50 border-2 border-accent-200 p-12 text-center">

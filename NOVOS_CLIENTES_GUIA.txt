@@ -1,0 +1,93 @@
+## SISTEMA DE NOVOS CLIENTES - GUIA DE IMPLEMENTAÇÃO
+
+### 🎯 O QUE FOI IMPLEMENTADO:
+
+**1. Formulário de Cadastro de Novos Clientes**
+- Formulário simples com Nome, E-mail e Telefone
+- Seleção de terapeuta (Marcelo ou Nadielma)
+- Botões "Agende Sua Sessão" substituídos por formulário
+- Mensagem de confirmação após envio
+
+**2. Banco de Dados**
+- Tabela `new_client_requests` no Supabase
+- Campos: id, name, email, phone, therapist_id, status, notes, created_at, updated_at
+- Status: pending, contacted, scheduled, cancelled
+- Row Level Security (RLS) configurado
+
+**3. Hook Personalizado**
+- `useNewClientRequests.ts` para gerenciar solicitações
+- Funções: createRequest, updateRequestStatus, refreshRequests
+- Atualização em tempo real via WebSocket
+
+**4. Tela para Terapeutas**
+- Nova seção "Novos Clientes" no menu de Pacientes
+- Lista de solicitações com status
+- Detalhes da solicitação com anotações
+- Ações: Marcar como Contatado, Agendado, Cancelado
+
+### 📋 COMO USAR:
+
+**Para Visitantes:**
+1. Clicar em "Agende Sua Sessão" na página inicial
+2. Preencher nome, e-mail e telefone
+3. Receber confirmação de envio
+
+**Para Terapeutas:**
+1. Fazer login como terapeuta
+2. Acessar Dashboard > Pacientes > Novos Clientes
+3. Ver lista de solicitações pendentes
+4. Clicar em uma solicitação para ver detalhes
+5. Adicionar anotações se necessário
+6. Atualizar status conforme o contato:
+   - "Marcar como Contatado" após ligar para o cliente
+   - "Marcar como Agendado" após confirmar horário
+   - "Cancelar Solicitação" se necessário
+
+### 🔧 CONFIGURAÇÃO TÉCNICA:
+
+**1. Executar SQL para criar tabela:**
+- Arquivo: `NEW_CLIENT_REQUESTS_SETUP.sql`
+- Executar no SQL Editor do Supabase
+
+**2. Arquivos Criados:**
+- `/hooks/useNewClientRequests.ts` - Hook para gerenciar solicitações
+- `/components/NewClientForm.tsx` - Formulário de cadastro
+- `/components/therapist/NewClientRequests.tsx` - Tela para terapeutas
+- `/NEW_CLIENT_REQUESTS_SETUP.sql` - SQL para criar tabela
+- `/NOVOS_CLIENTES_GUIA.txt` - Este guia
+
+**3. Arquivos Modificados:**
+- `/services/supabase.ts` - Adicionados tipos para nova tabela
+- `/components/HeroSection.tsx` - Substituídos links por formulário
+- `/components/dashboard/Sidebar.tsx` - Adicionado link no menu
+- `/App.tsx` - Adicionada rota para nova tela
+
+### 📱 FLUXO DE USUÁRIO:
+
+**Visitante:**
+1. Acessa site → Vê botões "Agende Sua Sessão"
+2. Clica no botão → Abre formulário em modal
+3. Preenche dados → Envia formulário
+4. Recebe confirmação → "O terapeuta entrará em contato"
+
+**Terapeuta:**
+1. Faz login → Acessa Dashboard
+2. Vê notificação de novas solicitações
+3. Acessa "Novos Clientes" → Vê lista de solicitações
+4. Seleciona solicitação → Vê detalhes
+5. Contata cliente → Atualiza status
+6. Agenda consulta → Marca como "Agendado"
+
+### 🔍 PRÓXIMOS PASSOS:
+
+1. Adicionar notificações para terapeutas quando houver novas solicitações
+2. Integrar com sistema de agendamento existente
+3. Adicionar campos adicionais (motivo da consulta, preferência de horário)
+4. Implementar relatórios de conversão (solicitações → agendamentos)
+
+### ⚠️ IMPORTANTE:
+
+- Execute o SQL para criar a tabela antes de usar o sistema
+- Apenas terapeutas podem ver as solicitações
+- Cada terapeuta vê apenas suas próprias solicitações
+- As solicitações são armazenadas mesmo se o usuário não estiver logado

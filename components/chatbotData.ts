@@ -43,7 +43,7 @@ export const knowledgeBase = {
         'Formação em Terapia Focada nas Emoções'
       ],
       description: 'Especialista em TRG com abordagem empática e focada em resultados. Cria um espaço seguro para explorar questões profundas e reprocessar traumas.',
-      whatsapp: 'https://wa.me/5500000000000'
+      whatsapp: 'https://wa.me/5519981109732'
     },
     nadielma: {
       name: 'Nadielma',
@@ -54,7 +54,7 @@ export const knowledgeBase = {
         'Pós-graduação em Neurociência e Comportamento'
       ],
       description: 'Combina TRG com profunda compreensão da dinâmica humana. Prática pautada na compaixão e na crença de que a transformação é sempre possível.',
-      whatsapp: 'https://wa.me/5500000000001'
+      whatsapp: 'https://wa.me/5519981740279'
     }
   },
   faq: [

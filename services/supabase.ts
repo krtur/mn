@@ -85,6 +85,18 @@ export type DocumentType = {
   updated_at: string;
 };
 
+export type NewClientRequestType = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  therapist_id: string;
+  status: 'pending' | 'contacted' | 'scheduled' | 'cancelled';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+};
+
 // Tipos de banco de dados (serão gerados automaticamente pelo Supabase)
 export type Database = any;
 
@@ -130,6 +142,18 @@ export interface Document {
   title: string;
   content: string;
   file_url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NewClientRequest {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  therapist_id: string;
+  status: 'pending' | 'contacted' | 'scheduled' | 'cancelled';
+  notes?: string;
   created_at: string;
   updated_at: string;
 }
