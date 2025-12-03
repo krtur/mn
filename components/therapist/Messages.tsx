@@ -52,6 +52,37 @@ export const Messages: React.FC = () => {
 
   const selectedContactData = allContacts.find((c) => c.id === selectedConversation);
 
+  // Marcar mensagens como lidas quando abrir a conversa
+  useEffect(() => {
+    const markAsRead = async () => {
+      if (!selectedConversation || !user) return;
+
+      try {
+        // Buscar mensagens não lidas desta conversa
+        const { data: unreadMessages } = await supabase
+          .from('messages')
+          .select('id')
+          .eq('recipient_id', user.id)
+          .eq('sender_id', selectedConversation)
+          .eq('read', false);
+
+        // Marcar como lidas
+        if (unreadMessages && unreadMessages.length > 0) {
+          await supabase
+            .from('messages')
+            .update({ read: true })
+            .eq('recipient_id', user.id)
+            .eq('sender_id', selectedConversation)
+            .eq('read', false);
+        }
+      } catch (err) {
+        console.error('Erro ao marcar mensagens como lidas:', err);
+      }
+    };
+
+    markAsRead();
+  }, [selectedConversation, user]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedConversation || !user) return;
