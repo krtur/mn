@@ -5,6 +5,7 @@ import { knowledgeBase, Message, initialGreeting } from './chatbotData';
 import SendIcon from './icons/SendIcon';
 import XIcon from './icons/XIcon';
 import PublicApiForm from './PublicApiForm';
+import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 const Chatbot: React.FC = () => {
   const { language } = useLanguage();
@@ -233,15 +234,9 @@ O que prefere?`;
     }
   };
 
-  const handleScheduleClick = (therapist: string | null) => {
-    if (therapist === 'marcelo') {
-      window.open('https://wa.me/5519981109732', '_blank');
-    } else if (therapist === 'nadielma') {
-      window.open('https://wa.me/5519981740279', '_blank');
-    } else {
-      // If no specific therapist, open Marcelo's WhatsApp as default
-      window.open('https://wa.me/5519981109732', '_blank');
-    }
+  const handleScheduleClick = (therapistId: string) => {
+    setSelectedTherapist(therapistId);
+    openModalAndEnsureVisibility(setShowForm);
   };
   
   return (

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import DirectRestApiForm from './DirectRestApiForm';
+import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 const MeuAtendimento: React.FC = () => {
   const { language } = useLanguage();
@@ -127,7 +128,7 @@ const MeuAtendimento: React.FC = () => {
           {t('cta.description')}
         </p>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => openModalAndEnsureVisibility(setShowForm)}
           className="btn-primary"
         >
           Agende Sua Sessão

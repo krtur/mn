@@ -105,7 +105,7 @@ export const translations = {
       corporateTherapy: {
         title: 'Soluções Terapêuticas Personalizadas para Empresas',
         description: 'Acreditamos na importância de um ambiente emocionalmente saudável para o sucesso duradouro das empresas. Oferecemos soluções terapêuticas personalizadas que podem elevar o bem-estar emocional de sua equipe, resultando em maior produtividade, engajamento e harmonia no local de trabalho e pessoal.',
-        cta: 'Agende uma consulta inicial para saber mais',
+        cta: 'Agende sua sessão',
         ctaDescription: 'Estamos ansiosos para discutir como podemos apoiar sua equipe em sua jornada rumo à saúde emocional e ao sucesso empresarial. Entre em contato conosco para agendar uma consulta inicial ou solicitar mais informações sobre nossos serviços.',
       },
       schoolProject: {
@@ -274,7 +274,7 @@ export const translations = {
       corporateTherapy: {
         title: 'Soluciones Terapéuticas Personalizadas para Empresas',
         description: 'Creemos en la importancia de un ambiente emocionalmente saludable para el éxito duradero de las empresas. Ofrecemos soluciones terapéuticas personalizadas que pueden elevar el bienestar emocional de tu equipo, resultando en mayor productividad, compromiso y armonía en el lugar de trabajo y personal.',
-        cta: 'Agenda una consulta inicial para saber más',
+        cta: 'Agenda tu sesión',
         ctaDescription: 'Estamos ansiosos por discutir cómo podemos apoyar a tu equipo en su viaje hacia la salud emocional y el éxito empresarial. Ponte en contacto con nosotros para agendar una consulta inicial o solicitar más información sobre nuestros servicios.',
       },
       schoolProject: {

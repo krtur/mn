@@ -1,0 +1,39 @@
+# Correção de Visibilidade dos Modais
+
+## Problema Resolvido
+- Os formulários de agendamento estavam sendo exibidos cortados quando abertos
+- O usuário precisava rolar a página manualmente para ver o formulário completo
+- Isso acontecia em todas as telas que tinham o formulário de agendamento
+
+## Solução Implementada
+
+### 1. Criação de Função Utilitária
+- Criado arquivo `components/utils/modalUtils.ts` com função `openModalAndEnsureVisibility`
+- Esta função garante que o modal seja visível no viewport após ser aberto
+- Usa `scrollIntoView` com comportamento suave para centralizar o modal
+
+### 2. Atualização dos Componentes
+Os seguintes componentes foram atualizados para usar a nova função:
+- HeroSection.tsx
+- OQueETrg.tsx
+- MeuAtendimento.tsx
+- Depoimentos.tsx
+- Credenciais.tsx
+- Chatbot.tsx
+
+### 3. Melhorias nos Modais
+- Todos os modais agora usam `items-center` para centralização vertical
+- Removido o posicionamento baseado em `paddingTop` que causava o problema
+- Adicionado efeito de animação suave ao centralizar o modal
+
+### 4. Como Testar
+1. Acesse qualquer página do site
+2. Clique em "Agende sua sessão" ou botões similares
+3. O formulário deverá abrir e ser automaticamente centralizado na tela
+4. Não deve ser necessário rolar a página para ver o formulário completo
+
+### 5. Benefícios
+- Melhor experiência do usuário
+- Maior taxa de conversão (mais agendamentos)
+- Funcionamento consistente em todas as telas
+- Solução compatível com dispositivos móveis e desktop

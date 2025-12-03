@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import PublicApiForm from './PublicApiForm';
+import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 interface Therapist {
   name: string;
@@ -150,7 +151,7 @@ const Credenciais: React.FC = () => {
             Nossas credenciais certificadas garantem que você está em mãos de profissionais qualificados e reconhecidos internacionalmente.
           </p>
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => openModalAndEnsureVisibility(setShowForm)}
             className="btn-primary"
           >
             Agende Sua Sessão Gratuita

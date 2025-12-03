@@ -6,6 +6,7 @@ import CheckCircleIcon from './icons/CheckCircleIcon';
 import HeartIcon from './icons/HeartIcon';
 import BoltIcon from './icons/BoltIcon';
 import PublicApiForm from './PublicApiForm';
+import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 const HeroSection: React.FC = () => {
   const { language } = useLanguage();
@@ -20,14 +21,10 @@ const HeroSection: React.FC = () => {
   const [showGenericForm, setShowGenericForm] = useState(false);
   const [modalPosition, setModalPosition] = useState(0);
   
-  // Função para abrir modal na posição atual do scroll
+  // Função para abrir modal na posição atual do scroll e garantir visibilidade
   const openModalAtCurrentPosition = (setterFunction: React.Dispatch<React.SetStateAction<boolean>>) => {
-    // Captura a posição atual do scroll
-    const scrollY = window.scrollY || window.pageYOffset;
-    // Define a posição do modal
-    setModalPosition(scrollY);
-    // Abre o modal
-    setterFunction(true);
+    // Usa a função de utilidade para abrir o modal e garantir visibilidade
+    openModalAndEnsureVisibility(setterFunction);
   };
 
   const stats = [
@@ -126,7 +123,7 @@ const HeroSection: React.FC = () => {
             
             {/* Modal para Marcelo */}
             {showMarceloForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center p-4" style={{ paddingTop: `${modalPosition + 100}px` }}>
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
                   <button 
                     onClick={() => setShowMarceloForm(false)}
@@ -150,7 +147,7 @@ const HeroSection: React.FC = () => {
             
             {/* Modal para Nadielma */}
             {showNadielmaForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center p-4" style={{ paddingTop: `${modalPosition + 100}px` }}>
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
                   <button 
                     onClick={() => setShowNadielmaForm(false)}
@@ -174,7 +171,7 @@ const HeroSection: React.FC = () => {
             
             {/* Modal para Agendamento Genérico (com seleção de terapeuta) */}
             {showGenericForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center p-4" style={{ paddingTop: `${modalPosition + 100}px` }}>
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
                   <button 
                     onClick={() => setShowGenericForm(false)}
@@ -308,7 +305,7 @@ const HeroSection: React.FC = () => {
           {/* Main CTA Button */}
           <div className="mb-8">
             <button
-              onClick={() => openModalAtCurrentPosition(setShowGenericForm)}
+              onClick={() => openModalAndEnsureVisibility(setShowGenericForm)}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-lg"
             >
               <span className="flex items-center justify-center gap-2">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { UserRole } from '../auth/AuthContext';
 import { useAuth } from '../auth/AuthContext';
+import { useNewClientRequests } from '../../hooks/useNewClientRequests';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface MenuItem {
   path?: string;
   icon: string;
   children?: MenuItem[];
+  notificationCount?: string;
 }
 
 interface CategoryProps {
@@ -69,7 +71,7 @@ const therapistMenuItems: MenuItem[] = [
       children: [
         { label: 'Meus Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
         { label: 'Adicionar Paciente', path: '/dashboard/therapist/patient-registration', icon: '➕' },
-        { label: 'Novos Clientes', path: '/dashboard/therapist/new-clients', icon: '🆕' },
+        { label: 'Novos Clientes', path: '/dashboard/therapist/new-clients', icon: '🆕', notificationCount: 'pendingRequestsCount' },
         { label: 'Debug Solicitações', path: '/dashboard/therapist/debug-requests', icon: '🔧' }
       ] 
     },
@@ -97,6 +99,10 @@ const therapistMenuItems: MenuItem[] = [
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
   const location = useLocation();
   const { logout } = useAuth();
+  const { requests } = useNewClientRequests();
+  
+  // Contar solicitações pendentes
+  const pendingRequestsCount = requests.filter(req => req.status === 'pending').length;
   
   // Verifica se uma rota está ativa, incluindo subrotas e query params
   const isActive = (path?: string) => {
@@ -239,6 +245,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
                       >
                         <span className="w-5 h-5 flex items-center justify-center text-sm">{child.icon}</span>
                         <span className="ml-3 text-sm">{child.label}</span>
+                        {child.notificationCount && eval(child.notificationCount) > 0 && (
+                          <span className="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            {eval(child.notificationCount)}
+                          </span>
+                        )}
                       </Link>
                     ))}
                   </div>
@@ -261,6 +272,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
             >
               <span className="w-6 h-6 flex items-center justify-center">{item.icon}</span>
               {isOpen && <span className="ml-3">{item.label}</span>}
+              {isOpen && item.notificationCount && eval(item.notificationCount) > 0 && (
+                <span className="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {eval(item.notificationCount)}
+                </span>
+              )}
+              {!isOpen && item.notificationCount && eval(item.notificationCount) > 0 && (
+                <span className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                  {eval(item.notificationCount)}
+                </span>
+              )}
             </Link>
           );
         })}

@@ -36,6 +36,20 @@ export const TdahResults: React.FC = () => {
     console.log('🔍 Buscando triagens para paciente:', selectedPatientId);
     const results = await getTherapistPatientScreenings(selectedPatientId);
     console.log('📊 Triagens encontradas:', results.length);
+    
+    // Adicionar mais logs para debug
+    if (results.length === 0) {
+      console.log('⚠️ ALERTA: Nenhuma triagem encontrada para este paciente');
+    } else {
+      console.log('✅ Triagens encontradas:', results.map(r => ({
+        id: r.id,
+        patient_id: r.patient_id,
+        therapist_id: r.therapist_id,
+        created_at: r.created_at,
+        risk_level: r.risk_level
+      })));
+    }
+    
     setScreenings(results);
     // Resetar triagem selecionada antes de carregar nova
     setSelectedScreening(null);

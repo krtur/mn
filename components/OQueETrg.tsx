@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import PublicApiForm from './PublicApiForm';
+import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 interface Protocol {
   id: number;
@@ -253,7 +254,7 @@ const OQueETrg: React.FC = () => {
             Agende uma sessão gratuita de 30 minutos e descubra como a TRG pode revolucionar sua saúde emocional.
           </p>
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => openModalAndEnsureVisibility(setShowForm)}
             className="btn-primary"
           >
             Agende Sua Sessão Gratuita

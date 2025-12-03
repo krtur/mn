@@ -66,8 +66,23 @@ export const useTdahScreening = () => {
         const riskLevel = getRiskLevel(data.totalPercentage);
         console.log('📊 Nível de risco:', riskLevel);
 
+        // Buscar o therapist_id do paciente
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('therapist_id')
+          .eq('id', user.id)
+          .single();
+
+        if (userError) {
+          console.error('❌ Erro ao buscar therapist_id do paciente:', userError);
+        }
+
+        const therapistId = userData?.therapist_id || null;
+        console.log('👨‍⚕️ Terapeuta do paciente:', therapistId);
+
         const screeningData = {
           patient_id: user.id,
+          therapist_id: therapistId, // Adicionar o ID do terapeuta associado ao paciente
           answers: data.answers,
           category_a_score: data.categoryScores.A,
           category_b_score: data.categoryScores.B,
@@ -171,6 +186,12 @@ export const useTdahScreening = () => {
         setLoading(true);
         setError(null);
 
+        if (!user || !user.id) {
+          throw new Error('Usuário não autenticado');
+        }
+
+        console.log('🔍 Terapeuta buscando triagens:', user.id, 'para paciente:', patientId);
+
         // Buscar triagens do paciente
         const { data, error: fetchError } = await supabase
           .from('tdah_screenings')
@@ -184,6 +205,16 @@ export const useTdahScreening = () => {
         }
 
         console.log(`✓ Triagens encontradas para paciente ${patientId}:`, data?.length || 0);
+        
+        // Log detalhado das triagens encontradas para debug
+        if (data && data.length > 0) {
+          console.log('📊 Detalhes das triagens:', data.map(item => ({
+            id: item.id,
+            patient_id: item.patient_id,
+            therapist_id: item.therapist_id,
+            created_at: item.created_at
+          })));
+        }
         return (data || []) as TdahScreeningResult[];
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao buscar triagens';
