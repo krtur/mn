@@ -52,7 +52,7 @@ const patientMenuItems: MenuItem[] = [
     },
   ];
 
-const therapistMenuItems: MenuItem[] = [
+const getTherapistMenuItems = (): MenuItem[] => [
     { label: 'Dashboard', path: '/dashboard/therapist', icon: '📊' },
     { 
       label: 'Agenda', 
@@ -71,7 +71,7 @@ const therapistMenuItems: MenuItem[] = [
       children: [
         { label: 'Meus Pacientes', path: '/dashboard/therapist/patients', icon: '👥' },
         { label: 'Adicionar Paciente', path: '/dashboard/therapist/patient-registration', icon: '➕' },
-        { label: 'Novos Clientes', path: '/dashboard/therapist/new-clients', icon: '🆕', notificationCount: 'pendingRequestsCount' },
+        { label: 'Novos Clientes', path: '/dashboard/therapist/new-clients', icon: '🆕', notificationCount: 'pending' },
         { label: 'Debug Solicitações', path: '/dashboard/therapist/debug-requests', icon: '🔧' }
       ] 
     },
@@ -164,11 +164,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
     }));
   };
   
-  const menuItems = userRole === 'patient' ? patientMenuItems : therapistMenuItems;
+  const menuItems = userRole === 'patient' ? patientMenuItems : getTherapistMenuItems();
   
   // Função para verificar se uma categoria deve ser expandida
   useEffect(() => {
-    const currentMenuItems = userRole === 'patient' ? patientMenuItems : therapistMenuItems;
+    const currentMenuItems = userRole === 'patient' ? patientMenuItems : getTherapistMenuItems();
     
     // Verificar cada item do menu
     currentMenuItems.forEach(item => {
@@ -245,9 +245,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
                       >
                         <span className="w-5 h-5 flex items-center justify-center text-sm">{child.icon}</span>
                         <span className="ml-3 text-sm">{child.label}</span>
-                        {child.notificationCount && eval(child.notificationCount) > 0 && (
+                        {child.notificationCount === 'pending' && pendingRequestsCount > 0 && (
                           <span className="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                            {eval(child.notificationCount)}
+                            {pendingRequestsCount}
                           </span>
                         )}
                       </Link>
@@ -272,14 +272,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, userRole }) => {
             >
               <span className="w-6 h-6 flex items-center justify-center">{item.icon}</span>
               {isOpen && <span className="ml-3">{item.label}</span>}
-              {isOpen && item.notificationCount && eval(item.notificationCount) > 0 && (
+              {isOpen && item.notificationCount === 'pending' && pendingRequestsCount > 0 && (
                 <span className="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                  {eval(item.notificationCount)}
+                  {pendingRequestsCount}
                 </span>
               )}
-              {!isOpen && item.notificationCount && eval(item.notificationCount) > 0 && (
+              {!isOpen && item.notificationCount === 'pending' && pendingRequestsCount > 0 && (
                 <span className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                  {eval(item.notificationCount)}
+                  {pendingRequestsCount}
                 </span>
               )}
             </Link>
