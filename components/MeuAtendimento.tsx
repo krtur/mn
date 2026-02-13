@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
-import DirectRestApiForm from './DirectRestApiForm';
-import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 const MeuAtendimento: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedTherapist, setSelectedTherapist] = useState<string | null>(null);
-  
-  // IDs dos terapeutas
-  const therapistIds = {
-    marcelo: '028d8869-679f-4093-b435-1a43b6ced0e2',
-    nadielma: '83273ffc-c878-4abc-a24b-e35fd4801339'
-  };
 
   return (
     <section className="container mx-auto px-4 py-16 md:py-24 animate-fade-in">
@@ -32,9 +22,9 @@ const MeuAtendimento: React.FC = () => {
         <div className="card-premium bg-gradient-to-br from-primary-50 to-accent-50 border-2 border-primary-200 overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 p-10">
           <div className="flex-shrink-0">
             <div className="relative w-40 h-40 rounded-xl overflow-hidden bg-gradient-to-br from-primary-100 to-accent-100 shadow-md">
-              <img 
-                src="/marcelo.png" 
-                alt="Terapeuta Marcelo" 
+              <img
+                src="/marcelo.png"
+                alt="Terapeuta Marcelo"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -81,9 +71,9 @@ const MeuAtendimento: React.FC = () => {
         <div className="card-premium bg-gradient-to-br from-accent-50 to-primary-50 border-2 border-accent-200 overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 p-10">
           <div className="flex-shrink-0">
             <div className="relative w-40 h-40 rounded-xl overflow-hidden bg-gradient-to-br from-accent-100 to-primary-100 shadow-md">
-              <img 
-                src="/nadielma.png" 
-                alt="Terapeuta Nadielma" 
+              <img
+                src="/nadielma.png"
+                alt="Terapeuta Nadielma"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -120,44 +110,7 @@ const MeuAtendimento: React.FC = () => {
       </div>
 
       {/* CTA */}
-      <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-14 text-center mt-20">
-        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
-          {t('cta.title')} {t('cta.subtitle')}
-        </h3>
-        <p className="text-lg text-slate-600 mb-10 leading-relaxed">
-          {t('cta.description')}
-        </p>
-        <button
-          onClick={() => openModalAndEnsureVisibility(setShowForm)}
-          className="btn-primary"
-        >
-          Agende Sua Sessão
-        </button>
-        
-        {/* Modal do formulário */}
-        {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-              <button 
-                onClick={() => setShowForm(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-                title="Fechar formulário"
-                aria-label="Fechar formulário"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              <DirectRestApiForm 
-                onSuccess={() => setTimeout(() => setShowForm(false), 3000)}
-                onCancel={() => setShowForm(false)}
-                preselectedTherapist={selectedTherapist || undefined}
-                isModal={true}
-              />
-            </div>
-          </div>
-        )}
-      </div>
+
     </section>
   );
 };

@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import WhatsappIcon from './icons/WhatsappIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import HeartIcon from './icons/HeartIcon';
 import BoltIcon from './icons/BoltIcon';
-import PublicApiForm from './PublicApiForm';
-import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 const HeroSection: React.FC = () => {
   const { language } = useLanguage();
@@ -14,18 +12,6 @@ const HeroSection: React.FC = () => {
   // WhatsApp links for therapists (mantidos como fallback)
   const marceloWhatsapp = 'https://wa.me/5519981109732';
   const nadielmaWhatsapp = 'https://wa.me/5519981740279';
-
-  // Estados para controlar os modais de agendamento
-  const [showMarceloForm, setShowMarceloForm] = useState(false);
-  const [showNadielmaForm, setShowNadielmaForm] = useState(false);
-  const [showGenericForm, setShowGenericForm] = useState(false);
-  const [modalPosition, setModalPosition] = useState(0);
-
-  // Função para abrir modal na posição atual do scroll e garantir visibilidade
-  const openModalAtCurrentPosition = (setterFunction: React.Dispatch<React.SetStateAction<boolean>>) => {
-    // Usa a função de utilidade para abrir o modal e garantir visibilidade
-    openModalAndEnsureVisibility(setterFunction);
-  };
 
   const stats = [
     { number: '200+', label: t('stats.patients'), icon: '👥' },
@@ -122,75 +108,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             {/* Modal para Marcelo */}
-            {showMarceloForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button
-                    onClick={() => setShowMarceloForm(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-                    title="Fechar formulário"
-                    aria-label="Fechar formulário"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <PublicApiForm
-                    onSuccess={() => setTimeout(() => setShowMarceloForm(false), 3000)}
-                    onCancel={() => setShowMarceloForm(false)}
-                    preselectedTherapist="028d8869-679f-4093-b435-1a43b6ced0e2"
-                    isModal={true}
-                  />
-                </div>
-              </div>
-            )}
 
-            {/* Modal para Nadielma */}
-            {showNadielmaForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button
-                    onClick={() => setShowNadielmaForm(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-                    title="Fechar formulário"
-                    aria-label="Fechar formulário"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <PublicApiForm
-                    onSuccess={() => setTimeout(() => setShowNadielmaForm(false), 3000)}
-                    onCancel={() => setShowNadielmaForm(false)}
-                    preselectedTherapist="83273ffc-c878-4abc-a24b-e35fd4801339"
-                    isModal={true}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Modal para Agendamento Genérico (com seleção de terapeuta) */}
-            {showGenericForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button
-                    onClick={() => setShowGenericForm(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-                    title="Fechar formulário"
-                    aria-label="Fechar formulário"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <PublicApiForm
-                    onSuccess={() => setTimeout(() => setShowGenericForm(false), 3000)}
-                    onCancel={() => setShowGenericForm(false)}
-                    isModal={true}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -292,19 +210,7 @@ const HeroSection: React.FC = () => {
             {t('cta.description')}
           </p>
           {/* Main CTA Button */}
-          <div className="mb-8">
-            <button
-              onClick={() => openModalAndEnsureVisibility(setShowGenericForm)}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-lg"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Agende sua sessão
-              </span>
-            </button>
-          </div>
+
 
           {/* WhatsApp Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">

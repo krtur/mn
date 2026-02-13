@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
-import PublicApiForm from './PublicApiForm';
-import { openModalAndEnsureVisibility } from './utils/modalUtils';
 
 interface Therapist {
   name: string;
@@ -38,8 +36,6 @@ const therapists: Therapist[] = [
 const Credenciais: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedTherapist, setSelectedTherapist] = useState<string | null>(null);
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="max-w-6xl mx-auto">
@@ -143,43 +139,7 @@ const Credenciais: React.FC = () => {
         </div>
 
         {/* CTA Final */}
-        <div className="card-premium bg-gradient-to-r from-primary-50 to-accent-50 border-2 border-primary-200 p-12 text-center mt-16">
-          <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-            Confiança e Profissionalismo
-          </h3>
-          <p className="text-lg text-slate-600 mb-8">
-            Nossas credenciais certificadas garantem que você está em mãos de profissionais qualificados e reconhecidos internacionalmente.
-          </p>
-          <button
-            onClick={() => openModalAndEnsureVisibility(setShowForm)}
-            className="btn-primary"
-          >
-            Agende Sua Sessão Gratuita
-          </button>
-          
-          {/* Modal do formulário */}
-          {showForm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                <button 
-                  onClick={() => setShowForm(false)}
-                  className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-                  title="Fechar formulário"
-                  aria-label="Fechar formulário"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                <PublicApiForm 
-                  onSuccess={() => setTimeout(() => setShowForm(false), 3000)}
-                  onCancel={() => setShowForm(false)}
-                  isModal={true}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+
       </div>
     </section>
   );
