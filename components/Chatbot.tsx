@@ -24,7 +24,7 @@ const Chatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedTherapist, setSelectedTherapist] = useState<string | null>(null);
-  
+
   // IDs dos terapeutas
   const therapistIds = {
     marcelo: '028d8869-679f-4093-b435-1a43b6ced0e2',
@@ -99,7 +99,7 @@ Quer agendar uma sessão com um deles?`;
     }
 
     // Check for pricing/free session
-    if (lowerMessage.match(/preço|valor|custa|quanto|grátis|sessão gratuita|free/i)) {
+    if (lowerMessage.match(/preço|valor|custa|quanto|grátis|free/i)) {
       return `💼 **Investimento em sua saúde mental** - Oferecemos atendimento profissional com terapeutas certificados internacionalmente.
 
 Para conhecer melhor nossos serviços e valores:
@@ -238,7 +238,7 @@ O que prefere?`;
     setSelectedTherapist(therapistId);
     openModalAndEnsureVisibility(setShowForm);
   };
-  
+
   return (
     <>
       {/* Chat Button */}
@@ -288,16 +288,15 @@ O que prefere?`;
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-3 rounded-lg ${
-                    message.sender === 'user'
+                  className={`max-w-xs px-4 py-3 rounded-lg ${message.sender === 'user'
                       ? 'bg-primary-500 text-white rounded-br-none'
                       : 'bg-white text-slate-800 border border-stone-200 rounded-bl-none'
-                  }`}
+                    }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
                   {message.sender === 'bot' && message.text.includes('Agendar Sessão') && (
                     <div className="mt-3">
-                      <button 
+                      <button
                         onClick={() => handleScheduleClick(null)}
                         className="bg-primary-500 hover:bg-primary-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
                       >
@@ -307,13 +306,13 @@ O que prefere?`;
                   )}
                   {message.sender === 'bot' && message.text.includes('Qual terapeuta você prefere?') && (
                     <div className="mt-3 flex flex-col space-y-2">
-                      <button 
+                      <button
                         onClick={() => handleScheduleClick('marcelo')}
                         className="bg-primary-500 hover:bg-primary-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
                       >
                         Falar com Marcelo
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleScheduleClick('nadielma')}
                         className="bg-accent-500 hover:bg-accent-600 text-white text-sm py-2 px-4 rounded-lg transition-colors"
                       >
@@ -361,12 +360,12 @@ O que prefere?`;
           </div>
         </div>
       )}
-      
+
       {/* Modal do formulário */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-            <button 
+            <button
               onClick={() => setShowForm(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
               title="Fechar formulário"
@@ -376,7 +375,7 @@ O que prefere?`;
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <PublicApiForm 
+            <PublicApiForm
               onSuccess={() => setTimeout(() => setShowForm(false), 3000)}
               onCancel={() => setShowForm(false)}
               preselectedTherapist={selectedTherapist || undefined}
