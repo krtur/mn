@@ -16,7 +16,7 @@ export const translations = {
       whatIsTrg: 'O que é TRG?',
       faq: 'Perguntas Frequentes',
       resources: 'Recursos',
-      ebooks: 'eBooks',
+
       phobias: 'Fobias (Glossário)',
       phrases: 'Frases',
     },
@@ -84,7 +84,7 @@ export const translations = {
       tagline: 'Transformando vidas através da terapia expressiva e acompanhamento profissional.',
       care: '💙 Nós nos preocupamos com você!',
       connect: 'Conecte-se',
-      copyright: '© 2025 M&N Terapeutas. Todos os direitos reservados.',
+      copyright: '© 2026 M&N Terapeutas. Todos os direitos reservados.',
     },
 
     // Chatbot
@@ -127,11 +127,7 @@ export const translations = {
         description: 'Respostas às suas dúvidas sobre nossos serviços e metodologia.',
         cta: 'Envie sua pergunta',
       },
-      ebooks: {
-        title: 'eBooks',
-        description: 'Recursos educacionais para sua transformação pessoal.',
-        cta: 'Baixar eBooks',
-      },
+
       phobias: {
         title: 'Fobias',
         description: 'Glossário completo de fobias e como tratá-las.',
@@ -179,7 +175,7 @@ export const translations = {
       whatIsTrg: '¿Qué es TRG?',
       faq: 'Preguntas Frecuentes',
       resources: 'Recursos',
-      ebooks: 'eBooks',
+
       phobias: 'Fobias (Glosario)',
       phrases: 'Frases',
     },
@@ -247,7 +243,7 @@ export const translations = {
       tagline: 'Transformando vidas a través de la terapia expresiva y acompañamiento profesional.',
       care: '💙 ¡Nos preocupamos por ti!',
       connect: 'Conéctate',
-      copyright: '© 2025 M&N Terapeutas. Todos los derechos reservados.',
+      copyright: '© 2026 M&N Terapeutas. Todos los derechos reservados.',
     },
 
     // Chatbot
@@ -290,11 +286,7 @@ export const translations = {
         description: 'Respuestas a tus dudas sobre nuestros servicios y metodología.',
         cta: 'Envía tu pregunta',
       },
-      ebooks: {
-        title: 'eBooks',
-        description: 'Recursos educativos para tu transformación personal.',
-        cta: 'Descargar eBooks',
-      },
+
       phobias: {
         title: 'Fobias',
         description: 'Glosario completo de fobias y cómo tratarlas.',

@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
 
     'o-que-e-trg': '/o-que-e-trg',
     'faq': '/faq',
-    'ebooks': '/ebooks',
+
     'fobias': '/fobias',
     'frases': '/frases',
   };
@@ -59,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
     {
       nameKey: 'nav.resources',
       dropdown: [
-        { nameKey: 'nav.ebooks', pageKey: 'ebooks' },
+
         { nameKey: 'nav.phobias', pageKey: 'fobias' },
         { nameKey: 'nav.phrases', pageKey: 'frases' },
       ],

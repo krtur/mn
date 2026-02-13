@@ -17,7 +17,7 @@ import OQueETrg from './components/OQueETrg';
 import Faq from './components/Faq';
 import Frases from './components/Frases';
 import Fobias from './components/Fobias';
-import Ebooks from './components/Ebooks';
+
 import Chatbot from './components/Chatbot';
 
 // Auth Components
@@ -151,14 +151,7 @@ function App() {
                 </PublicLayout>
               }
             />
-            <Route
-              path="/ebooks"
-              element={
-                <PublicLayout>
-                  <Ebooks />
-                </PublicLayout>
-              }
-            />
+
             <Route
               path="/teste-solicitacao"
               element={
