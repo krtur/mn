@@ -49,9 +49,12 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-primary-700 pt-8">
+        <div className="border-t border-primary-700 pt-8 flex flex-col items-center gap-2">
           <p className="text-center text-slate-400 text-base">
             {t('footer.copyright')}
+          </p>
+          <p className="text-center text-white text-sm opacity-80">
+            Site desenvolvido por <a href="https://mm2.chat/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-300 transition-colors duration-300">https://mm2.chat/</a>
           </p>
         </div>
       </div>
