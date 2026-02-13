@@ -75,7 +75,7 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
             particles = [];
             const numberOfParticles = (canvas.width * canvas.height) / particleCountDensity;
             for (let i = 0; i < numberOfParticles; i++) {
-                const size = Math.random() * 1.5 + 1;
+                const size = Math.random() * 3 + 2;
                 const x = Math.random() * (canvas.width - size * 2) + size;
                 const y = Math.random() * (canvas.height - size * 2) + size;
                 const speedX = Math.random() * 0.4 - 0.2;
@@ -111,7 +111,7 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
                             ctx.strokeStyle = `rgba(139, 92, 246, ${opacity * 0.25})`;
                         }
 
-                        ctx.lineWidth = 1;
+                        ctx.lineWidth = 2;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);

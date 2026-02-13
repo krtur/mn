@@ -30,8 +30,8 @@ const HeroSection: React.FC = () => {
   return (
     <section className="relative w-full overflow-hidden bg-slate-50">
       {/* Background with Particles */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <ParticleNetwork particleColor="rgba(15, 23, 42, 0.2)" />
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+        <ParticleNetwork particleColor="rgba(15, 23, 42, 0.4)" />
       </div>
 
       {/* Hero Main Content */}
@@ -109,7 +109,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5 w-full justify-center">
-              <a href={marceloWhatsapp} target="_blank" rel="noopener noreferrer" className="bg-success-600 hover:bg-success-700 text-white px-10 py-5 rounded-2xl shadow-xl hover:shadow-success-200/50 transition-all duration-300 transform hover:-translate-y-1.5 flex items-center justify-center gap-3 font-bold text-lg">
+              <a href={marceloWhatsapp} target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl shadow-xl hover:shadow-green-200/50 transition-all duration-300 transform hover:-translate-y-1.5 flex items-center justify-center gap-3 font-bold text-lg">
                 <WhatsappIcon className="w-6 h-6" />
                 <span>Falar com Marcelo</span>
               </a>
