@@ -20,7 +20,6 @@ async function listarUsuarios() {
 
     // Buscar TODOS os usuários sem filtro
     const { data: users, error } = await supabase
-      .from("users")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -40,7 +39,7 @@ async function listarUsuarios() {
     users.forEach((user, index) => {
       console.log(`${index + 1}. ${user.name}`);
       console.log(`   Email: ${user.email}`);
-      console.log(`   CPF: ${user.cpf}`);
+      console.log(`   Phone: ${user.phone}`);
       console.log(`   Telefone: ${user.phone}`);
       console.log(`   Role: ${user.role}`);
       console.log(`   ID: ${user.id}`);

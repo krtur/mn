@@ -16,14 +16,14 @@ export const Login: React.FC = () => {
   useEffect(() => {
     // Evitar verificar múltiplas vezes
     if (hasRedirected.current) return;
-    
+
     const checkAuthStatus = async () => {
       try {
         console.log('🔍 Login: Verificando status de autenticação');
-        
+
         // Verificar se há um token válido no localStorage (usando API backend)
         const token = localStorage.getItem('token');
-        
+
         if (token && user) {
           console.log('✅ Login: Token válido e usuário carregado, redirecionando para dashboard');
           hasRedirected.current = true;
@@ -44,7 +44,7 @@ export const Login: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+
     checkAuthStatus();
   }, [user, navigate]);
 
@@ -60,7 +60,7 @@ export const Login: React.FC = () => {
       console.log('✅ login() retornou com sucesso');
       // NÃO navegar aqui - deixar o useEffect fazer o redirecionamento
       // quando o user for carregado pelo onAuthStateChange
-      
+
       // Não vamos mais usar timeout aqui, pois está causando problemas
       // O estado isLoading será gerenciado pelo AuthContext
     } catch (err: any) {
@@ -74,7 +74,7 @@ export const Login: React.FC = () => {
 
   const handleResendEmail = async () => {
     if (!emailPendingConfirmation) return;
-    
+
     setIsResendingEmail(true);
     try {
       await resendConfirmationEmail(emailPendingConfirmation);
@@ -96,9 +96,9 @@ export const Login: React.FC = () => {
           {/* Logo */}
           <div className="text-center mb-10">
             <div className="flex justify-center mb-6">
-              <img 
-                src="/logopreto.png" 
-                alt="M&N Terapeutas" 
+              <img
+                src="/logopreto.png"
+                alt="M&N Terapeutas"
                 className="h-20 w-auto drop-shadow-lg"
               />
             </div>
@@ -125,14 +125,14 @@ export const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                Email ou CPF
+                Email
               </label>
               <input
                 id="email"
-                type="text"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com ou 123.456.789-00"
+                placeholder="seu@email.com"
                 className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
                 required
               />

@@ -3,12 +3,12 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth, UserRole } from './AuthContext';
 import { useTherapists } from '../../hooks/useTherapists';
 import { supabase } from '../../services/supabase';
+import { maskPhone } from '../utils/masks';
 
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    cpf: '',
     phone: '',
     password: '',
     confirmPassword: '',
@@ -32,22 +32,22 @@ export const Register: React.FC = () => {
       navigate('/dashboard', { replace: true });
     }
   }, [user, navigate]);
-  
+
   // Verificar se há um convite na URL
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const inviteId = searchParams.get('invite');
-    
+
     if (inviteId) {
       loadInviteData(inviteId);
     }
   }, [location]);
-  
+
   // Função para carregar dados do convite
   const loadInviteData = async (inviteId: string) => {
     setLoadingInvite(true);
     setError('');
-    
+
     try {
       const { data: invite, error: inviteError } = await supabase
         .from('patient_invites')
@@ -55,21 +55,21 @@ export const Register: React.FC = () => {
         .eq('id', inviteId)
         .eq('status', 'pending')
         .single();
-      
+
       if (inviteError || !invite) {
         setError('Convite inválido ou expirado');
         return;
       }
-      
+
       // Verificar se o convite está expirado
       const expiresAt = new Date(invite.expires_at);
       if (expiresAt < new Date()) {
         setError('Este convite expirou');
         return;
       }
-      
+
       setInviteData(invite);
-      
+
       // Preencher formulário com dados do convite
       setFormData(prev => ({
         ...prev,
@@ -77,7 +77,7 @@ export const Register: React.FC = () => {
         email: invite.email,
         therapistId: invite.therapist_id
       }));
-      
+
     } catch (err) {
       console.error('Erro ao carregar convite:', err);
       setError('Erro ao carregar convite');
@@ -88,7 +88,12 @@ export const Register: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'phone') {
+      setFormData((prev) => ({ ...prev, [name]: maskPhone(value) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,6 +103,11 @@ export const Register: React.FC = () => {
     // Validações
     if (!formData.therapistId) {
       setError('Selecione um terapeuta');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres');
       return;
     }
 
@@ -120,12 +130,11 @@ export const Register: React.FC = () => {
         }
       }
 
-      // Registrar o usuário com therapist_id
+      // Registrar o usuário com therapist_id (limpando máscaras)
       const registerData: any = {
         name: formData.name,
         email: formData.email,
-        cpf: formData.cpf,
-        phone: formData.phone,
+        phone: formData.phone.replace(/\D/g, ''),
         role: formData.role,
         password: formData.password,
         therapistId: formData.therapistId, // Passar o ID do terapeuta
@@ -151,9 +160,21 @@ export const Register: React.FC = () => {
           message: successMessage,
         },
       });
-    } catch (err) {
-      setError('Erro ao registrar. Tente novamente.');
-      console.error(err);
+    } catch (err: any) {
+      console.error('❌ Erro durante o registro:', err);
+
+      // Tenta extrair a mensagem de erro mais útil
+      const errorMessage = err?.message || err?.details || 'Erro desconhecido';
+
+      if (errorMessage.includes('already registered') || errorMessage.includes('registered')) {
+        setError('Este email já está cadastrado. Tente fazer login ou recuperar sua senha.');
+      } else if (errorMessage.includes('null value in column "cpf"')) {
+        setError('Erro interno do servidor: A coluna CPF no banco de dados ainda é obrigatória. Por favor, contate o administrador.');
+      } else if (errorMessage.includes('rate limit')) {
+        setError('Muitas tentativas. Por favor, aguarde um pouco antes de tentar novamente.');
+      } else {
+        setError(`Erro ao registrar: ${errorMessage}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -167,9 +188,9 @@ export const Register: React.FC = () => {
           {/* Logo */}
           <div className="text-center mb-10">
             <div className="flex justify-center mb-6">
-              <img 
-                src="/logopreto.png" 
-                alt="M&N Terapeutas" 
+              <img
+                src="/logopreto.png"
+                alt="M&N Terapeutas"
                 className="h-20 w-auto drop-shadow-lg"
               />
             </div>
@@ -190,7 +211,7 @@ export const Register: React.FC = () => {
               </p>
             </div>
           )}
-          
+
           {/* Formulário */}
           <form onSubmit={handleSubmit} className="space-y-4 max-h-96 overflow-y-auto pr-2">
             {/* Seleção de terapeuta - mostrar apenas se não for convite */}
@@ -263,21 +284,6 @@ export const Register: React.FC = () => {
               )}
             </div>
 
-            <div>
-              <label htmlFor="cpf" className="block text-sm font-semibold text-slate-700 mb-2">
-                CPF
-              </label>
-              <input
-                id="cpf"
-                type="text"
-                name="cpf"
-                value={formData.cpf}
-                onChange={handleChange}
-                placeholder="123.456.789-00"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
-                required
-              />
-            </div>
 
             <div>
               <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">

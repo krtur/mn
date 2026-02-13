@@ -44,7 +44,6 @@ export type UserType = {
   id: string;
   email: string;
   name: string;
-  cpf: string;
   phone: string;
   role: 'patient' | 'therapist_a' | 'therapist_b';
   profile_image?: string;
@@ -104,7 +103,6 @@ export type Database = any;
 export interface User {
   id: string;
   email: string;
-  cpf: string;
   name: string;
   phone: string;
   role: 'patient' | 'therapist_a' | 'therapist_b';

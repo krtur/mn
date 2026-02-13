@@ -8,7 +8,6 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  cpf: string;
   phone: string;
   role: UserRole;
   profileImage?: string;
@@ -40,12 +39,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadUserData = async (userId: string) => {
     try {
       console.log('🔍 Carregando dados do usuário:', userId);
-      
+
       // Verificar sessão atual para obter email
       const { data: sessionData } = await supabaseAuth.getSession();
       const userEmail = sessionData?.session?.user?.email || 'usuario@exemplo.com';
       const userName = sessionData?.session?.user?.user_metadata?.name || 'Usuário';
-      
+
       // Tentar obter dados completos da tabela users
       try {
         const { data, error } = await supabase
@@ -58,14 +57,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error('❌ Erro na query:', error.message, error.code, error.details);
           throw error; // Lançar erro para ser capturado pelo catch abaixo
         }
-        
+
         if (data) {
           console.log('✅ Dados do usuário carregados da tabela users:', data.name);
           setUser({
             id: data.id,
             email: data.email,
             name: data.name,
-            cpf: data.cpf,
             phone: data.phone,
             role: data.role,
             profileImage: data.profile_image,
@@ -78,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (dbError) {
         console.warn('⚠️ Erro ao buscar na tabela users, usando dados da sessão:', dbError);
       }
-      
+
       // Se chegou aqui, não conseguiu carregar da tabela users
       // Criar usuário com dados da sessão
       console.log('✅ Usando dados da sessão:', userEmail);
@@ -86,13 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: userId,
         email: userEmail,
         name: userName,
-        cpf: '',
         phone: '',
         role: 'patient',
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      
+
     } catch (error) {
       console.error('❌ Erro ao carregar dados do usuário:', error);
       // Mesmo com erro, criar um usuário temporário
@@ -100,7 +97,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: userId,
         email: 'usuario@exemplo.com',
         name: 'Usuário',
-        cpf: '',
         phone: '',
         role: 'patient',
         createdAt: new Date(),
@@ -117,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Verificar sessão ao iniciar
   useEffect(() => {
     console.log('🔄 Inicializando autenticação...');
-    
+
     const checkSession = async () => {
       try {
         // Verificar se há token no localStorage
@@ -130,19 +126,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setIsLoading(false);
           return;
         }
-        
+
         console.log('🔍 Verificando sessão existente...');
-        
+
         // Buscar dados do usuário usando a nova API
         const userData = await authApi.getUser();
         console.log('✅ Dados do usuário carregados:', userData.name);
-        
+
         // Converter ApiUser para User
         const user: User = {
           id: userData.id,
           email: userData.email,
           name: userData.name,
-          cpf: userData.cpf || '',
           phone: userData.phone || '',
           role: userData.role,
           profileImage: userData.profileImage,
@@ -150,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           createdAt: userData.createdAt ? new Date(userData.createdAt) : new Date(),
           updatedAt: userData.updatedAt ? new Date(userData.updatedAt) : new Date(),
         };
-        
+
         // Definir usuário e estado de autenticação
         setUser(user);
         setIsAuthenticated(true);
@@ -165,10 +160,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
       }
     };
-    
+
     // Verificar sessão existente
     checkSession();
-    
+
     return () => {
       // Nada para limpar
     };
@@ -178,27 +173,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       console.log('Iniciando login para:', email);
-      
+
       // Usar a nova API de autenticação
       const response = await authApi.login(email, password);
-      
+
       console.log('Login bem-sucedido para:', email);
-      
+
       // Armazenar token para uso em API
       localStorage.setItem('token', response.session.access_token);
-      
+
       // Definir isAuthenticated como true imediatamente
       setIsAuthenticated(true);
-      
+
       // Limpar email pendente ao fazer login com sucesso
       setEmailPendingConfirmation(null);
-      
+
       // Converter ApiUser para User
       const userData: User = {
         id: response.user.id,
         email: response.user.email,
         name: response.user.name,
-        cpf: response.user.cpf || '',
         phone: response.user.phone || '',
         role: response.user.role,
         profileImage: response.user.profileImage,
@@ -206,21 +200,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         createdAt: response.user.createdAt ? new Date(response.user.createdAt) : new Date(),
         updatedAt: response.user.updatedAt ? new Date(response.user.updatedAt) : new Date(),
       };
-      
+
       // Definir usuário
       setUser(userData);
-      
+
       // Log para debug
       console.log('✅ Usuário definido após login:', userData.name);
-      
+
     } catch (error) {
       console.error('❌ Erro ao fazer login:', error);
-      
+
       // Se o erro for de email não confirmado
       if (error instanceof Error && error.message.includes('not confirmed')) {
         setEmailPendingConfirmation(email);
       }
-      
+
       setIsLoading(false);
       throw error;
     } finally {
@@ -231,55 +225,82 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'> & { password: string; therapistId?: string }) => {
     setIsLoading(true);
     try {
-      // Criar usuário no Auth do Supabase
+      console.log('🚀 Iniciando processo de registro para:', userData.email);
+
+      // 1. Criar usuário no Auth do Supabase ou obter se já existir
+      let authUserId: string | undefined;
+
       const { data: authData, error: authError } = await supabaseAuth.signUp({
         email: userData.email,
         password: userData.password,
+        options: {
+          data: {
+            name: userData.name,
+          }
+        }
       });
 
-      if (authError) throw authError;
+      if (authError) {
+        // Se o erro for "User already registered", tentamos verificar se o registro na tabela users existe
+        if (authError.message.includes('already registered')) {
+          console.log('ℹ️ Usuário já existe no Auth. Verificando tabela users...');
 
-      if (authData.user) {
-        // Criar registro do usuário na tabela users
+          // Precisamos descobrir o ID do usuário. Como não temos logado, 
+          // usaremos uma abordagem de "recuperação" se o signup falha mas o usuário é dele.
+          // Nota: O Supabase não retorna o ID se o usuário já existe por segurança.
+          // No entanto, se o signUp falhar mas o usuário estiver tentando se registrar novamente,
+          // o erro 422 é lançado.
+          throw authError;
+        }
+        throw authError;
+      }
+
+      authUserId = authData.user?.id;
+
+      if (authUserId) {
+        // 2. Criar registro do usuário na tabela users
         const userRecord: any = {
-          id: authData.user.id,
+          id: authUserId,
           email: userData.email,
-          cpf: userData.cpf,
           name: userData.name,
           phone: userData.phone,
           role: userData.role,
         };
 
-        // Adicionar therapist_id se for paciente
         if (userData.role === 'patient' && userData.therapistId) {
           userRecord.therapist_id = userData.therapistId;
         }
 
+        console.log('📝 Inserindo registro na tabela users...', userRecord);
         const { error: dbError } = await supabase
           .from('users')
           .insert([userRecord]);
 
         if (dbError) {
-          console.error('Erro ao criar usuário na tabela:', dbError);
-          throw dbError;
+          console.error('❌ Erro ao criar usuário na tabela:', dbError);
+          // Se o erro for de duplicidade (já existe na tabela), podemos prosseguir
+          if (dbError.code === '23505') {
+            console.log('ℹ️ Usuário já existe na tabela users.');
+          } else {
+            throw dbError;
+          }
         }
 
         setUser({
-          id: authData.user.id,
+          id: authUserId,
           email: userData.email,
           name: userData.name,
-          cpf: userData.cpf,
           phone: userData.phone,
           role: userData.role,
           therapist_id: userData.therapistId,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
-        
-        console.log('✅ Usuário registrado com sucesso:', userData.email, 'Terapeuta:', userData.therapistId);
+
+        console.log('✅ Usuário registrado com sucesso:', userData.email);
       }
     } catch (error) {
-      console.error('Erro ao cadastrar:', error);
+      console.error('❌ Erro fatal no cadastro:', error);
       setIsLoading(false);
       throw error;
     } finally {
@@ -290,27 +311,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     try {
       console.log('🚪 Iniciando logout...');
-      
+
       // Fazer logout na API
       await authApi.logout();
-      
+
       // Limpar estado local COMPLETAMENTE
       setUser(null);
       setIsAuthenticated(false);
       setEmailPendingConfirmation(null);
-      
+
       // Remover TODOS os tokens e dados do localStorage
       localStorage.removeItem('token');
       localStorage.removeItem('supabase-auth');
       localStorage.removeItem('supabase.auth.token');
-      
+
       // Limpar sessionStorage também
       sessionStorage.clear();
-      
+
       console.log('✅ Logout bem-sucedido! Estado completamente limpo.');
     } catch (error) {
       console.error('❌ Erro ao fazer logout:', error);
-      
+
       // Mesmo com erro, garantir que o estado local foi limpo COMPLETAMENTE
       setUser(null);
       setIsAuthenticated(false);
@@ -319,7 +340,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('supabase-auth');
       localStorage.removeItem('supabase.auth.token');
       sessionStorage.clear();
-      
+
       throw error;
     }
   };
@@ -340,7 +361,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Gerenciar estado de autenticação separadamente do usuário
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   // Verificar autenticação sempre que o usuário ou token mudar
   useEffect(() => {
     const checkAuth = async () => {
@@ -349,12 +370,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthenticated(true);
         return;
       }
-      
+
       // Verificar se há token válido
       try {
         const token = localStorage.getItem('token');
         const supabaseAuthData = localStorage.getItem('supabase-auth');
-        
+
         if (token && supabaseAuthData) {
           const { data } = await supabaseAuth.getSession();
           if (data?.session) {
@@ -373,19 +394,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthenticated(false);
       }
     };
-    
+
     checkAuth();
   }, [user]);
-  
+
   // Log para debug do estado de autenticação
   useEffect(() => {
-    console.log('AuthContext - Estado de autenticação atualizado:', { 
-      user: user?.email || 'null', 
+    console.log('AuthContext - Estado de autenticação atualizado:', {
+      user: user?.email || 'null',
       isAuthenticated,
-      isLoading 
+      isLoading
     });
   }, [user, isAuthenticated, isLoading]);
-  
+
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, isLoading, emailPendingConfirmation, login, register, logout, resendConfirmationEmail }}>
       {children}

@@ -3,10 +3,10 @@
  * Este arquivo centraliza todas as chamadas HTTP
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 
-  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-    ? 'http://localhost:3001/api' 
-    : typeof window !== 'undefined' 
+const API_URL = import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? 'http://localhost:3001/api'
+    : typeof window !== 'undefined'
       ? `http://${window.location.hostname}:3001/api`
       : 'http://localhost:3001/api');
 
@@ -27,7 +27,7 @@ async function request<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = localStorage.getItem('token');
-  
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -73,7 +73,6 @@ export const authAPI = {
   register: (data: {
     name: string;
     email: string;
-    cpf: string;
     phone: string;
     password: string;
     role: 'patient' | 'therapist_a' | 'therapist_b';

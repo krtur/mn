@@ -15,7 +15,6 @@ export interface PatientInvite {
 export interface PatientFormData {
   name: string;
   email: string;
-  cpf: string;
   phone: string;
   password?: string;
 }
@@ -67,7 +66,6 @@ export const usePatientManagement = () => {
         id: authData.user.id,
         email: patientData.email,
         name: patientData.name,
-        cpf: patientData.cpf,
         phone: patientData.phone,
         role: 'patient',
         therapist_id: user.id,
@@ -96,7 +94,7 @@ export const usePatientManagement = () => {
   };
 
   // Função para enviar convite por email
-  const sendInvite = async (patientData: Omit<PatientFormData, 'password' | 'cpf' | 'phone'>) => {
+  const sendInvite = async (patientData: Omit<PatientFormData, 'password' | 'phone'>) => {
     if (!user || !user.role.startsWith('therapist')) {
       setError('Apenas terapeutas podem enviar convites');
       return null;

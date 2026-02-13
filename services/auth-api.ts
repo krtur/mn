@@ -4,9 +4,9 @@
  */
 
 // Usar URL da API baseada no ambiente
-const API_URL = import.meta.env.VITE_API_URL || 
-  (window.location.hostname === 'localhost' 
-    ? 'http://localhost:3001/api' 
+const API_URL = import.meta.env.VITE_API_URL ||
+  (window.location.hostname === 'localhost'
+    ? 'http://localhost:3001/api'
     : `http://${window.location.hostname}:3001/api`);
 console.log('🔗 API URL configurada:', API_URL);
 
@@ -18,7 +18,6 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  cpf?: string;
   phone?: string;
   role: 'patient' | 'therapist_a' | 'therapist_b';
   profileImage?: string;
@@ -54,7 +53,7 @@ async function request<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = localStorage.getItem('token');
-  
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` }),

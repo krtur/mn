@@ -38,22 +38,23 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 app.post('/api/login', async (req, res) => {
   try {
     console.log('🔐 Tentativa de login para:', req.body.email);
-    
+
     if (!req.body.email || !req.body.password) {
       console.error('❌ Dados de login inválidos:', { email: !!req.body.email, password: !!req.body.password });
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
-    
+
     const { email, password } = req.body;
+
     console.log('🔍 Tentando autenticação com Supabase para:', email);
-    
+
     // Usar createClient diretamente para garantir que estamos usando as credenciais corretas
     const authClient = createClient(
       supabaseUrl,
       supabaseAnonKey,
       { auth: { persistSession: false } }
     );
-    
+
     const { data, error } = await authClient.auth.signInWithPassword({
       email,
       password,
@@ -63,11 +64,11 @@ app.post('/api/login', async (req, res) => {
       console.error('❌ Erro de autenticação:', error.message, error.status);
       return res.status(401).json({ error: error.message, details: error });
     }
-    
+
     console.log('✅ Autenticação bem-sucedida para:', email);
 
     console.log('✅ Login bem-sucedido para:', email);
-    
+
     // Buscar dados do usuário
     let userData = null;
     try {
@@ -76,13 +77,13 @@ app.post('/api/login', async (req, res) => {
         .select('*')
         .eq('id', data.user.id)
         .single();
-        
+
       if (userError) {
         console.warn('⚠️ Erro ao buscar dados do usuário:', userError.message);
         console.error('❌ ERRO CRÍTICO: Não foi possível carregar dados do usuário do banco de dados!');
         console.error('   Isso pode causar problemas de segurança. Verifique as políticas RLS do Supabase.');
         // Não retornar dados incompletos - forçar erro
-        return res.status(500).json({ 
+        return res.status(500).json({
           error: 'Erro ao carregar dados do usuário. Verifique as políticas RLS do Supabase.',
           details: userError.message
         });
@@ -92,7 +93,7 @@ app.post('/api/login', async (req, res) => {
       }
     } catch (userDataError) {
       console.error('❌ Erro ao carregar dados do usuário:', userDataError);
-      return res.status(500).json({ 
+      return res.status(500).json({
         error: 'Erro ao carregar dados do usuário',
         details: userDataError.message
       });
@@ -115,22 +116,22 @@ app.get('/api/user', async (req, res) => {
     if (!token) {
       return res.status(401).json({ error: 'Token não fornecido' });
     }
-    
+
     // Verificar token com Supabase
     const { data: { user }, error } = await supabase.auth.getUser(token);
-    
+
     if (error || !user) {
       console.error('❌ Erro ao verificar token:', error?.message || 'Usuário não encontrado');
       return res.status(401).json({ error: 'Token inválido' });
     }
-    
+
     // Buscar dados do usuário
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('id', user.id)
       .single();
-      
+
     if (userError) {
       console.warn('⚠️ Erro ao buscar dados do usuário:', userError.message);
       // Usar dados básicos do Auth
@@ -142,7 +143,7 @@ app.get('/api/user', async (req, res) => {
         therapist_id: null
       });
     }
-    
+
     console.log('✅ Dados do usuário retornados:', userData.name);
     res.json(userData);
   } catch (error) {

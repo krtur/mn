@@ -12,7 +12,6 @@ export const Profile: React.FC = () => {
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    cpf: user?.cpf || '',
     address: '',
     emergencyContact: '',
   });
@@ -85,10 +84,6 @@ export const Profile: React.FC = () => {
               <div>
                 <p className="text-sm text-slate-600">Telefone</p>
                 <p className="font-semibold text-slate-900">{user?.phone}</p>
-              </div>
-              <div>
-                <p className="text-sm text-slate-600">CPF</p>
-                <p className="font-semibold text-slate-900">{user?.cpf}</p>
               </div>
               <div>
                 <p className="text-sm text-slate-600">Membro desde</p>

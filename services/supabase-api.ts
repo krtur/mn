@@ -414,7 +414,7 @@ export const userAPI = {
         .eq('role', 'patient');
 
       if (search) {
-        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,cpf.ilike.%${search}%`);
+        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%`);
       }
 
       const { data, error } = await query;

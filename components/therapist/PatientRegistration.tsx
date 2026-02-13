@@ -10,7 +10,6 @@ export const PatientRegistration: React.FC = () => {
   const [formData, setFormData] = useState<PatientFormData>({
     name: '',
     email: '',
-    cpf: '',
     phone: '',
     password: '',
   });
@@ -54,7 +53,6 @@ export const PatientRegistration: React.FC = () => {
       setFormData({
         name: '',
         email: '',
-        cpf: '',
         phone: '',
         password: '',
       });
@@ -132,21 +130,19 @@ export const PatientRegistration: React.FC = () => {
         <nav className="flex -mb-px">
           <button
             onClick={() => setActiveTab('register')}
-            className={`py-4 px-6 font-medium text-sm border-b-2 ${
-              activeTab === 'register'
+            className={`py-4 px-6 font-medium text-sm border-b-2 ${activeTab === 'register'
                 ? 'border-teal-500 text-teal-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-            }`}
+              }`}
           >
             Cadastro Direto
           </button>
           <button
             onClick={() => setActiveTab('invite')}
-            className={`py-4 px-6 font-medium text-sm border-b-2 ${
-              activeTab === 'invite'
+            className={`py-4 px-6 font-medium text-sm border-b-2 ${activeTab === 'invite'
                 ? 'border-teal-500 text-teal-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-            }`}
+              }`}
           >
             Enviar Convite
           </button>
@@ -228,20 +224,6 @@ export const PatientRegistration: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="cpf" className="block text-sm font-medium text-slate-700">
-                  CPF
-                </label>
-                <input
-                  type="text"
-                  id="cpf"
-                  name="cpf"
-                  value={formData.cpf}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
 
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
@@ -415,13 +397,12 @@ export const PatientRegistration: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              invite.status === 'pending'
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${invite.status === 'pending'
                                 ? 'bg-yellow-100 text-yellow-800'
                                 : invite.status === 'accepted'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-red-100 text-red-800'
+                              }`}
                           >
                             {getInviteStatus(invite.status)}
                           </span>

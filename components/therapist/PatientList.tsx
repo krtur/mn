@@ -7,7 +7,6 @@ import { Search, Filter, Eye, Users } from 'lucide-react';
 interface Patient {
   id: string;
   name: string;
-  cpf: string;
   phone: string;
   email: string;
   status?: 'active' | 'inactive' | 'paused';
@@ -21,7 +20,7 @@ type FilterStatus = 'all' | 'active' | 'inactive' | 'paused';
 export const PatientList: React.FC = () => {
   const { patients: realPatients, loading, error } = usePatients();
   const { appointments } = useAppointments();
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [sortBy, setSortBy] = useState<SortBy>('name');
@@ -32,7 +31,6 @@ export const PatientList: React.FC = () => {
   const patients = realPatients.map(p => ({
     id: p.id,
     name: p.name,
-    cpf: p.cpf,
     phone: p.phone,
     email: p.email,
     status: 'active' as const,
@@ -44,7 +42,6 @@ export const PatientList: React.FC = () => {
     let result = patients.filter((patient) => {
       const matchesSearch =
         patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        patient.cpf.includes(searchTerm) ||
         patient.email.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesStatus = filterStatus === 'all' || patient.status === filterStatus;
@@ -60,7 +57,7 @@ export const PatientList: React.FC = () => {
         const aLastSession = appointments
           .filter(apt => apt.patient_id === a.id && new Date(apt.start_time) <= new Date())
           .sort((x, y) => new Date(y.start_time).getTime() - new Date(x.start_time).getTime())[0];
-        
+
         const bLastSession = appointments
           .filter(apt => apt.patient_id === b.id && new Date(apt.start_time) <= new Date())
           .sort((x, y) => new Date(y.start_time).getTime() - new Date(x.start_time).getTime())[0];
@@ -72,7 +69,7 @@ export const PatientList: React.FC = () => {
         const aNextSession = appointments
           .filter(apt => apt.patient_id === a.id && new Date(apt.start_time) > new Date())
           .sort((x, y) => new Date(x.start_time).getTime() - new Date(y.start_time).getTime())[0];
-        
+
         const bNextSession = appointments
           .filter(apt => apt.patient_id === b.id && new Date(apt.start_time) > new Date())
           .sort((x, y) => new Date(x.start_time).getTime() - new Date(y.start_time).getTime())[0];
@@ -118,7 +115,7 @@ export const PatientList: React.FC = () => {
     const lastApt = appointments
       .filter(apt => apt.patient_id === patientId && new Date(apt.start_time) <= new Date())
       .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())[0];
-    
+
     return lastApt ? new Date(lastApt.start_time).toLocaleDateString('pt-BR') : 'Nunca';
   };
 
@@ -126,7 +123,7 @@ export const PatientList: React.FC = () => {
     const nextApt = appointments
       .filter(apt => apt.patient_id === patientId && new Date(apt.start_time) > new Date())
       .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())[0];
-    
+
     return nextApt ? new Date(nextApt.start_time).toLocaleDateString('pt-BR') : 'Sem agendamento';
   };
 
@@ -170,7 +167,7 @@ export const PatientList: React.FC = () => {
             <Search className="absolute left-3 top-3 text-slate-400" size={20} />
             <input
               type="text"
-              placeholder="Buscar por nome, CPF ou email..."
+              placeholder="Buscar por nome ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -180,21 +177,19 @@ export const PatientList: React.FC = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('table')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                viewMode === 'table'
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${viewMode === 'table'
                   ? 'bg-teal-600 text-white'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
+                }`}
             >
               Tabela
             </button>
             <button
               onClick={() => setViewMode('cards')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                viewMode === 'cards'
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${viewMode === 'cards'
                   ? 'bg-teal-600 text-white'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
+                }`}
             >
               Cards
             </button>
@@ -254,7 +249,6 @@ export const PatientList: React.FC = () => {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Nome</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">CPF</th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Telefone</th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Email</th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Última Sessão</th>
@@ -267,7 +261,6 @@ export const PatientList: React.FC = () => {
                 {filteredAndSortedPatients.map((patient) => (
                   <tr key={patient.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 text-sm font-medium text-slate-900">{patient.name}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{patient.cpf}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{patient.phone}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{patient.email}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{getLastSession(patient.id)}</td>
@@ -303,7 +296,6 @@ export const PatientList: React.FC = () => {
             >
               <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-4">
                 <h3 className="text-lg font-bold">{patient.name}</h3>
-                <p className="text-teal-100 text-sm mt-1">CPF: {patient.cpf}</p>
               </div>
 
               <div className="p-4 space-y-3">

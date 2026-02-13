@@ -19,9 +19,9 @@ import { useAppointments } from '../../hooks/useAppointments';
 interface Patient {
   id: string;
   name: string;
-  email: string;
   phone: string;
-  cpf: string;
+  email: string;
+  status?: 'active' | 'inactive' | 'paused';
   created_at: string;
 }
 
@@ -104,7 +104,6 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
         <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-6 flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold">{patient.name}</h2>
-            <p className="text-teal-100 mt-1">CPF: {patient.cpf}</p>
           </div>
           <button
             onClick={onClose}
@@ -120,11 +119,10 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 font-semibold whitespace-nowrap transition-colors ${
-                activeTab === tab
+              className={`px-6 py-3 font-semibold whitespace-nowrap transition-colors ${activeTab === tab
                   ? 'text-teal-600 border-b-2 border-teal-600 bg-white'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               {tab === 'info' && 'Informações'}
               {tab === 'notes' && 'Anotações'}
@@ -312,13 +310,12 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                     goals.map((goal) => (
                       <div
                         key={goal.id}
-                        className={`p-4 rounded-lg border-l-4 ${
-                          goal.status === 'completed'
+                        className={`p-4 rounded-lg border-l-4 ${goal.status === 'completed'
                             ? 'bg-green-50 border-green-600'
                             : goal.status === 'paused'
-                            ? 'bg-yellow-50 border-yellow-600'
-                            : 'bg-blue-50 border-blue-600'
-                        }`}
+                              ? 'bg-yellow-50 border-yellow-600'
+                              : 'bg-blue-50 border-blue-600'
+                          }`}
                       >
                         <div className="flex items-start justify-between">
                           <div>
@@ -329,13 +326,12 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                             </p>
                           </div>
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
-                              goal.status === 'completed'
+                            className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${goal.status === 'completed'
                                 ? 'bg-green-200 text-green-800'
-                                : goal.status === 'paused'
-                                ? 'bg-yellow-200 text-yellow-800'
-                                : 'bg-blue-200 text-blue-800'
-                            }`}
+                                : goal.status === 'active'
+                                  ? 'bg-blue-200 text-blue-800'
+                                  : 'bg-yellow-200 text-yellow-800'
+                              }`}
                           >
                             {goal.status === 'completed' && '✓ Concluída'}
                             {goal.status === 'active' && '⏳ Ativa'}
@@ -458,11 +454,10 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                             </p>
                           </div>
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              apt.status === 'confirmed'
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${apt.status === 'confirmed'
                                 ? 'bg-green-100 text-green-800'
                                 : 'bg-yellow-100 text-yellow-800'
-                            }`}
+                              }`}
                           >
                             {apt.status === 'confirmed' ? '✓ Confirmado' : '⏳ Pendente'}
                           </span>
