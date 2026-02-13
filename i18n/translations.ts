@@ -11,7 +11,7 @@ export const translations = {
       corporateTherapy: 'Terapia Corporativa',
       schoolProject: 'Projeto Escola',
       mentoring: 'Mentoria',
-      lowCostTherapy: 'Terapia Baixo Custo',
+
       methodology: 'A Metodologia (TRG)',
       whatIsTrg: 'O que é TRG?',
       faq: 'Perguntas Frequentes',
@@ -94,7 +94,7 @@ export const translations = {
       trg: 'Terapia de Reprocessamento Generativo (TRG)',
       corporate: 'Terapia Corporativa',
       school: 'Projeto Escola',
-      lowCost: 'Terapia de Baixo Custo',
+
       mentoring: 'Mentoria',
     },
 
@@ -111,11 +111,7 @@ export const translations = {
         description: 'Transformando a saúde mental nas escolas através de programas educacionais e terapêuticos.',
         cta: 'Saiba mais sobre o Projeto Escola',
       },
-      lowCostTherapy: {
-        title: 'Terapia de Baixo Custo',
-        description: 'Terapia acessível para todos, sem comprometer a qualidade do atendimento.',
-        cta: 'Conheça nossos planos acessíveis',
-      },
+
       mentoring: {
         title: 'Mentoria',
         description: 'Desenvolvimento pessoal e profissional com orientação especializada.',
@@ -178,7 +174,7 @@ export const translations = {
       corporateTherapy: 'Terapia Corporativa',
       schoolProject: 'Proyecto Escolar',
       mentoring: 'Mentoría',
-      lowCostTherapy: 'Terapia de Bajo Costo',
+
       methodology: 'La Metodología (TRG)',
       whatIsTrg: '¿Qué es TRG?',
       faq: 'Preguntas Frecuentes',
@@ -261,7 +257,7 @@ export const translations = {
       trg: 'Terapia de Reprocesamiento Generativo (TRG)',
       corporate: 'Terapia Corporativa',
       school: 'Proyecto Escolar',
-      lowCost: 'Terapia de Bajo Costo',
+
       mentoring: 'Mentoría',
     },
 
@@ -278,11 +274,7 @@ export const translations = {
         description: 'Transformando la salud mental en las escuelas a través de programas educativos y terapéuticos.',
         cta: 'Conoce más sobre el Proyecto Escolar',
       },
-      lowCostTherapy: {
-        title: 'Terapia de Bajo Costo',
-        description: 'Terapia accesible para todos, sin comprometer la calidad de la atención.',
-        cta: 'Conoce nuestros planes accesibles',
-      },
+
       mentoring: {
         title: 'Mentoría',
         description: 'Desarrollo personal y profesional con orientación especializada.',

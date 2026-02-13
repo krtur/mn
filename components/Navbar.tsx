@@ -23,7 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
     'credenciais': '/credenciais',
     'terapia-corporativa': '/terapia-corporativa',
     'projeto-escola': '/projeto-escola',
-    'terapia-baixo-custo': '/terapia-baixo-custo',
+
     'o-que-e-trg': '/o-que-e-trg',
     'faq': '/faq',
     'ebooks': '/ebooks',
@@ -46,7 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
       dropdown: [
         { nameKey: 'nav.corporateTherapy', pageKey: 'terapia-corporativa' },
         { nameKey: 'nav.schoolProject', pageKey: 'projeto-escola' },
-        { nameKey: 'nav.lowCostTherapy', pageKey: 'terapia-baixo-custo' },
+
       ],
     },
     {
@@ -107,9 +107,8 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
                       key={item.nameKey}
                       href="#"
                       onClick={(e) => handleLinkClick(e, item.pageKey)}
-                      className={`block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-700 hover:pl-5 cursor-pointer transition-all duration-200 ${
-                        index !== link.dropdown!.length - 1 ? 'border-b border-slate-100' : ''
-                      }`}
+                      className={`block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-700 hover:pl-5 cursor-pointer transition-all duration-200 ${index !== link.dropdown!.length - 1 ? 'border-b border-slate-100' : ''
+                        }`}
                       role="menuitem"
                     >
                       {t(item.nameKey)}

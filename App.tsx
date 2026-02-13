@@ -9,7 +9,7 @@ import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
 import TerapiaCorporativa from './components/TerapiaCorporativa';
 import ProjetoEscola from './components/ProjetoEscola';
-import TerapiaBaixoCusto from './components/TerapiaBaixoCusto';
+
 import MeuAtendimento from './components/MeuAtendimento';
 import Credenciais from './components/Credenciais';
 import Depoimentos from './components/Depoimentos';
@@ -53,7 +53,7 @@ import DirectRestApiForm from './components/DirectRestApiForm';
 // Public Layout Component
 const PublicLayout = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 min-h-screen flex flex-col text-slate-800 font-sans">
-    <Header setCurrentPage={() => {}} />
+    <Header setCurrentPage={() => { }} />
     <main className="flex-grow flex items-center justify-center p-4">
       {children}
     </main>
@@ -94,14 +94,7 @@ function App() {
                 </PublicLayout>
               }
             />
-            <Route
-              path="/terapia-baixo-custo"
-              element={
-                <PublicLayout>
-                  <TerapiaBaixoCusto />
-                </PublicLayout>
-              }
-            />
+
             <Route
               path="/meu-atendimento"
               element={

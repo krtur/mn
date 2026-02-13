@@ -23,11 +23,7 @@ export const knowledgeBase = {
       description: 'Programa de terapia voltado para o ambiente escolar.',
       target: 'Estudantes e comunidade escolar'
     },
-    terapiaBaixoCusto: {
-      name: 'Terapia de Baixo Custo',
-      description: 'Sessões de terapia com valores acessíveis para democratizar o acesso ao tratamento.',
-      target: 'Pessoas com orçamento limitado'
-    },
+
     mentoria: {
       name: 'Mentoria',
       description: 'Programa de mentoria para desenvolvimento pessoal e profissional.'

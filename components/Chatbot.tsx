@@ -57,7 +57,6 @@ const Chatbot: React.FC = () => {
 
 3. **Projeto Escola** - Programa voltado para o ambiente escolar.
 
-4. **Terapia de Baixo Custo** - Sessões com valores acessíveis.
 
 5. **Mentoria** - Desenvolvimento pessoal e profissional.
 
@@ -289,8 +288,8 @@ O que prefere?`;
               >
                 <div
                   className={`max-w-xs px-4 py-3 rounded-lg ${message.sender === 'user'
-                      ? 'bg-primary-500 text-white rounded-br-none'
-                      : 'bg-white text-slate-800 border border-stone-200 rounded-bl-none'
+                    ? 'bg-primary-500 text-white rounded-br-none'
+                    : 'bg-white text-slate-800 border border-stone-200 rounded-bl-none'
                     }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
