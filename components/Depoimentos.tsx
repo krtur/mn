@@ -73,30 +73,7 @@ const Depoimentos: React.FC = () => {
 
 
 
-      <div className="card-premium bg-gradient-to-r from-accent-50 to-primary-50 border-2 border-accent-200 p-12 text-center">
-        <div className="mb-6">
-          <svg className="w-16 h-16 mx-auto text-accent-600" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-          </svg>
-        </div>
-        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-          Quer ver mais depoimentos?
-        </h3>
-        <p className="text-lg text-slate-700 mb-8">
-          Visite nosso canal no YouTube e conheça centenas de histórias de transformação e sucesso com a metodologia TRG.
-        </p>
-        <a
-          href="https://www.youtube.com/@mnterapeutas"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-accent inline-flex items-center gap-3 px-10 py-4"
-        >
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-          </svg>
-          <span>Acesse Nosso Canal no YouTube</span>
-        </a>
-      </div>
+
     </section>
   );
 };

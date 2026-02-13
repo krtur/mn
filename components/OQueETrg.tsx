@@ -70,24 +70,7 @@ const OQueETrg: React.FC = () => {
           </p>
         </div>
 
-        {/* Vídeo Explicativo */}
-        <div className="mb-16">
-          <h3 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-            Entenda Melhor a TRG
-          </h3>
-          <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg">
-            <div className="relative w-full aspect-video">
-              <iframe
-                className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/nKmNnM596-c"
-                title="O que é TRG - Terapia de Reprocessamento Generativo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
+
 
         {/* Protocolos */}
         <div className="mb-16">
