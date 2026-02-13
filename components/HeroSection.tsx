@@ -14,13 +14,13 @@ const HeroSection: React.FC = () => {
   // WhatsApp links for therapists (mantidos como fallback)
   const marceloWhatsapp = 'https://wa.me/5519981109732';
   const nadielmaWhatsapp = 'https://wa.me/5519981740279';
-  
+
   // Estados para controlar os modais de agendamento
   const [showMarceloForm, setShowMarceloForm] = useState(false);
   const [showNadielmaForm, setShowNadielmaForm] = useState(false);
   const [showGenericForm, setShowGenericForm] = useState(false);
   const [modalPosition, setModalPosition] = useState(0);
-  
+
   // Função para abrir modal na posição atual do scroll e garantir visibilidade
   const openModalAtCurrentPosition = (setterFunction: React.Dispatch<React.SetStateAction<boolean>>) => {
     // Usa a função de utilidade para abrir o modal e garantir visibilidade
@@ -53,7 +53,7 @@ const HeroSection: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Badge */}
           <div className="mb-12 animate-fade-in">
-            <span className="inline-block px-6 py-3 bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 rounded-full text-base font-bold tracking-wide border border-primary-200">
+            <span className="inline-block px-8 py-4 bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 rounded-full text-3xl font-bold tracking-wide border border-primary-200">
               {t('hero.badge')}
             </span>
           </div>
@@ -120,12 +120,12 @@ const HeroSection: React.FC = () => {
                 <span>{t('cta.buttonNadielma')}</span>
               </a>
             </div>
-            
+
             {/* Modal para Marcelo */}
             {showMarceloForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button 
+                  <button
                     onClick={() => setShowMarceloForm(false)}
                     className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
                     title="Fechar formulário"
@@ -135,7 +135,7 @@ const HeroSection: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                  <PublicApiForm 
+                  <PublicApiForm
                     onSuccess={() => setTimeout(() => setShowMarceloForm(false), 3000)}
                     onCancel={() => setShowMarceloForm(false)}
                     preselectedTherapist="028d8869-679f-4093-b435-1a43b6ced0e2"
@@ -144,12 +144,12 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
             )}
-            
+
             {/* Modal para Nadielma */}
             {showNadielmaForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button 
+                  <button
                     onClick={() => setShowNadielmaForm(false)}
                     className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
                     title="Fechar formulário"
@@ -159,7 +159,7 @@ const HeroSection: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                  <PublicApiForm 
+                  <PublicApiForm
                     onSuccess={() => setTimeout(() => setShowNadielmaForm(false), 3000)}
                     onCancel={() => setShowNadielmaForm(false)}
                     preselectedTherapist="83273ffc-c878-4abc-a24b-e35fd4801339"
@@ -168,12 +168,12 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
             )}
-            
+
             {/* Modal para Agendamento Genérico (com seleção de terapeuta) */}
             {showGenericForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative animate-fade-in-up">
-                  <button 
+                  <button
                     onClick={() => setShowGenericForm(false)}
                     className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
                     title="Fechar formulário"
@@ -183,7 +183,7 @@ const HeroSection: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                  <PublicApiForm 
+                  <PublicApiForm
                     onSuccess={() => setTimeout(() => setShowGenericForm(false), 3000)}
                     onCancel={() => setShowGenericForm(false)}
                     isModal={true}
@@ -252,9 +252,9 @@ const HeroSection: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Image */}
             <div className="flex justify-center animate-fade-in">
-              <img 
-                src="/terapeutas.png" 
-                alt="Nossos Terapeutas - Marcelo e Nadielma" 
+              <img
+                src="/terapeutas.png"
+                alt="Nossos Terapeutas - Marcelo e Nadielma"
                 className="rounded-2xl shadow-2xl max-w-md w-full object-cover hover:shadow-xl transition-all duration-300"
               />
             </div>
@@ -316,7 +316,7 @@ const HeroSection: React.FC = () => {
               </span>
             </button>
           </div>
-          
+
           {/* WhatsApp Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
             <a

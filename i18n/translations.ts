@@ -20,7 +20,7 @@ export const translations = {
       phobias: 'Fobias (Glossário)',
       phrases: 'Frases',
     },
-    
+
     // Hero Section
     hero: {
       badge: '💙 NÓS NOS PREOCUPAMOS COM VOCÊ!',
@@ -76,7 +76,7 @@ export const translations = {
       buttonMarcelo: 'Falar com Marcelo',
       buttonNadielma: 'Falar com Nadi',
       ctaBoxLabel: 'COMECE AGORA',
-      ctaBoxTitle: 'Transforme sua vida com',
+      ctaBoxTitle: 'Transforme sua vida com a',
       ctaBoxSubtitle: 'Metodologia comprovada para resultados duradouros',
       ctaBoxFeatures: 'Atendimento profissional • Terapeutas certificados • Resultados garantidos',
     },
@@ -345,10 +345,10 @@ export type TranslationKey = keyof typeof translations['pt-BR'];
 export const getTranslation = (language: Language, key: string): string => {
   const keys = key.split('.');
   let value: any = translations[language];
-  
+
   for (const k of keys) {
     value = value?.[k];
   }
-  
+
   return value || key;
 };
