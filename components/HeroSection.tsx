@@ -263,28 +263,17 @@ const HeroSection: React.FC = () => {
             <div className="animate-slide-up">
               <div className="space-y-8">
                 <div className="card-premium p-8 border-l-4 border-primary-500">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{t('therapists.marcelo')}</h3>
-                  <p className="text-primary-600 font-semibold mb-3">{t('therapists.marceloRole')}</p>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{t('therapists.names')}</h3>
+                  <p className="text-primary-600 font-bold mb-1">{t('therapists.roles')}</p>
+                  <p className="text-accent-600 font-semibold mb-3">{t('therapists.specialization')}</p>
                   <p className="text-slate-600 leading-relaxed mb-4">
-                    {t('therapists.marceloDesc')}
+                    {t('therapists.bio')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">CITRG</span>
                     <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">Ansiedade</span>
+                    <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">Depressão</span>
                     <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">Traumas</span>
-                  </div>
-                </div>
-
-                <div className="card-premium p-8 border-l-4 border-accent-500">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{t('therapists.nadielma')}</h3>
-                  <p className="text-accent-600 font-semibold mb-3">{t('therapists.nadielmaRole')}</p>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    {t('therapists.nadielmaDesc')}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold">CITRG</span>
-                    <span className="px-3 py-1 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold">Casais</span>
-                    <span className="px-3 py-1 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold">Família</span>
                   </div>
                 </div>
               </div>

@@ -60,12 +60,10 @@ export const translations = {
       title: 'Conheça Nossos',
       subtitle: 'Terapeutas',
       description: 'Profissionais certificados internacionalmente, dedicados a sua transformação',
-      marcelo: 'Marcelo',
-      marceloRole: 'Terapeuta e Fundador',
-      marceloDesc: 'Especialista em Terapia de Reprocessamento Generativo (TRG) com certificação internacional. Sua abordagem empática e focada em resultados cria um espaço seguro para sua transformação.',
-      nadielma: 'Nadi',
-      nadielmaRole: 'Terapeuta e Fundadora',
-      nadielmaDesc: 'Combina TRG com profunda compreensão da dinâmica humana. Sua prática é pautada na compaixão e na crença de que a transformação é sempre possível.',
+      names: 'Marcelo & Nadi',
+      roles: 'Terapeutas e Fundadores',
+      specialization: 'Especialistas em transtornos emocionais graves / psicossomática',
+      bio: 'Juntos, combinam a Terapia de Reprocessamento Generativo (TRG) com uma profunda compreensão da dinâmica humana. Com certificação internacional e uma abordagem empática, criam um espaço seguro e acolhedor, acreditando que a transformação e o alívio emocional são sempre possíveis.',
     },
 
     // CTA
@@ -229,12 +227,10 @@ export const translations = {
       title: 'Conoce a Nuestros',
       subtitle: 'Terapeutas',
       description: 'Profesionales certificados internacionalmente, dedicados a tu transformación',
-      marcelo: 'Marcelo',
-      marceloRole: 'Terapeuta y Fundador',
-      marceloDesc: 'Especialista en Terapia de Reprocesamiento Generativo (TRG) con certificación internacional. Su enfoque empático y enfocado en resultados crea un espacio seguro para tu transformación.',
-      nadielma: 'Nadielma',
-      nadielmaRole: 'Terapeuta y Fundadora',
-      nadielmaDesc: 'Combina TRG con una profunda comprensión de la dinámica humana. Su práctica se basa en la compasión y en la creencia de que la transformación siempre es posible.',
+      names: 'Marcelo y Nadi',
+      roles: 'Terapeutas y Fundadores',
+      specialization: 'Especialistas en trastornos emocionales graves / psicosomática',
+      bio: 'Juntos, combinan la Terapia de Reprocesamiento Generativo (TRG) con una profunda comprensión de la dinámica humana. Con certificación internacional y un enfoque empático, crean un espacio seguro y acogedor.',
     },
 
     // CTA
