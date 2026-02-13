@@ -8,21 +8,42 @@
 @layer base {
   html {
     @apply scroll-smooth;
+    font-size: 16px;
   }
 
   body {
-    @apply bg-gradient-to-br from-slate-50 via-sky-50 to-slate-50 text-slate-700 font-lato;
-    letter-spacing: 0.3px;
+    @apply bg-slate-50 text-slate-700 font-lato antialiased selection:bg-primary-100 selection:text-primary-900;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-poppins font-semibold text-slate-900;
-    letter-spacing: -0.5px;
   }
 
   p {
     @apply leading-relaxed;
-    line-height: 1.75;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
   }
 }
 
@@ -88,15 +109,15 @@
   .animation-delay-200 {
     animation-delay: 0.2s;
   }
-  
+
   .animation-delay-250 {
     animation-delay: 0.25s;
   }
-  
+
   .animation-delay-300 {
     animation-delay: 0.3s;
   }
-  
+
   .animation-delay-400 {
     animation-delay: 0.4s;
   }
@@ -144,6 +165,7 @@
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -155,6 +177,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -162,24 +185,39 @@
   }
 
   @keyframes shake {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateX(0);
     }
-    10%, 30%, 50%, 70%, 90% {
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
       transform: translateX(-5px);
     }
-    20%, 40%, 60%, 80% {
+
+    20%,
+    40%,
+    60%,
+    80% {
       transform: translateX(5px);
     }
   }
 
   @keyframes blob {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(0, 0) scale(1);
     }
+
     33% {
       transform: translate(30px, -50px) scale(1.1);
     }
+
     66% {
       transform: translate(-20px, 20px) scale(0.9);
     }
@@ -205,16 +243,31 @@
   .animation-delay-2000 {
     animation-delay: 2s;
   }
-  
+
   /* Animation delays for dynamic indexes */
-  .animation-delay-100 { animation-delay: 0.1s; }
-  .animation-delay-200 { animation-delay: 0.2s; }
-  .animation-delay-300 { animation-delay: 0.3s; }
-  .animation-delay-400 { animation-delay: 0.4s; }
-  .animation-delay-500 { animation-delay: 0.5s; }
-  
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+
   /* Aspect ratios */
   .aspect-video {
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
   }
 }
