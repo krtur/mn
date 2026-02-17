@@ -64,6 +64,12 @@ export const translations = {
       roles: 'Terapeutas e Fundadores',
       specialization: 'Especialistas em transtornos emocionais graves / psicossomática',
       bio: 'Juntos, combinam a Terapia de Reprocessamento Generativo (TRG) com uma profunda compreensão da dinâmica humana. Com certificação internacional e uma abordagem empática, criam um espaço seguro e acolhedor, acreditando que a transformação e o alívio emocional são sempre possíveis.',
+      marcelo: 'Marcelo',
+      marceloRole: 'Terapeuta e Fundador',
+      marceloDesc: 'Especialista em TRG com abordagem empática e focada em resultados. Cria um espaço seguro para explorar questões profundas e reprocessar traumas.',
+      nadielma: 'Nadi',
+      nadielmaRole: 'Terapeuta e Fundadora',
+      nadielmaDesc: 'Combina TRG com profunda compreensão da dinâmica humana. Prática pautada na compaixão e na crença de que a transformação é sempre possível.',
     },
 
     // CTA
@@ -223,6 +229,12 @@ export const translations = {
       roles: 'Terapeutas y Fundadores',
       specialization: 'Especialistas en trastornos emocionales graves / psicosomática',
       bio: 'Juntos, combinan la Terapia de Reprocesamiento Generativo (TRG) con una profunda comprensión de la dinámica humana. Con certificación internacional y un enfoque empático, crean un espacio seguro y acogedor.',
+      marcelo: 'Marcelo',
+      marceloRole: 'Terapeuta y Fundador',
+      marceloDesc: 'Especialista en TRG con un enfoque empático y centrado en los resultados. Crea un espacio seguro para explorar cuestiones profundas y reprocesar traumas.',
+      nadielma: 'Nadi',
+      nadielmaRole: 'Terapeuta y Fundadora',
+      nadielmaDesc: 'Combina la TRG con una comprensión profunda de la dinámica humana. Práctica basada en la compasión y en la creencia de que la transformación es siempre posible.',
     },
 
     // CTA
@@ -231,7 +243,7 @@ export const translations = {
       subtitle: 'transformación?',
       description: 'Agenda tu sesión con uno de nuestros terapeutas certificados y comienza tu viaje de sanación.',
       buttonMarcelo: 'Hablar con Marcelo',
-      buttonNadielma: 'Hablar con Nadielma',
+      buttonNadielma: 'Hablar con Nadi',
       ctaBoxLabel: 'COMIENZA AHORA',
       ctaBoxTitle: 'Transforma tu vida con',
       ctaBoxSubtitle: 'Metodología comprobada para resultados duraderos',
