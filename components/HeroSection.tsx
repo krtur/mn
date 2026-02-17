@@ -153,7 +153,7 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Our Therapists Section */}
-      <div className="relative z-10 bg-[#020205] py-32 border-t border-white/5">
+      <div className="relative z-10 py-32 border-t border-white/5">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="bg-[#0a0a0f] rounded-[3rem] shadow-2xl overflow-hidden border border-white/10">
@@ -162,9 +162,9 @@ const HeroSection: React.FC = () => {
                   <img
                     src="/terapeutas.png"
                     alt="Nossos Terapeutas - Marcelo e Nadielma"
-                    className="absolute inset-0 w-full h-full object-cover object-top opacity-90"
+                    className="absolute inset-0 w-full h-full object-cover object-top"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] to-transparent lg:bg-gradient-to-r lg:from-[#0a0a0f] lg:to-transparent"></div>
+                  {/* Gradient removed as requested */}
                   <div className="absolute bottom-0 left-0 p-12 text-white lg:hidden">
                     <h3 className="text-3xl font-bold mb-2">{t('therapists.names')}</h3>
                     <p className="text-lg opacity-90">{t('therapists.roles')}</p>
