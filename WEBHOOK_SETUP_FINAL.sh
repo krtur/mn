@@ -60,8 +60,14 @@ if id "$WEBHOOK_USER" &>/dev/null; then
   echo -e "${YELLOW}⚠️ Usuário webhook já existe${NC}"
 else
   useradd -r -s /bin/bash -d /var/www/webhook $WEBHOOK_USER
-  echo -e "${GREEN}✅ Usuário webhook criado${NC}"
+  usermod -aG docker $WEBHOOK_USER
+  echo -e "${GREEN}✅ Usuário webhook criado e adicionado ao grupo docker${NC}"
 fi
+
+# Configurar sudo sem senha para restart do nginx
+echo "$WEBHOOK_USER ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart nginx" > /etc/sudoers.d/webhook
+chmod 0440 /etc/sudoers.d/webhook
+
 
 # ============================================
 # 2. Copiar webhook-server.js para o VPS

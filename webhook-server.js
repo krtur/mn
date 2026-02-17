@@ -35,7 +35,7 @@ app.use((req, res, next) => {
  */
 function verifyWebhookSignature(req) {
   const signature = req.headers['x-hub-signature-256'];
-  
+
   if (!signature) {
     console.warn('⚠️ Webhook sem assinatura detectado');
     return false;
@@ -48,7 +48,7 @@ function verifyWebhookSignature(req) {
     .digest('hex');
 
   const expectedSignature = `sha256=${hash}`;
-  
+
   const isValid = crypto.timingSafeEqual(
     Buffer.from(signature),
     Buffer.from(expectedSignature)
@@ -63,86 +63,66 @@ function verifyWebhookSignature(req) {
 async function executeDeploy() {
   try {
     console.log('\n========================================');
-    console.log('🚀 INICIANDO DEPLOY AUTOMÁTICO');
+    console.log('🚀 INICIANDO DEPLOY AUTOMÁTICO (DOCKER)');
     console.log('========================================\n');
 
     // 1. Navegar para o diretório do projeto
     console.log(`📁 Entrando no diretório: ${PROJECT_DIR}`);
-    
+
     // 2. Pull das alterações
     console.log('📥 Fazendo git pull origin main...');
     const { stdout: pullOutput } = await execAsync('git pull origin main', { cwd: PROJECT_DIR });
     console.log(pullOutput);
 
-    // 3. Instalar dependências
-    console.log('📦 Instalando dependências com npm install...');
-    const { stdout: npmOutput } = await execAsync('npm install', { cwd: PROJECT_DIR });
-    console.log(npmOutput);
+    // 3. Reiniciar containers com Docker Compose
+    console.log('🐳 Reconstruindo e iniciando containers Docker...');
+    const { stdout: dockerOutput } = await execAsync('docker compose up -d --build', { cwd: PROJECT_DIR });
+    console.log(dockerOutput);
 
-    // 4. Build do frontend
-    console.log('🔨 Fazendo build do frontend com npm run build...');
-    const { stdout: buildOutput } = await execAsync('npm run build', { cwd: PROJECT_DIR });
-    console.log(buildOutput);
-
-    // 5. Reiniciar o servidor com PM2
-    console.log('🔄 Reiniciando servidor com PM2...');
-    try {
-      await execAsync('pm2 restart mn-backend', { cwd: PROJECT_DIR });
-      console.log('✅ Servidor reiniciado com sucesso');
-    } catch (pmError) {
-      console.log('⚠️ PM2 restart falhou, tentando start...');
-      await execAsync('pm2 start server.js --name mn-backend', { cwd: PROJECT_DIR });
-      console.log('✅ Servidor iniciado com sucesso');
-    }
-
-    // 6. Salvar configuração do PM2
-    console.log('💾 Salvando configuração do PM2...');
-    await execAsync('pm2 save', { cwd: PROJECT_DIR });
-
-    // 7. Reiniciar Nginx
+    // 4. Reiniciar Nginx (opcional, mas garante que o proxy esteja ok)
     console.log('🔄 Reiniciando Nginx...');
     await execAsync('systemctl restart nginx');
     console.log('✅ Nginx reiniciado com sucesso');
 
     console.log('\n========================================');
-    console.log('✅ DEPLOY CONCLUÍDO COM SUCESSO!');
+    console.log('✅ DEPLOY DOCKER CONCLUÍDO COM SUCESSO!');
     console.log('========================================\n');
-    console.log('🌐 Site: http://31.97.252.100');
-    console.log('🔌 API: http://31.97.252.100:3001/api\n');
+    console.log('🌐 Site: http://31.97.252.100\n');
 
-    return { success: true, message: 'Deploy concluído com sucesso' };
+    return { success: true, message: 'Deploy Docker concluído com sucesso' };
   } catch (error) {
     console.error('\n========================================');
-    console.error('❌ ERRO NO DEPLOY!');
+    console.error('❌ ERRO NO DEPLOY DOCKER!');
     console.error('========================================\n');
     console.error('Erro:', error.message);
-    console.error('Stdout:', error.stdout);
-    console.error('Stderr:', error.stderr);
+    if (error.stdout) console.error('Stdout:', error.stdout);
+    if (error.stderr) console.error('Stderr:', error.stderr);
     console.error('\n');
-    
-    return { 
-      success: false, 
-      message: 'Erro ao executar deploy',
-      error: error.message 
+
+    return {
+      success: false,
+      message: 'Erro ao executar deploy Docker',
+      error: error.message
     };
   }
 }
+
 
 /**
  * Rota para receber webhooks do GitHub
  */
 app.post('/hooks/mn-deploy', async (req, res) => {
   console.log('\n📨 Webhook recebido do GitHub');
-  
+
   // Verificar assinatura
   try {
     const isValid = verifyWebhookSignature(req);
-    
+
     if (!isValid) {
       console.error('❌ Assinatura do webhook inválida!');
       return res.status(401).json({ error: 'Assinatura inválida' });
     }
-    
+
     console.log('✅ Assinatura do webhook verificada');
   } catch (error) {
     console.error('❌ Erro ao verificar assinatura:', error.message);
@@ -165,7 +145,7 @@ app.post('/hooks/mn-deploy', async (req, res) => {
 
   console.log('✅ Push na branch main detectado');
   console.log(`📝 Commits: ${req.body.commits?.length || 0}`);
-  
+
   if (req.body.commits && req.body.commits.length > 0) {
     req.body.commits.forEach((commit, index) => {
       console.log(`   ${index + 1}. ${commit.message}`);
@@ -174,7 +154,7 @@ app.post('/hooks/mn-deploy', async (req, res) => {
 
   // Executar deploy
   const result = await executeDeploy();
-  
+
   // Responder ao GitHub
   res.status(result.success ? 200 : 500).json(result);
 });

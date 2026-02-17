@@ -1,0 +1,20 @@
+[Unit]
+Description=M&N Terapeutas - Webhook Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/mn
+ExecStart=/usr/bin/node /var/www/mn/webhook-server.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment="NODE_ENV=production"
+Environment="WEBHOOK_PORT=9001"
+Environment="WEBHOOK_SECRET=c07e7eaa5d8bab70edf4b3acb837f9426ce96fbbd12ee2b270821cecb11b19b8"
+Environment="PROJECT_DIR=/var/www/mn"
+
+[Install]
+WantedBy=multi-user.target

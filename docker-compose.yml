@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3001:3001"
+    restart: always
+    environment:
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - PORT=3001
