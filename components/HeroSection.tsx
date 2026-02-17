@@ -17,7 +17,7 @@ const HeroSection: React.FC = () => {
   const stats = [
     { number: '200+', label: t('stats.patients'), icon: '👥' },
     { number: '95%', label: t('stats.satisfaction'), icon: '⭐' },
-    { number: '6', label: t('stats.experience'), icon: '🎓' },
+    { number: '5', label: t('stats.experience'), icon: '🎓' },
   ];
 
   const benefits = [
