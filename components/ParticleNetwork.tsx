@@ -32,12 +32,19 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
 
         let animationFrameId: number;
         let particles: Particle[] = [];
+        let signals: Signal[] = [];
 
         class Particle {
-            x: number; y: number; size: number; speedX: number; speedY: number;
+            x: number; y: number; size: number; baseSize: number; speedX: number; speedY: number;
+            pulseSpeed: number; pulseOffset: number;
 
             constructor(x: number, y: number, size: number, speedX: number, speedY: number) {
-                this.x = x; this.y = y; this.size = size; this.speedX = speedX; this.speedY = speedY;
+                this.x = x; this.y = y;
+                this.baseSize = size;
+                this.size = size;
+                this.speedX = speedX; this.speedY = speedY;
+                this.pulseSpeed = 0.02 + Math.random() * 0.03;
+                this.pulseOffset = Math.random() * Math.PI * 2;
             }
 
             draw() {
@@ -48,7 +55,10 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
                 ctx.fill();
             }
 
-            update() {
+            update(time: number) {
+                // Pulsing effect
+                this.size = this.baseSize + Math.sin(time * this.pulseSpeed + this.pulseOffset) * 0.5;
+
                 // Repulsão do mouse
                 const dx = this.x - mousePositionRef.current.x;
                 const dy = this.y - mousePositionRef.current.y;
@@ -71,11 +81,47 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
             }
         }
 
+        class Signal {
+            start: Particle;
+            end: Particle;
+            progress: number;
+            speed: number;
+            alive: boolean;
+
+            constructor(start: Particle, end: Particle) {
+                this.start = start;
+                this.end = end;
+                this.progress = 0;
+                this.speed = 0.02 + Math.random() * 0.04; // Velocidade do sinal
+                this.alive = true;
+            }
+
+            update() {
+                this.progress += this.speed;
+                if (this.progress >= 1) {
+                    this.alive = false;
+                }
+            }
+
+            draw() {
+                if (!ctx || !this.alive) return;
+                const x = this.start.x + (this.end.x - this.start.x) * this.progress;
+                const y = this.start.y + (this.end.y - this.start.y) * this.progress;
+
+                // Desenhar o "brilho" viajante
+                ctx.fillStyle = particleColor;
+                ctx.beginPath();
+                ctx.arc(x, y, 1.5, 0, Math.PI * 2, false);
+                ctx.fill();
+            }
+        }
+
         const init = () => {
             particles = [];
+            signals = [];
             const numberOfParticles = (canvas.width * canvas.height) / particleCountDensity;
             for (let i = 0; i < numberOfParticles; i++) {
-                const size = Math.random() * 3 + 2;
+                const size = Math.random() * 3 + 1.5; // Slightly adjusted size
                 const x = Math.random() * (canvas.width - size * 2) + size;
                 const y = Math.random() * (canvas.height - size * 2) + size;
                 const speedX = Math.random() * 0.4 - 0.2;
@@ -87,45 +133,69 @@ export const ParticleNetwork: React.FC<ParticleNetworkProps> = ({
         const connect = () => {
             if (!ctx) return;
             const maxDistanceSq = (canvas.width / 7) * (canvas.height / 7);
+
             for (let a = 0; a < particles.length; a++) {
                 for (let b = a; b < particles.length; b++) {
-                    const distanceSq = ((particles[a].x - particles[b].x) ** 2) + ((particles[a].y - particles[b].y) ** 2);
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distanceSq = dx * dx + dy * dy;
 
                     if (distanceSq < maxDistanceSq) {
                         const opacity = 1 - (distanceSq / maxDistanceSq);
-                        // Usar a mesma cor base, mas ajustando opacidade
-                        // Isso assume que particleColor é rgba ou hex. 
-                        // Para simplicidade, vamos usar o roxo padrão se a cor não for rgba
-                        // ou tentar manipular string. Aqui simplificamos usando a cor base + opacidade calculada
 
+                        // Desenhar linha
                         const hasParen = particleColor.endsWith(')');
                         if (hasParen) {
                             ctx.strokeStyle = particleColor.replace(/[\d.]+\)$/g, `${opacity * 0.25})`);
                         } else {
-                            // Fallback
                             ctx.strokeStyle = `rgba(139, 92, 246, ${opacity * 0.25})`;
                         }
 
-                        // Fallback simples se a regex falhar (ex: cor hex)
                         if (particleColor.startsWith('#')) {
                             ctx.strokeStyle = `rgba(139, 92, 246, ${opacity * 0.25})`;
                         }
 
-                        ctx.lineWidth = 2;
+                        ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
                         ctx.stroke();
+
+                        // Chance aleatória de criar um sinal viajante entre partículas conectadas
+                        if (Math.random() < 0.0005) { // Ajuste a probabilidade conforme necessário
+                            signals.push(new Signal(particles[a], particles[b]));
+                        }
+                        if (Math.random() < 0.0005) {
+                            signals.push(new Signal(particles[b], particles[a]));
+                        }
                     }
                 }
             }
         };
 
+        let time = 0;
         const animate = () => {
             if (!ctx) return;
+            time++;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (const particle of particles) { particle.update(); particle.draw(); }
+
+            for (const particle of particles) {
+                particle.update(time);
+                particle.draw();
+            }
+
             connect();
+
+            // Update and draw signals
+            for (let i = signals.length - 1; i >= 0; i--) {
+                const signal = signals[i];
+                signal.update();
+                signal.draw();
+                if (!signal.alive) {
+                    signals.splice(i, 1);
+                }
+            }
+
             animationFrameId = requestAnimationFrame(animate);
         };
 
