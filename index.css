@@ -12,7 +12,7 @@
   }
 
   body {
-    @apply bg-slate-50 text-slate-700 font-lato antialiased selection:bg-primary-100 selection:text-primary-900;
+    @apply bg-[#020205] text-slate-300 font-lato antialiased selection:bg-purple-900 selection:text-white;
   }
 
   h1,
@@ -34,16 +34,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #020205;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #1e1b4b;
     border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #4c1d95;
   }
 }
 
@@ -134,7 +134,7 @@
   }
 
   .header-gradient {
-    background: linear-gradient(to right, #0c4a6e, #075985, #354fa7);
+    background: linear-gradient(to right, #050505, #1e1b4b, #4c1d95);
   }
 
   .btn-whatsapp {
