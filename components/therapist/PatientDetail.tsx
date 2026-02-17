@@ -23,7 +23,11 @@ interface Patient {
   email: string;
   status?: 'active' | 'inactive' | 'paused';
   created_at: string;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
+
+import { userAPI } from '../../services/supabase-api';
 
 interface PatientDetailProps {
   patient: Patient;
@@ -35,6 +39,10 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
   const [newNote, setNewNote] = useState('');
   const [newNoteTags, setNewNoteTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+
+  // TDAH Screening State
+  const [tdahEnabled, setTdahEnabled] = useState(patient.tdah_screening_enabled || false);
+  const [updatingTdah, setUpdatingTdah] = useState(false);
 
   const { notes, addNote } = usePatientNotes(patient.id);
   const { progress, goals, addProgressEntry, addGoal } = usePatientProgress(patient.id);
@@ -48,6 +56,20 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
 
   const stats = getStatistics();
   const recentSessions = getRecentSessions(5);
+
+  const handleToggleTdah = async () => {
+    try {
+      setUpdatingTdah(true);
+      const newState = !tdahEnabled;
+      await userAPI.updateTdahStatus(patient.id, { enabled: newState });
+      setTdahEnabled(newState);
+    } catch (error) {
+      console.error('Erro ao atualizar status TDAH:', error);
+      alert('Erro ao atualizar status da triagem TDAH.');
+    } finally {
+      setUpdatingTdah(false);
+    }
+  };
 
   const handleAddNote = async () => {
     if (!newNote.trim()) return;
@@ -120,8 +142,8 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 font-semibold whitespace-nowrap transition-colors ${activeTab === tab
-                  ? 'text-teal-600 border-b-2 border-teal-600 bg-white'
-                  : 'text-slate-600 hover:text-slate-900'
+                ? 'text-teal-600 border-b-2 border-teal-600 bg-white'
+                : 'text-slate-600 hover:text-slate-900'
                 }`}
             >
               {tab === 'info' && 'Informações'}
@@ -138,6 +160,42 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
           {/* INFO TAB */}
           {activeTab === 'info' && (
             <div className="space-y-6">
+              {/* TDAH Configuration Section */}
+              <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
+                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <AlertCircle className="text-purple-600" size={24} />
+                  Configuração Triagem TDAH
+                </h3>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-slate-900">Habilitar Triagem</p>
+                    <p className="text-sm text-slate-600">
+                      Permitir que o paciente realize a triagem de TDAH.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleToggleTdah}
+                    disabled={updatingTdah}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${tdahEnabled ? 'bg-purple-600' : 'bg-slate-200'
+                      }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${tdahEnabled ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                    />
+                  </button>
+                </div>
+                <div className="mt-4 pt-4 border-t border-purple-200 flex justify-between items-center">
+                  <span className="text-sm font-medium text-slate-700">Status do Pagamento:</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${patient.tdah_screening_paid
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                    {patient.tdah_screening_paid ? 'PAGO' : 'PENDENTE'}
+                  </span>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-slate-50 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
@@ -311,10 +369,10 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                       <div
                         key={goal.id}
                         className={`p-4 rounded-lg border-l-4 ${goal.status === 'completed'
-                            ? 'bg-green-50 border-green-600'
-                            : goal.status === 'paused'
-                              ? 'bg-yellow-50 border-yellow-600'
-                              : 'bg-blue-50 border-blue-600'
+                          ? 'bg-green-50 border-green-600'
+                          : goal.status === 'paused'
+                            ? 'bg-yellow-50 border-yellow-600'
+                            : 'bg-blue-50 border-blue-600'
                           }`}
                       >
                         <div className="flex items-start justify-between">
@@ -327,10 +385,10 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                           </div>
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${goal.status === 'completed'
-                                ? 'bg-green-200 text-green-800'
-                                : goal.status === 'active'
-                                  ? 'bg-blue-200 text-blue-800'
-                                  : 'bg-yellow-200 text-yellow-800'
+                              ? 'bg-green-200 text-green-800'
+                              : goal.status === 'active'
+                                ? 'bg-blue-200 text-blue-800'
+                                : 'bg-yellow-200 text-yellow-800'
                               }`}
                           >
                             {goal.status === 'completed' && '✓ Concluída'}
@@ -455,8 +513,8 @@ export const PatientDetail: React.FC<PatientDetailProps> = ({ patient, onClose }
                           </div>
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${apt.status === 'confirmed'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-yellow-100 text-yellow-800'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-yellow-100 text-yellow-800'
                               }`}
                           >
                             {apt.status === 'confirmed' ? '✓ Confirmado' : '⏳ Pendente'}

@@ -11,6 +11,8 @@ interface Patient {
   email: string;
   status?: 'active' | 'inactive' | 'paused';
   created_at: string;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
 
 type ViewMode = 'table' | 'cards';
@@ -35,6 +37,8 @@ export const PatientList: React.FC = () => {
     email: p.email,
     status: 'active' as const,
     created_at: p.created_at,
+    tdah_screening_enabled: p.tdah_screening_enabled,
+    tdah_screening_paid: p.tdah_screening_paid,
   }));
 
   // Filtrar e ordenar pacientes
@@ -178,8 +182,8 @@ export const PatientList: React.FC = () => {
             <button
               onClick={() => setViewMode('table')}
               className={`px-4 py-2 rounded-lg font-semibold transition-colors ${viewMode === 'table'
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-teal-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
             >
               Tabela
@@ -187,8 +191,8 @@ export const PatientList: React.FC = () => {
             <button
               onClick={() => setViewMode('cards')}
               className={`px-4 py-2 rounded-lg font-semibold transition-colors ${viewMode === 'cards'
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-teal-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
             >
               Cards

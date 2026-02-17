@@ -49,6 +49,8 @@ export type UserType = {
   profile_image?: string;
   created_at: string;
   updated_at: string;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 };
 
 export type AppointmentType = {
@@ -109,6 +111,8 @@ export interface User {
   profile_image?: string;
   created_at: string;
   updated_at: string;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
 
 export interface Appointment {

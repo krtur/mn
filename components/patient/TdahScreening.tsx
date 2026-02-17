@@ -2,6 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronDown, ChevronUp, BarChart3, CheckCircle, AlertCircle, ArrowRight, Clock, Save, Loader } from 'lucide-react';
 import { TDAH_QUESTIONS, Question } from '../../data/tdahQuestions';
 import { useTdahScreening } from '../../hooks/useTdahScreening';
+import { useAuth } from '../auth/AuthContext';
+import { PaymentGate } from './PaymentGate';
 
 interface Answer {
   questionId: number;
@@ -26,6 +28,7 @@ const RESPONSE_OPTIONS = [
 ];
 
 export const TdahScreening: React.FC = () => {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<Map<number, number>>(new Map());
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showResults, setShowResults] = useState(false);
@@ -173,6 +176,25 @@ export const TdahScreening: React.FC = () => {
     }
   };
 
+  // Verificar pagamento
+  if (!user?.tdah_screening_paid) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <PaymentGate
+          title="Triagem TDAH Premium"
+          description="Desbloqueie o acesso completo à triagem de TDAH para adultos."
+          price={300}
+          onPaymentSuccess={() => {
+            // Recarregar a página para atualizar o contexto do usuário
+            // Idealmente, usaríamos uma função reloadUser() do AuthContext, 
+            // mas window.location.reload() é mais garantido neste caso simples.
+            window.location.reload();
+          }}
+        />
+      </div>
+    );
+  }
+
   // Tela de boas-vindas antes de iniciar o teste
   if (!testStarted) {
     return (
@@ -265,10 +287,10 @@ export const TdahScreening: React.FC = () => {
             {totalPercentage >= 75
               ? 'Seus sintomas sugerem características significativas de TDAH. Recomenda-se avaliação profissional com um especialista.'
               : totalPercentage >= 50
-              ? 'Você apresenta alguns sintomas compatíveis com TDAH. Considere uma avaliação profissional.'
-              : totalPercentage >= 25
-              ? 'Você apresenta alguns sintomas, mas em nível moderado. Acompanhamento recomendado.'
-              : 'Seus sintomas sugerem baixa probabilidade de TDAH. Continue monitorando sua saúde mental.'}
+                ? 'Você apresenta alguns sintomas compatíveis com TDAH. Considere uma avaliação profissional.'
+                : totalPercentage >= 25
+                  ? 'Você apresenta alguns sintomas, mas em nível moderado. Acompanhamento recomendado.'
+                  : 'Seus sintomas sugerem baixa probabilidade de TDAH. Continue monitorando sua saúde mental.'}
           </p>
         </div>
 
@@ -300,12 +322,11 @@ export const TdahScreening: React.FC = () => {
                     <div className="text-right">
                       <p className={`text-2xl font-bold ${risk.color}`}>{cat.percentage}%</p>
                       <div className="w-32 h-2 bg-slate-200 rounded-full overflow-hidden mt-1">
-                        <div className={`h-full rounded-full transition-all ${
-                          cat.percentage >= 75 ? 'bg-red-600' :
+                        <div className={`h-full rounded-full transition-all ${cat.percentage >= 75 ? 'bg-red-600' :
                           cat.percentage >= 50 ? 'bg-orange-600' :
-                          cat.percentage >= 25 ? 'bg-yellow-600' :
-                          'bg-green-600'
-                        }`} style={{ width: `${cat.percentage}%` }} />
+                            cat.percentage >= 25 ? 'bg-yellow-600' :
+                              'bg-green-600'
+                          }`} style={{ width: `${cat.percentage}%` }} />
                       </div>
                     </div>
                     {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
@@ -444,7 +465,7 @@ export const TdahScreening: React.FC = () => {
         <p className="text-slate-600 mb-4">Responda com sinceridade para obter uma avaliação mais precisa</p>
         <div className="flex items-center justify-center gap-2">
           <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-teal-600 rounded-full transition-all"
               style={{ width: `${((currentQuestion + 1) / TDAH_QUESTIONS.length) * 100}%` }}
             />
@@ -474,11 +495,10 @@ export const TdahScreening: React.FC = () => {
             <button
               key={option.value}
               onClick={() => handleAnswer(option.value)}
-              className={`flex-1 min-w-[120px] px-3 py-3 rounded-lg border-2 font-semibold transition-all text-center ${
-                currentAnswer === option.value
-                  ? 'bg-teal-600 text-white border-teal-700 ring-2 ring-offset-2 ring-teal-600 shadow-lg'
-                  : 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200 hover:shadow-md'
-              }`}
+              className={`flex-1 min-w-[120px] px-3 py-3 rounded-lg border-2 font-semibold transition-all text-center ${currentAnswer === option.value
+                ? 'bg-teal-600 text-white border-teal-700 ring-2 ring-offset-2 ring-teal-600 shadow-lg'
+                : 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200 hover:shadow-md'
+                }`}
             >
               <div className="flex items-center justify-center gap-2">
                 <span>{option.label}</span>

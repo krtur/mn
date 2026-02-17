@@ -24,6 +24,8 @@ export interface User {
   therapist_id?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
 
 // Interface para resposta de login

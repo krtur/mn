@@ -11,7 +11,7 @@ export const PatientDashboard: React.FC = () => {
   const { appointments, loading: appointmentsLoading } = useAppointments();
   const { conversations, loading: messagesLoading } = useMessages();
   const { documents, loading: documentsLoading } = useDocuments();
-  
+
   // Mostrar loading apenas enquanto carrega o usuário
   if (isLoading || !user) {
     return (
@@ -26,14 +26,14 @@ export const PatientDashboard: React.FC = () => {
   const upcomingAppointments = appointments.filter(
     (apt) => new Date(apt.start_time) > new Date() && apt.status !== 'cancelled'
   );
-  
+
   const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unread_count, 0);
-  
-  const nextAppointment = upcomingAppointments.length > 0 
+
+  const nextAppointment = upcomingAppointments.length > 0
     ? upcomingAppointments[0]
     : null;
 
-  const nextSessionDisplay = nextAppointment 
+  const nextSessionDisplay = nextAppointment
     ? new Date(nextAppointment.start_time).toLocaleDateString('pt-BR')
     : 'Nenhuma';
 
@@ -88,7 +88,7 @@ export const PatientDashboard: React.FC = () => {
               Ver todos →
             </Link>
           </div>
-          
+
           <div className="space-y-3">
             {appointmentsLoading ? (
               <div className="flex items-center justify-center py-8">
@@ -141,7 +141,7 @@ export const PatientDashboard: React.FC = () => {
             <Zap className="text-orange-600" size={28} />
             Ações Rápidas
           </h2>
-          
+
           <div className="space-y-3">
             <Link
               to="/dashboard/patient/appointments"
@@ -150,7 +150,7 @@ export const PatientDashboard: React.FC = () => {
               <Plus size={20} />
               Novo Agendamento
             </Link>
-            
+
             <Link
               to="/dashboard/patient/messages"
               className="flex items-center gap-3 w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
@@ -158,7 +158,7 @@ export const PatientDashboard: React.FC = () => {
               <Send size={20} />
               Enviar Mensagem
             </Link>
-            
+
             <Link
               to="/dashboard/patient/reports"
               className="flex items-center gap-3 w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
@@ -167,13 +167,15 @@ export const PatientDashboard: React.FC = () => {
               Meus Relatórios
             </Link>
 
-            <Link
-              to="/dashboard/patient/tdah-screening"
-              className="flex items-center gap-3 w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <Zap size={20} />
-              Triagem TDAH
-            </Link>
+            {user?.tdah_screening_enabled && (
+              <Link
+                to="/dashboard/patient/tdah-screening"
+                className="flex items-center gap-3 w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
+              >
+                <Zap size={20} />
+                Triagem TDAH
+              </Link>
+            )}
 
             <Link
               to="/dashboard/patient/test-shop"

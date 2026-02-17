@@ -14,6 +14,8 @@ export interface User {
   therapist_id?: string;
   createdAt: Date;
   updatedAt: Date;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
 
 interface AuthContextType {
@@ -70,6 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             therapist_id: data.therapist_id,
             createdAt: new Date(data.created_at),
             updatedAt: new Date(data.updated_at),
+            tdah_screening_enabled: data.tdah_screening_enabled,
+            tdah_screening_paid: data.tdah_screening_paid,
           });
           return; // Sair da função se os dados foram carregados com sucesso
         }
@@ -144,6 +148,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           therapist_id: userData.therapist_id,
           createdAt: userData.createdAt ? new Date(userData.createdAt) : new Date(),
           updatedAt: userData.updatedAt ? new Date(userData.updatedAt) : new Date(),
+          tdah_screening_enabled: userData.tdah_screening_enabled,
+          tdah_screening_paid: userData.tdah_screening_paid,
         };
 
         // Definir usuário e estado de autenticação
@@ -199,6 +205,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         therapist_id: response.user.therapist_id,
         createdAt: response.user.createdAt ? new Date(response.user.createdAt) : new Date(),
         updatedAt: response.user.updatedAt ? new Date(response.user.updatedAt) : new Date(),
+        tdah_screening_enabled: response.user.tdah_screening_enabled,
+        tdah_screening_paid: response.user.tdah_screening_paid,
       };
 
       // Definir usuário

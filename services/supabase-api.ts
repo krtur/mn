@@ -426,6 +426,29 @@ export const userAPI = {
       throw error;
     }
   },
+
+  /**
+   * Atualizar status da Triagem TDAH (Habilitado/Pago)
+   */
+  async updateTdahStatus(userId: string, data: { enabled?: boolean; paid?: boolean }) {
+    try {
+      const updates: any = {};
+      if (data.enabled !== undefined) updates.tdah_screening_enabled = data.enabled;
+      if (data.paid !== undefined) updates.tdah_screening_paid = data.paid;
+
+      const { data: result, error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', userId)
+        .select();
+
+      if (error) throw error;
+      return result?.[0] as UserType;
+    } catch (error) {
+      console.error('Erro ao atualizar status TDAH:', error);
+      throw error;
+    }
+  },
 };
 
 // ==================== REALTIME ====================

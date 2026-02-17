@@ -10,6 +10,8 @@ export interface Patient {
   profile_image?: string;
   created_at: string;
   updated_at: string;
+  tdah_screening_enabled?: boolean;
+  tdah_screening_paid?: boolean;
 }
 
 export const usePatients = () => {
@@ -80,6 +82,19 @@ export const usePatients = () => {
           filter: `therapist_id=eq.${user.id}`
         },
         () => {
+          fetchPatients();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'users',
+          filter: `therapist_id=eq.${user.id}`
+        },
+        () => {
+          console.log('🔄 Detectada alteração em pacientes, recarregando...');
           fetchPatients();
         }
       )
