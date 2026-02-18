@@ -44,14 +44,14 @@ export const TherapistDashboard: React.FC = () => {
   const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unread_count, 0);
   const confirmedAppointments = appointments.filter((apt) => apt.status === 'confirmed').length;
   const pendingAppointments = appointments.filter((apt) => apt.status === 'pending').length;
-  
+
   const documentsByType = {
     report: documents.filter((doc) => doc.type === 'report').length,
     diagnosis: documents.filter((doc) => doc.type === 'diagnosis').length,
     progress_note: documents.filter((doc) => doc.type === 'progress_note').length,
   };
 
-  const confirmationRate = appointments.length > 0 
+  const confirmationRate = appointments.length > 0
     ? Math.round((confirmedAppointments / appointments.length) * 100)
     : 0;
 
@@ -66,252 +66,268 @@ export const TherapistDashboard: React.FC = () => {
   const upcomingAppointments = appointmentsNextWeek.slice(0, 4);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-lg p-6 text-white">
-        <h1 className="text-4xl font-bold">Bem-vindo, {user?.name}! 👋</h1>
-        <p className="text-slate-300 mt-2">Aqui está o resumo do seu dia e próximas atividades</p>
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 text-white shadow-xl">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-2">
+              Painel do Terapeuta
+            </h1>
+            <p className="text-slate-400 text-lg">
+              Bem-vindo, {user?.name}. Aqui está o panorama do seu dia.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 bg-slate-800/50 p-2 rounded-xl border border-slate-700 backdrop-blur-sm">
+            <div className="px-4 py-2 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-400 font-medium text-sm">
+              {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </div>
+          </div>
+        </div>
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 h-80 w-80 rounded-full bg-teal-900/20 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-60 w-60 rounded-full bg-blue-900/20 blur-3xl"></div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Quick Stats Grid */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat) => (
           <Link
             key={stat.label}
             to={stat.path}
-            className={`bg-gradient-to-br ${stat.color} rounded-lg shadow-lg p-6 hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer text-white group`}
+            className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:ring-teal-500/30"
           >
-            <div className="flex justify-between items-start mb-4">
-              <div className="text-4xl">{stat.icon}</div>
-              {stat.highlight && (
-                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
-                  Novo
-                </span>
-              )}
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500 truncate">{stat.label}</p>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <p className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {stat.value}
+                  </p>
+                  {stat.highlight && (
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-red-500">
+                      <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-400 opacity-75"></span>
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className={`rounded-xl p-3 text-2xl bg-slate-50 group-hover:bg-slate-100 transition-colors`}>
+                {stat.icon}
+              </div>
             </div>
-            <p className="text-slate-100 text-sm font-medium">{stat.label}</p>
-            <p className="text-3xl font-bold mt-2 group-hover:scale-110 transition-transform">{stat.value}</p>
+
+            {/* Progress bar for confirmation rate */}
+            {stat.label.includes('Taxa') && (
+              <div className="mt-4 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
+                  style={{ width: stat.value }}
+                ></div>
+              </div>
+            )}
+
+            <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r ${stat.color} opacity-0 transition-opacity group-hover:opacity-100`}></div>
           </Link>
         ))}
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Agendamentos de Hoje */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 border-t-4 border-teal-600">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900">📅 Agendamentos de Hoje</h2>
-            <span className="bg-teal-100 text-teal-800 text-sm font-semibold px-3 py-1 rounded-full">
-              {appointmentsToday.length} sessão{appointmentsToday.length !== 1 ? 's' : ''}
-            </span>
-          </div>
-          <div className="space-y-3">
-            {appointmentsToday.length > 0 ? (
-              appointmentsToday.map((apt) => (
-                <div key={apt.id} className="border-l-4 border-teal-600 pl-4 py-3 bg-slate-50 rounded hover:bg-slate-100 transition-colors">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-semibold text-slate-900">
-                        {apt.patient?.name || 'Paciente'}
-                      </p>
-                      <p className="text-sm text-slate-600 mt-1">
-                        ⏰ {new Date(apt.start_time).toLocaleTimeString('pt-BR', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}{' '}
-                        -{' '}
-                        {new Date(apt.end_time).toLocaleTimeString('pt-BR', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
-                    </div>
-                    {apt.status === 'pending' && (
-                      <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">
-                        Pendente
-                      </span>
-                    )}
-                    {apt.status === 'confirmed' && (
-                      <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">
-                        Confirmado
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="border-l-4 border-slate-300 pl-4 py-3 bg-slate-50 rounded">
-                <p className="font-semibold text-slate-900">Nenhum agendamento hoje</p>
-                <p className="text-sm text-slate-600 mt-1">Sua agenda está livre para o dia</p>
-              </div>
-            )}
-          </div>
-          <Link
-            to="/dashboard/therapist/schedule"
-            className="mt-4 inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold text-sm"
-          >
-            Ver agenda completa →
-          </Link>
-        </div>
-
-        {/* Ações Rápidas */}
-        <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-purple-600">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">⚡ Ações Rápidas</h2>
-          <div className="space-y-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        {/* Left Column: Appointments Today */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              📅 Agendamentos de Hoje
+            </h2>
             <Link
               to="/dashboard/therapist/schedule"
-              className="block w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105"
+              className="text-sm font-semibold text-teal-600 hover:text-teal-700 hover:underline"
             >
-              📅 Ver Agenda
+              Ver agenda completa
             </Link>
+          </div>
+
+          <div className="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 overflow-hidden">
+            {appointmentsToday.length > 0 ? (
+              <div className="divide-y divide-slate-100">
+                {appointmentsToday.map((apt) => (
+                  <div key={apt.id} className="p-5 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-teal-50 flex flex-col items-center justify-center text-teal-700 border border-teal-100">
+                        <span className="text-xs font-bold uppercase">{new Date(apt.start_time).toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</span>
+                        <span className="text-lg font-bold">{new Date(apt.start_time).getDate()}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-900">{apt.patient?.name || 'Paciente'}</h3>
+                        <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
+                          <span className="flex items-center gap-1">
+                            ⏰ {new Date(apt.start_time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} - {new Date(apt.end_time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {apt.status === 'pending' && (
+                        <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold border border-yellow-200">
+                          Pendente
+                        </span>
+                      )}
+                      {apt.status === 'confirmed' && (
+                        <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">
+                          Confirmado
+                        </span>
+                      )}
+                      <Link
+                        to={`/dashboard/therapist/schedule?date=${new Date(apt.start_time).toISOString().split('T')[0]}`}
+                        className="p-2 text-slate-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                        title="Ver na agenda"
+                      >
+                        →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center">
+                <div className="mx-auto w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-3xl">☕</span>
+                </div>
+                <h3 className="text-lg font-medium text-slate-900">Dia livre!</h3>
+                <p className="text-slate-500 mt-1">Nenhum agendamento para hoje.</p>
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Stats Cards: Documents */}
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                📋 Documentos Emitidos
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                  <span className="text-sm font-medium text-slate-600">Relatórios</span>
+                  <span className="font-bold text-slate-900">{documentsByType.report}</span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                  <span className="text-sm font-medium text-slate-600">Diagnósticos</span>
+                  <span className="font-bold text-slate-900">{documentsByType.diagnosis}</span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                  <span className="text-sm font-medium text-slate-600">Anotações</span>
+                  <span className="font-bold text-slate-900">{documentsByType.progress_note}</span>
+                </div>
+              </div>
+              <Link
+                to="/dashboard/therapist/documents"
+                className="mt-4 block text-center w-full py-2 text-sm font-semibold text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+              >
+                Gerenciar Documentos
+              </Link>
+            </div>
+
+            {/* Stats Cards: Próximas Sessões */}
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                📅 Próximos 7 Dias
+              </h3>
+              <div className="space-y-3">
+                {upcomingAppointments.length > 0 ? (
+                  upcomingAppointments.map((apt) => (
+                    <div key={apt.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                      <div className="w-1.5 h-10 bg-blue-500 rounded-full"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-900 truncate">
+                          {apt.patient?.name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {new Date(apt.start_time).toLocaleDateString('pt-BR', { weekday: 'short' })}, {new Date(apt.start_time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-slate-500 text-center py-4">Sem agendamentos próximos.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Actions & Messages */}
+        <div className="space-y-6">
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+              ⚡ Ações Rápidas
+            </h3>
+            <div className="grid grid-cols-1 gap-3">
+              <Link
+                to="/dashboard/therapist/schedule?action=new"
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-teal-600 font-medium"
+              >
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-teal-100 text-teal-600">📅</span>
+                Novo Agendamento
+              </Link>
+              <Link
+                to="/dashboard/therapist/patient-registration"
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-blue-600 font-medium"
+              >
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-600">👥</span>
+                Cadastrar Paciente
+              </Link>
+              <Link
+                to="/dashboard/therapist/documents"
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-purple-600 font-medium"
+              >
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-purple-100 text-purple-600">📄</span>
+                Emitir Documento
+              </Link>
+              <Link
+                to="/dashboard/therapist/messages"
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-green-600 font-medium"
+              >
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-green-100 text-green-600">💬</span>
+                Enviar Mensagem
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                💬 Mensagens
+              </h3>
+              {unreadMessages > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {unreadMessages} novas
+                </span>
+              )}
+            </div>
+            <div className="space-y-2">
+              {recentConversations.length > 0 ? (
+                recentConversations.map((conv) => (
+                  <Link
+                    key={conv.id}
+                    to="/dashboard/therapist/messages"
+                    className="block p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      <p className="font-medium text-slate-900 text-sm">{conv.other_user_name}</p>
+                      {conv.unread_count > 0 && <div className="w-2 h-2 rounded-full bg-red-500 mt-1"></div>}
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1 truncate">{conv.last_message}</p>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-sm text-slate-500 text-center py-4">Nenhuma mensagem recente.</p>
+              )}
+            </div>
             <Link
               to="/dashboard/therapist/messages"
-              className="block w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105"
+              className="mt-4 block text-center w-full py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors"
             >
-              💬 Mensagens {unreadMessages > 0 && `(${unreadMessages})`}
+              Ver todas →
             </Link>
-            <Link
-              to="/dashboard/therapist/documents"
-              className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105"
-            >
-              📄 Emitir Documento
-            </Link>
-            <Link
-              to="/dashboard/therapist/patients"
-              className="block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg text-center transition-all transform hover:scale-105"
-            >
-              👥 Meus Pacientes
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Próximas Sessões e Últimas Conversas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Próximas Sessões */}
-        <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-blue-600">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900">📆 Próximas Sessões</h2>
-            <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
-              {appointmentsNextWeek.length} próximas
-            </span>
-          </div>
-          <div className="space-y-3">
-            {upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map((apt) => (
-                <div key={apt.id} className="border-l-4 border-blue-600 pl-4 py-2 bg-slate-50 rounded hover:bg-slate-100 transition-colors">
-                  <p className="font-semibold text-slate-900 text-sm">
-                    {apt.patient?.name || 'Paciente'}
-                  </p>
-                  <p className="text-xs text-slate-600 mt-1">
-                    {new Date(apt.start_time).toLocaleDateString('pt-BR')} às{' '}
-                    {new Date(apt.start_time).toLocaleTimeString('pt-BR', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="text-slate-600 text-sm">Nenhuma sessão agendada para os próximos 7 dias</p>
-            )}
-          </div>
-        </div>
-
-        {/* Últimas Conversas */}
-        <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-purple-600">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900">💬 Últimas Conversas</h2>
-            <span className="bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full">
-              {conversations.length} conversas
-            </span>
-          </div>
-          <div className="space-y-3">
-            {recentConversations.length > 0 ? (
-              recentConversations.map((conv) => (
-                <Link
-                  key={conv.id}
-                  to="/dashboard/therapist/messages"
-                  className="block border-l-4 border-purple-600 pl-4 py-2 bg-slate-50 rounded hover:bg-slate-100 transition-colors"
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <p className="font-semibold text-slate-900 text-sm">
-                        {conv.other_user_name}
-                      </p>
-                      <p className="text-xs text-slate-600 mt-1 truncate">
-                        {conv.last_message}
-                      </p>
-                    </div>
-                    {conv.unread_count > 0 && (
-                      <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ml-2">
-                        {conv.unread_count}
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p className="text-slate-600 text-sm">Nenhuma conversa ainda</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Documentos e Estatísticas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Documentos */}
-        <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-green-600">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">📋 Documentos Criados</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 text-center border border-red-200">
-              <p className="text-2xl font-bold text-red-600">{documentsByType.report}</p>
-              <p className="text-xs text-red-700 mt-1 font-semibold">Relatórios</p>
-            </div>
-            <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-4 text-center border border-yellow-200">
-              <p className="text-2xl font-bold text-yellow-600">{documentsByType.diagnosis}</p>
-              <p className="text-xs text-yellow-700 mt-1 font-semibold">Diagnósticos</p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 text-center border border-blue-200">
-              <p className="text-2xl font-bold text-blue-600">{documentsByType.progress_note}</p>
-              <p className="text-xs text-blue-700 mt-1 font-semibold">Anotações</p>
-            </div>
-          </div>
-          <Link
-            to="/dashboard/therapist/documents"
-            className="mt-4 inline-flex items-center text-green-600 hover:text-green-700 font-semibold text-sm"
-          >
-            Ver todos os documentos →
-          </Link>
-        </div>
-
-        {/* Estatísticas */}
-        <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-orange-600">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">📊 Estatísticas</h2>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-semibold text-slate-700">Taxa de Confirmação</p>
-                <p className="text-sm font-bold text-slate-900">{confirmationRate}%</p>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                {/* Dynamic width requires inline style - Tailwind cannot generate dynamic classes */}
-                <div
-                  className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all"
-                  style={{ width: `${confirmationRate}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-yellow-50 rounded-lg p-3 border border-yellow-200">
-                <p className="text-xs text-yellow-700 font-semibold">Pendentes</p>
-                <p className="text-2xl font-bold text-yellow-600 mt-1">{pendingAppointments}</p>
-              </div>
-              <div className="bg-green-50 rounded-lg p-3 border border-green-200">
-                <p className="text-xs text-green-700 font-semibold">Confirmados</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{confirmedAppointments}</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

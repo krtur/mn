@@ -5,6 +5,8 @@ import { useAuth } from '../auth/AuthContext';
 import { supabase } from '../../services/supabase';
 import { Calendar, CalendarEvent } from '../calendar/Calendar';
 
+import { useAvailableSlots } from '../../hooks/useAvailableSlots';
+
 export const Appointments: React.FC = () => {
   const { user } = useAuth();
   const { appointments, loading, error, updateAppointment, deleteAppointment, refetch } = useAppointments();
@@ -29,9 +31,11 @@ export const Appointments: React.FC = () => {
   const [newRequest, setNewRequest] = useState({
     therapistId: '',
     date: '',
-    time: '09:00',
+    time: '',
     reason: ''
   });
+
+  const { slots, loading: loadingSlots } = useAvailableSlots(newRequest.therapistId, newRequest.date);
 
   // Buscar dados do terapeuta do paciente
   useEffect(() => {
@@ -47,7 +51,7 @@ export const Appointments: React.FC = () => {
       setLoadingTherapists(true);
       try {
         console.log('🔍 Buscando terapeuta:', user.therapist_id);
-        
+
         const { data, error } = await supabase
           .from('users')
           .select('id, name, email')
@@ -58,9 +62,9 @@ export const Appointments: React.FC = () => {
           console.error('❌ Erro ao buscar terapeuta:', error);
           throw error;
         }
-        
+
         console.log('✅ Terapeuta encontrado:', data);
-        
+
         if (isMounted && data) {
           setTherapists([data]);
           // Pré-selecionar o terapeuta do paciente
@@ -157,12 +161,12 @@ export const Appointments: React.FC = () => {
 
       setShowEditModal(false);
       setSelectedAppointment(null);
-      
+
       // Refetch após atualizar
       setTimeout(() => {
         refetch();
       }, 500);
-      
+
       alert('Agendamento atualizado com sucesso!');
     } catch (err) {
       console.error('Erro ao atualizar:', err);
@@ -179,12 +183,12 @@ export const Appointments: React.FC = () => {
       await deleteAppointment(selectedAppointment.id);
       setShowEditModal(false);
       setSelectedAppointment(null);
-      
+
       // Refetch após deletar
       setTimeout(() => {
         refetch();
       }, 500);
-      
+
       alert('Agendamento deletado com sucesso!');
     } catch (err) {
       console.error('Erro ao deletar:', err);
@@ -281,7 +285,7 @@ export const Appointments: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Data *</label>
                 <input
@@ -291,14 +295,41 @@ export const Appointments: React.FC = () => {
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-1">Horário *</label>
-                <input
-                  type="time"
-                  value={newRequest.time}
-                  onChange={(e) => setNewRequest({ ...newRequest, time: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
+
+                {!newRequest.date ? (
+                  <p className="text-sm text-slate-500 italic">Selecione uma data primeiro para ver os horários.</p>
+                ) : loadingSlots ? (
+                  <div className="flex items-center gap-2 py-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-teal-600"></div>
+                    <p className="text-sm text-slate-600">Buscando horários disponíveis...</p>
+                  </div>
+                ) : slots.length === 0 ? (
+                  <p className="text-sm text-red-500 bg-red-50 p-2 rounded border border-red-100">
+                    Não há horários disponíveis para esta data.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-2">
+                    {slots.map((slot) => (
+                      <button
+                        key={slot.time}
+                        type="button"
+                        onClick={() => setNewRequest({ ...newRequest, time: slot.time })}
+                        className={`
+                            px-2 py-2 text-sm font-semibold rounded-lg border transition-all
+                            ${newRequest.time === slot.time
+                            ? 'bg-teal-600 text-white border-teal-600 ring-2 ring-teal-200'
+                            : 'bg-white text-slate-700 border-slate-300 hover:border-teal-400 hover:bg-teal-50'}
+                          `}
+                      >
+                        {slot.time}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {/* Hidden input for form compatibility if needed, using the selected time */}
+                <input type="hidden" name="time" value={newRequest.time} />
               </div>
             </div>
 
@@ -348,7 +379,7 @@ export const Appointments: React.FC = () => {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow p-6">
-            <Calendar 
+            <Calendar
               events={calendarEvents}
               onEventClick={(event) => {
                 const appointment = appointments.find(a => a.id === event.id);
@@ -370,46 +401,45 @@ export const Appointments: React.FC = () => {
               // Formatar data corretamente sem problemas de fuso horário
               const [year, month, day] = request.requested_date.split('-');
               const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('pt-BR');
-              
+
               return (
-              <div key={request.id} className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900">
-                      {request.therapist?.name || 'Terapeuta'}
-                    </h3>
-                    <p className="text-sm text-slate-600">
-                      📅 {formattedDate} às{' '}
-                      {request.requested_time}
-                    </p>
-                    {request.reason && (
-                      <p className="text-sm text-slate-500 mt-2">Motivo: {request.reason}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      request.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      request.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                      'bg-slate-100 text-slate-800'
-                    }`}>
-                      {request.status === 'pending' ? '⏳ Pendente' :
-                       request.status === 'approved' ? '✓ Aprovada' :
-                       request.status === 'rejected' ? '✕ Rejeitada' :
-                       'Cancelada'}
-                    </span>
-                    {request.status === 'pending' && (
-                      <button
-                        onClick={() => handleCancelRequest(request.id)}
-                        className="text-sm text-red-600 hover:text-red-700 font-semibold"
-                      >
-                        Cancelar
-                      </button>
-                    )}
+                <div key={request.id} className="bg-white rounded-lg shadow p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-slate-900">
+                        {request.therapist?.name || 'Terapeuta'}
+                      </h3>
+                      <p className="text-sm text-slate-600">
+                        📅 {formattedDate} às{' '}
+                        {request.requested_time}
+                      </p>
+                      {request.reason && (
+                        <p className="text-sm text-slate-500 mt-2">Motivo: {request.reason}</p>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                          request.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                            'bg-slate-100 text-slate-800'
+                        }`}>
+                        {request.status === 'pending' ? '⏳ Pendente' :
+                          request.status === 'approved' ? '✓ Aprovada' :
+                            request.status === 'rejected' ? '✕ Rejeitada' :
+                              'Cancelada'}
+                      </span>
+                      {request.status === 'pending' && (
+                        <button
+                          onClick={() => handleCancelRequest(request.id)}
+                          className="text-sm text-red-600 hover:text-red-700 font-semibold"
+                        >
+                          Cancelar
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
             })}
           </div>
         </div>

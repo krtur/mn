@@ -7,6 +7,7 @@ import { useAppointmentRequests } from '../../hooks/useAppointmentRequests';
 import { useAuth } from '../auth/AuthContext';
 import { supabase } from '../../services/supabase';
 import { useLocation } from 'react-router-dom';
+import { TherapistSchedule } from './TherapistSchedule';
 
 interface NewAppointment {
   patientId: string;
@@ -39,13 +40,13 @@ export const ScheduleManager: React.FC = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [patients, setPatients] = useState<any[]>([]);
   const [loadingPatients, setLoadingPatients] = useState(false);
-  
+
   // Atualizar estado quando os parâmetros da URL mudarem
   useEffect(() => {
     if (tabParam === 'requests') {
       setActiveTab('requests');
     }
-    
+
     if (actionParam === 'new') {
       setShowNewAppointment(true);
       setActiveTab('calendar');
@@ -96,7 +97,7 @@ export const ScheduleManager: React.FC = () => {
 
         // Combinar e remover duplicatas
         const allPatientsMap = new Map<string, any>();
-        
+
         // Adicionar pacientes dos agendamentos
         patientsFromAppointments.forEach((p: any) => {
           if (p && p.id) allPatientsMap.set(p.id, p);
@@ -327,31 +328,28 @@ export const ScheduleManager: React.FC = () => {
       <div className="flex gap-2 border-b border-slate-200">
         <button
           onClick={() => setActiveTab('calendar')}
-          className={`px-4 py-2 font-semibold transition-colors ${
-            activeTab === 'calendar'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-slate-600 hover:text-slate-900'
-          }`}
+          className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'calendar'
+            ? 'text-teal-600 border-b-2 border-teal-600'
+            : 'text-slate-600 hover:text-slate-900'
+            }`}
         >
           📅 Calendário
         </button>
         <button
           onClick={() => setActiveTab('availability')}
-          className={`px-4 py-2 font-semibold transition-colors ${
-            activeTab === 'availability'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-slate-600 hover:text-slate-900'
-          }`}
+          className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'availability'
+            ? 'text-teal-600 border-b-2 border-teal-600'
+            : 'text-slate-600 hover:text-slate-900'
+            }`}
         >
           ⏰ Horários de Atendimento
         </button>
         <button
           onClick={() => setActiveTab('requests')}
-          className={`px-4 py-2 font-semibold transition-colors relative ${
-            activeTab === 'requests'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-slate-600 hover:text-slate-900'
-          }`}
+          className={`px-4 py-2 font-semibold transition-colors relative ${activeTab === 'requests'
+            ? 'text-teal-600 border-b-2 border-teal-600'
+            : 'text-slate-600 hover:text-slate-900'
+            }`}
         >
           📬 Solicitações
           {pendingRequests.length > 0 && (
@@ -494,106 +492,7 @@ export const ScheduleManager: React.FC = () => {
       )}
 
       {activeTab === 'availability' && (
-        <div className="space-y-4">
-          <div className="flex justify-end">
-            <button
-              onClick={() => setShowNewAvailability(!showNewAvailability)}
-              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-            >
-              + Adicionar Horário
-            </button>
-          </div>
-
-          {showNewAvailability && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-4">Adicionar Horário de Atendimento</h2>
-              <form onSubmit={handleAddAvailability} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Dia da Semana *</label>
-                  <select
-                    value={newAvailability.dayOfWeek}
-                    onChange={(e) => setNewAvailability({ ...newAvailability, dayOfWeek: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  >
-                    {[0, 1, 2, 3, 4, 5, 6].map(day => (
-                      <option key={day} value={day}>
-                        {getDayName(day)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Horário Início *</label>
-                    <input
-                      type="time"
-                      value={newAvailability.startTime}
-                      onChange={(e) => setNewAvailability({ ...newAvailability, startTime: e.target.value })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Horário Fim *</label>
-                    <input
-                      type="time"
-                      value={newAvailability.endTime}
-                      onChange={(e) => setNewAvailability({ ...newAvailability, endTime: e.target.value })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg transition-colors"
-                  >
-                    Adicionar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowNewAvailability(false)}
-                    className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2 rounded-lg transition-colors"
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="p-6 border-b border-slate-200">
-              <h2 className="text-xl font-bold text-slate-900">Horários de Atendimento</h2>
-            </div>
-
-            {availability.length === 0 ? (
-              <div className="p-6 text-center text-slate-600">
-                <p>Nenhum horário de atendimento configurado</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-slate-200">
-                {availability.map(slot => (
-                  <div key={slot.id} className="p-4 flex items-center justify-between hover:bg-slate-50">
-                    <div>
-                      <p className="font-semibold text-slate-900">{getDayName(slot.day_of_week)}</p>
-                      <p className="text-sm text-slate-600">
-                        {slot.start_time} - {slot.end_time}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => removeAvailability(slot.id)}
-                      className="text-red-600 hover:text-red-700 font-semibold text-sm"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        <TherapistSchedule />
       )}
 
       {activeTab === 'requests' && (
@@ -608,39 +507,39 @@ export const ScheduleManager: React.FC = () => {
                 // Formatar data corretamente sem problemas de fuso horário
                 const [year, month, day] = request.requested_date.split('-');
                 const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('pt-BR');
-                
+
                 return (
-                <div key={request.id} className="bg-white rounded-lg shadow p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-slate-900">
-                        {request.patient?.name || 'Paciente'}
-                      </h3>
-                      <p className="text-sm text-slate-600">
-                        📅 {formattedDate} às{' '}
-                        {request.requested_time}
-                      </p>
-                      {request.reason && (
-                        <p className="text-sm text-slate-500 mt-2">Motivo: {request.reason}</p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleApproveRequest(request.id)}
-                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-                      >
-                        ✓ Aprovar
-                      </button>
-                      <button
-                        onClick={() => handleRejectRequest(request.id)}
-                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
-                      >
-                        ✕ Rejeitar
-                      </button>
+                  <div key={request.id} className="bg-white rounded-lg shadow p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-slate-900">
+                          {request.patient?.name || 'Paciente'}
+                        </h3>
+                        <p className="text-sm text-slate-600">
+                          📅 {formattedDate} às{' '}
+                          {request.requested_time}
+                        </p>
+                        {request.reason && (
+                          <p className="text-sm text-slate-500 mt-2">Motivo: {request.reason}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleApproveRequest(request.id)}
+                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+                        >
+                          ✓ Aprovar
+                        </button>
+                        <button
+                          onClick={() => handleRejectRequest(request.id)}
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
+                        >
+                          ✕ Rejeitar
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
+                );
               })}
             </div>
           )}
