@@ -184,7 +184,7 @@ const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-3">
-                    {['CITRG', 'Ansiedade', 'Depressão', 'Traumas', 'Fobias', 'Conflitos Emocionais'].map((tag) => (
+                    {['Ansiedade', 'Depressão', 'Traumas', 'Fobias', 'Conflitos Emocionais'].map((tag) => (
                       <span key={tag} className="px-5 py-2 bg-white/5 text-slate-300 rounded-full text-sm font-bold hover:bg-purple-900/20 hover:text-purple-300 transition-colors cursor-default border border-white/10">
                         {tag}
                       </span>
