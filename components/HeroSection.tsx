@@ -164,16 +164,11 @@ const HeroSection: React.FC = () => {
                     alt="Nossos Terapeutas - Marcelo e Nadielma"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                   />
-                  {/* Gradient removed as requested */}
-                  <div className="absolute bottom-0 left-0 p-12 text-white lg:hidden">
-                    <h3 className="text-3xl font-bold mb-2">{t('therapists.names')}</h3>
-                    <p className="text-lg opacity-90">{t('therapists.roles')}</p>
-                  </div>
                 </div>
-                <div className="p-12 lg:p-20 flex flex-col justify-center">
-                  <div className="mb-10 hidden lg:block">
-                    <h2 className="text-4xl lg:text-5xl font-black text-white mb-4">{t('therapists.names')}</h2>
-                    <p className="text-purple-400 font-bold text-2xl">{t('therapists.roles')}</p>
+                <div className="p-8 md:p-12 lg:p-20 flex flex-col justify-center">
+                  <div className="mb-8 lg:mb-10">
+                    <h2 className="text-3xl lg:text-5xl font-black text-white mb-2 lg:mb-4">{t('therapists.names')}</h2>
+                    <p className="text-purple-400 font-bold text-xl lg:text-2xl">{t('therapists.roles')}</p>
                   </div>
 
                   <div className="mb-12">
