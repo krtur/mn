@@ -7,8 +7,8 @@ const LanguageSwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: 'pt-BR' as Language, label: 'Português', flag: '🇧🇷' },
-    { code: 'es' as Language, label: 'Español', flag: '🇪🇸' },
+    { code: 'pt-BR' as Language, label: 'PT/BR', flag: '🇧🇷' },
+    { code: 'es' as Language, label: 'ES', flag: '🇪🇸' },
   ];
 
   const handleLanguageSelect = (code: Language) => {
@@ -42,11 +42,10 @@ const LanguageSwitcher: React.FC = () => {
             <button
               key={lang.code}
               onClick={() => handleLanguageSelect(lang.code)}
-              className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-all duration-300 ${
-                language === lang.code
+              className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-all duration-300 ${language === lang.code
                   ? 'bg-primary-50 text-primary-700 font-semibold border-l-4 border-primary-600'
                   : 'text-slate-700 hover:bg-slate-50'
-              }`}
+                }`}
             >
               <span className="text-xl">{lang.flag}</span>
               <span>{lang.label}</span>

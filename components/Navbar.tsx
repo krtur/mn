@@ -154,7 +154,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentPage }) => {
       </nav>
 
       {/* Mobile Menu Button */}
-      <div className="lg:hidden flex items-center px-2">
+      <div className="lg:hidden flex items-center pl-2 pr-0 sm:px-2 order-last">
         <button
           onClick={() => setMobileMenuOpen(true)}
           className="text-white hover:text-accent-300 transition-colors p-2"

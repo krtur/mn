@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
             </a>
           </div>
           <Navbar setCurrentPage={setCurrentPage} />
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 ml-auto lg:ml-0">
             <LanguageSwitcher />
 
             {isAuthenticated ? (
