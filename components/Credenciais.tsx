@@ -69,7 +69,7 @@ const Credenciais: React.FC = () => {
 
         {/* Cartões de Credenciais */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-slate-900 mb-12 text-center">
+          <h3 className="text-3xl font-bold text-white mb-12 text-center">
             Terapeutas Certificados
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

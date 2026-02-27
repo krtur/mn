@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 import CheckCircleIcon from './icons/CheckCircleIcon';
@@ -6,6 +7,7 @@ import CheckCircleIcon from './icons/CheckCircleIcon';
 const TerapiaCorporativa: React.FC = () => {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const benefits = [
     {
@@ -81,7 +83,11 @@ const TerapiaCorporativa: React.FC = () => {
         <div className="mt-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((num) => (
-              <div key={num} className="group overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div
+                key={num}
+                className="group overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                onClick={() => setSelectedImage(`/terapia-corporativa${num}.png`)}
+              >
                 <img
                   src={`/terapia-corporativa${num}.png`}
                   alt={`Terapia Corporativa ${num}`}
@@ -91,7 +97,32 @@ const TerapiaCorporativa: React.FC = () => {
             ))}
           </div>
         </div>
-
+        {/* Modal para Imagem Ampliada */}
+        {selectedImage && createPortal(
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 px-4 py-8"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative max-w-5xl w-full max-h-full flex items-center justify-center animate-fade-in">
+              <button
+                className="absolute -top-12 right-0 md:-right-12 text-white/80 hover:text-white transition-colors focus:outline-none p-2"
+                onClick={() => setSelectedImage(null)}
+                aria-label="Fechar"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <img
+                src={selectedImage}
+                alt="Imagem ampliada"
+                className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>,
+          document.body
+        )}
 
       </div>
     </section>

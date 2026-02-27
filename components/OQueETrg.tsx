@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../i18n/translations';
 
@@ -47,6 +47,20 @@ const OQueETrg: React.FC = () => {
   const t = (key: string) => getTranslation(language, key);
   const [expandedFaq, setExpandedFaq] = React.useState<number | null>(null);
 
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 animate-fade-in">
       <div className="max-w-5xl mx-auto">
@@ -74,30 +88,55 @@ const OQueETrg: React.FC = () => {
 
         {/* Protocolos */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-slate-900 mb-12 text-center">
+          <h3 className="text-3xl font-bold text-white mb-12 text-center">
             Protocolos Terapêuticos da TRG
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {protocols.map((protocol) => (
-              <div
-                key={protocol.id}
-                className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col"
-              >
-                <div className="text-5xl mb-4 text-center">{protocol.icon}</div>
-                <h4 className="text-xl font-bold text-slate-900 mb-3 text-center">
-                  {protocol.name}
-                </h4>
-                <p className="text-slate-600 text-sm leading-relaxed text-center flex-grow">
-                  {protocol.description}
-                </p>
-              </div>
-            ))}
+          <div className="relative w-full group">
+            <button
+              onClick={scrollLeft}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -ml-2 md:-ml-6 z-10 bg-white/90 hover:bg-white text-primary-600 rounded-full p-2 md:p-3 shadow-lg border border-slate-200 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary-500 hidden md:block"
+              aria-label="Anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div
+              ref={carouselRef}
+              className="flex overflow-x-auto gap-6 snap-x snap-mandatory scrollbar-none py-4 px-2 -mx-2"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <style>{`.scrollbar-none::-webkit-scrollbar { display: none; }`}</style>
+              {protocols.map((protocol) => (
+                <div
+                  key={protocol.id}
+                  className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col flex-none w-[280px] md:w-[320px] snap-center"
+                >
+                  <div className="text-5xl mb-4 text-center">{protocol.icon}</div>
+                  <h4 className="text-xl font-bold text-slate-900 mb-3 text-center">
+                    {protocol.name}
+                  </h4>
+                  <p className="text-slate-600 text-sm leading-relaxed text-center flex-grow">
+                    {protocol.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={scrollRight}
+              className="absolute right-0 top-1/2 -translate-y-1/2 -mr-2 md:-mr-6 z-10 bg-white/90 hover:bg-white text-primary-600 rounded-full p-2 md:p-3 shadow-lg border border-slate-200 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary-500 hidden md:block"
+              aria-label="Próximo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
 
         {/* FAQ */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-slate-900 mb-8 text-center">
+          <h3 className="text-3xl font-bold text-white mb-8 text-center">
             Dúvidas Frequentes
           </h3>
 
