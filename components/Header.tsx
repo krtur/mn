@@ -70,7 +70,13 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
           <div className="flex-shrink-0">
             <a
               href="#"
-              onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                if (window.location.pathname !== '/') {
+                  navigate('/');
+                }
+                setCurrentPage('home');
+              }}
               aria-label="Página inicial de M&N Terapeutas"
               className="cursor-pointer group px-2"
             >
