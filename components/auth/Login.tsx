@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import { ParticleNetwork } from '../ParticleNetwork';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -89,31 +90,42 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#020205] relative px-4 py-8 overflow-hidden font-sans">
+      {/* Global Background with Particles */}
+      <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
+        <ParticleNetwork particleColor="rgba(124, 58, 237, 1)" />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Card com efeito glass */}
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 animate-fade-in">
+        <div className="bg-[#0a0a0f] backdrop-blur-md rounded-[2rem] shadow-2xl p-8 border border-white/10 animate-fade-in group">
+          {/* Decorative gradients */}
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-purple-900/20 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-1000 pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-32 h-32 bg-blue-900/20 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-1000 pointer-events-none"></div>
+
           {/* Logo */}
-          <div className="text-center mb-10">
+          <div className="relative z-10 text-center mb-10">
             <div className="flex justify-center mb-6">
-              <img
-                src="/logopreto.png"
-                alt="M&N Terapeutas"
-                className="h-20 w-auto drop-shadow-lg"
-              />
+              <Link to="/">
+                <img
+                  src="/logo.png"
+                  alt="M&N Terapeutas"
+                  className="h-20 w-auto drop-shadow-lg hover:scale-105 transition-transform"
+                />
+              </Link>
             </div>
           </div>
 
           {/* Erro */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50/80 border border-red-200 rounded-xl backdrop-blur-sm animate-shake">
-              <p className="text-red-700 text-sm font-medium">{error}</p>
+            <div className="relative z-10 mb-6 p-4 bg-red-900/30 border border-red-500/30 rounded-xl backdrop-blur-sm animate-shake">
+              <p className="text-red-400 text-sm font-medium">{error}</p>
               {emailPendingConfirmation && (
                 <button
                   type="button"
                   onClick={handleResendEmail}
                   disabled={isResendingEmail}
-                  className="mt-3 text-sm text-red-600 hover:text-red-700 font-semibold underline disabled:opacity-50 transition-colors"
+                  className="mt-3 text-sm text-red-300 hover:text-red-200 font-semibold underline disabled:opacity-50 transition-colors"
                 >
                   {isResendingEmail ? 'Reenviando...' : 'Reenviar email de confirmação'}
                 </button>
@@ -122,9 +134,9 @@ export const Login: React.FC = () => {
           )}
 
           {/* Formulário */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="relative z-10 space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-300 mb-2">
                 Email
               </label>
               <input
@@ -133,13 +145,13 @@ export const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
+                className="w-full px-4 py-3 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/5 text-white transition-all placeholder:text-slate-500"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-slate-300 mb-2">
                 Senha
               </label>
               <input
@@ -148,7 +160,7 @@ export const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50/50 transition-all placeholder:text-slate-400"
+                className="w-full px-4 py-3 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/5 text-white transition-all placeholder:text-slate-500"
                 required
               />
             </div>
@@ -156,7 +168,7 @@ export const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:shadow-none transform hover:scale-105 disabled:hover:scale-100"
+              className="w-full bg-purple-600 hover:bg-purple-500 disabled:bg-slate-600 text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-900/50 disabled:shadow-none transform hover:-translate-y-1 disabled:hover:translate-y-0 mt-6"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -170,29 +182,25 @@ export const Login: React.FC = () => {
           </form>
 
           {/* Link Cadastro */}
-          <div className="mt-8 text-center">
-            <p className="text-slate-600 text-sm">
+          <div className="relative z-10 mt-8 text-center">
+            <p className="text-slate-400 text-sm">
               Não tem conta?{' '}
-              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-bold transition-colors">
+              <Link to="/register" className="text-purple-400 hover:text-purple-300 font-bold transition-colors">
                 Cadastre-se
               </Link>
             </p>
           </div>
 
           {/* Divider */}
-          <div className="mt-8 pt-8 border-t border-slate-200/50">
+          <div className="relative z-10 mt-8 pt-6 border-t border-white/10">
             <Link
               to="/"
-              className="block text-center text-slate-600 hover:text-blue-600 text-sm font-semibold transition-colors"
+              className="block text-center text-slate-500 hover:text-purple-400 text-sm font-semibold transition-colors"
             >
               ← Voltar ao site
             </Link>
           </div>
         </div>
-
-        {/* Decoração */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
       </div>
     </div>
   );
