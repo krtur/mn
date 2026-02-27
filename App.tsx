@@ -19,6 +19,7 @@ import Frases from './components/Frases';
 import Fobias from './components/Fobias';
 
 import Chatbot from './components/Chatbot';
+import { ParticleNetwork } from './components/ParticleNetwork';
 
 // Auth Components
 import { Login } from './components/auth/Login';
@@ -52,13 +53,20 @@ import DirectRestApiForm from './components/DirectRestApiForm';
 
 // Public Layout Component
 const PublicLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-[#020205] min-h-screen flex flex-col text-slate-300 font-sans">
-    <Header setCurrentPage={() => { }} />
-    <main className="flex-grow flex items-center justify-center p-4">
-      {children}
-    </main>
-    <Footer />
-    <Chatbot />
+  <div className="bg-[#020205] min-h-screen flex flex-col text-slate-300 font-sans relative">
+    {/* Global Background with Particles for Public Pages */}
+    <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
+      <ParticleNetwork particleColor="rgba(124, 58, 237, 1)" />
+    </div>
+
+    <div className="relative z-10 flex flex-col min-h-screen w-full">
+      <Header setCurrentPage={() => { }} />
+      <main className="flex-grow flex items-center justify-center w-full">
+        {children}
+      </main>
+      <Footer />
+      <Chatbot />
+    </div>
   </div>
 );
 

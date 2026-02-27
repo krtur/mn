@@ -5,7 +5,6 @@ import WhatsappIcon from './icons/WhatsappIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import HeartIcon from './icons/HeartIcon';
 import BoltIcon from './icons/BoltIcon';
-import { ParticleNetwork } from './ParticleNetwork';
 
 const HeroSection: React.FC = () => {
   const { language } = useLanguage();
@@ -28,12 +27,7 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#020205]">
-      {/* Background with Particles */}
-      <div className="absolute inset-0 z-0 opacity-60 pointer-events-none">
-        <ParticleNetwork particleColor="rgba(124, 58, 237, 1)" />
-      </div>
-
+    <section className="relative w-full overflow-hidden bg-transparent">
       {/* Hero Main Content */}
       <div className="relative z-10 container mx-auto px-4 pt-40 pb-20 md:pt-48 md:pb-32 text-center">
         <div className="max-w-4xl mx-auto">
