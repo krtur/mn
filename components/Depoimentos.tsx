@@ -25,6 +25,8 @@ const videos: Video[] = [
   { name: 'Izabela Souza', url: 'https://www.youtube.com/watch?v=vL3xm7KP7cM', videoId: 'vL3xm7KP7cM' },
   { name: 'Izabela Souza (2)', url: 'https://www.youtube.com/watch?v=OwxPxw8CrP4', videoId: 'OwxPxw8CrP4' },
   { name: 'Gabriel Lucena', url: 'https://www.youtube.com/watch?v=gdRl0HbsY5U', videoId: 'gdRl0HbsY5U' },
+  { name: 'Júlio de Assis', url: 'https://www.youtube.com/watch?v=N767wAUZO4g', videoId: 'N767wAUZO4g' },
+  { name: 'Sandra', url: 'https://www.youtube.com/watch?v=5W9kBWnX6Qw', videoId: '5W9kBWnX6Qw' },
 ];
 
 const YouTubeEmbed: React.FC<{ videoId: string; name: string }> = ({ videoId, name }) => {
